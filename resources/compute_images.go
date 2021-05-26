@@ -2,6 +2,10 @@ package resources
 
 import (
 	"context"
+	"fmt"
+	"time"
+
+	"github.com/golang/protobuf/ptypes/timestamp"
 
 	"github.com/GennadySpb/cq-provider-yandex/client"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
@@ -22,7 +26,12 @@ func ComputeImages() *schema.Table {
 				Resolver: client.ResolveFolderID,
 			},
 			{
-				Name: "created_at",
+				Name:     "created_at",
+				Type:     schema.TypeTimestamp,
+				Resolver: resolveComputeImageCreatedAt,
+			},
+			{
+				Name: "name",
 				Type: schema.TypeString,
 			},
 			{
@@ -30,21 +39,35 @@ func ComputeImages() *schema.Table {
 				Type: schema.TypeString,
 			},
 			{
-				Name: "image_id",
+				Name:     "image_id",
+				Type:     schema.TypeString,
+				Resolver: resolveComputeImageID,
+			},
+			{
+				Name: "family",
 				Type: schema.TypeString,
 			},
 			{
-				Name: "image_type",
-				Type: schema.TypeString,
-			},
-			{
-				Name: "name",
-				Type: schema.TypeString,
+				Name:     "os_type",
+				Type:     schema.TypeString,
+				Resolver: resolveComputeImageOsType,
 			},
 			{
 				Name:     "labels",
 				Type:     schema.TypeJSON,
 				Resolver: resolveComputeImageLabels,
+			},
+			{
+				Name: "product_ids",
+				Type: schema.TypeStringArray,
+			},
+			{
+				Name: "min_disk_size",
+				Type: schema.TypeBigInt,
+			},
+			{
+				Name: "storage_size",
+				Type: schema.TypeBigInt,
 			},
 		},
 	}
@@ -76,4 +99,33 @@ func resolveComputeImageLabels(ctx context.Context, meta schema.ClientMeta, reso
 		labels[k] = &v
 	}
 	return resource.Set("labels", labels)
+}
+
+func resolveComputeImageCreatedAt(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+	r := resource.Item.(*compute.Image)
+	ts, _ := getTime(r.GetCreatedAt())
+	return resource.Set("created_at", ts)
+}
+
+func getTime(protots *timestamp.Timestamp) (*time.Time, error) {
+	if protots == nil {
+		return nil, nil
+	}
+	if !protots.IsValid() {
+		return nil, fmt.Errorf("invalid proto timestamp")
+
+	}
+
+	ts := protots.AsTime()
+	return &ts, nil
+}
+
+func resolveComputeImageID(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+	r := resource.Item.(*compute.Image)
+	return resource.Set("image_id", r.GetId())
+}
+
+func resolveComputeImageOsType(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+	r := resource.Item.(*compute.Image)
+	return resource.Set("os_type", r.GetOs().GetType().String())
 }
