@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+
 	"github.com/GennadySpb/cq-provider-yandex/client"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 
