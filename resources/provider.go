@@ -1,9 +1,9 @@
 package resources
 
 import (
-	"github.com/GennadySpb/cq-provider-yandex/client"
 	"github.com/cloudquery/cq-provider-sdk/provider"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/yandex-cloud/cq-provider-yandex/client"
 )
 
 func Provider() *provider.Provider {
@@ -15,9 +15,10 @@ func Provider() *provider.Provider {
 			//"compute.addresses":    ComputeAddresses(),
 			"compute.images": ComputeImages(),
 			//"compute.instances":    ComputeInstances(),
-			//"compute.networks":     ComputeNetworks(),
 			//"compute.disks":        ComputeDisks(),
-			//"compute.subnets":      ComputeSubnetworks(),
+			//"vpc.networks":         VpcNetworks(),
+			//"vpc.subnets":          VpcSubnetworks(),
+			"vpc.addresses": VpcAddresses(),
 			//"iam.service_accounts": IamServiceAccounts(),
 		},
 		Config: func() provider.Config {
