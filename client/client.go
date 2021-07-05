@@ -4,7 +4,10 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
+
+	"github.com/yandex-cloud/go-sdk/iamkey"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
@@ -51,15 +54,35 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 
 func buildSDK() (*ycsdk.SDK, error) {
 	ctx := context.Background()
-	// TODO: support full set of auth types
-	token := os.Getenv("YC_TOKEN")
+	cred, err := getCredentials()
+	if err != nil {
+		return nil, err
+	}
 	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
-		Credentials: ycsdk.NewIAMTokenCredentials(token),
+		Credentials: cred,
 	})
 	if err != nil {
 		return nil, err
 	}
 	return sdk, err
+}
+
+func getCredentials() (ycsdk.Credentials, error) {
+	if token, ok := os.LookupEnv("YC_TOKEN"); ok {
+		if strings.HasPrefix(token, "t1") {
+			return ycsdk.NewIAMTokenCredentials(token), nil
+		} else {
+			return ycsdk.OAuthToken(token), nil
+		}
+	}
+	if keyFile, ok := os.LookupEnv("YC_SERVICE_ACCOUNT_KEY_FILE"); ok {
+		key, err := iamkey.ReadFromJSONFile(keyFile)
+		if err != nil {
+			return nil, err
+		}
+		return ycsdk.ServiceAccountKey(key)
+	}
+	return ycsdk.InstanceServiceAccount(), nil
 }
 
 func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudID string) ([]string, error) {
