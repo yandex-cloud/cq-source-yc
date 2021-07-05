@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/GennadySpb/cq-provider-yandex/resources"
 	"github.com/cloudquery/cq-provider-sdk/serve"
+	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
 func main() {

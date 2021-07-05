@@ -4,7 +4,7 @@
 </a>
 </p>
 
-CloudQuery Yandex.Cloud Provider ![BuildStatus](https://img.shields.io/github/workflow/status/gennadyspb/cq-provider-yandex/test?style=flat-square) ![License](https://img.shields.io/github/license/cloudquery/cloudquery?style=flat-square)
+CloudQuery Yandex.Cloud Provider ![BuildStatus](https://img.shields.io/github/workflow/status/yandex-cloud/cq-provider-yandex/test?style=flat-square) ![License](https://img.shields.io/github/license/cloudquery/cloudquery?style=flat-square)
 ==================================
 
 This [CloudQuery](https://github.com/cloudquery/cloudquery)

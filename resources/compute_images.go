@@ -2,13 +2,9 @@ package resources
 
 import (
 	"context"
-	"fmt"
-	"time"
 
-	"github.com/golang/protobuf/ptypes/timestamp"
-
-	"github.com/GennadySpb/cq-provider-yandex/client"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 )
 
@@ -26,9 +22,14 @@ func ComputeImages() *schema.Table {
 				Resolver: client.ResolveFolderID,
 			},
 			{
+				Name:     "image_id",
+				Type:     schema.TypeString,
+				Resolver: client.ResolveResourceId,
+			},
+			{
 				Name:     "created_at",
 				Type:     schema.TypeTimestamp,
-				Resolver: resolveComputeImageCreatedAt,
+				Resolver: client.ResolveAsTime,
 			},
 			{
 				Name: "name",
@@ -37,11 +38,6 @@ func ComputeImages() *schema.Table {
 			{
 				Name: "description",
 				Type: schema.TypeString,
-			},
-			{
-				Name:     "image_id",
-				Type:     schema.TypeString,
-				Resolver: resolveComputeImageID,
 			},
 			{
 				Name: "family",
@@ -55,7 +51,7 @@ func ComputeImages() *schema.Table {
 			{
 				Name:     "labels",
 				Type:     schema.TypeJSON,
-				Resolver: resolveComputeImageLabels,
+				Resolver: client.ResolveLabels,
 			},
 			{
 				Name: "product_ids",
@@ -90,39 +86,6 @@ func fetchComputeImages(ctx context.Context, meta schema.ClientMeta, _ *schema.R
 		}
 	}
 	return nil
-}
-
-func resolveComputeImageLabels(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-	r := resource.Item.(*compute.Image)
-	labels := map[string]*string{}
-	for k, v := range r.Labels {
-		labels[k] = &v
-	}
-	return resource.Set("labels", labels)
-}
-
-func resolveComputeImageCreatedAt(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-	r := resource.Item.(*compute.Image)
-	ts, _ := getTime(r.GetCreatedAt())
-	return resource.Set("created_at", ts)
-}
-
-func getTime(protots *timestamp.Timestamp) (*time.Time, error) {
-	if protots == nil {
-		return nil, nil
-	}
-	if !protots.IsValid() {
-		return nil, fmt.Errorf("invalid proto timestamp")
-
-	}
-
-	ts := protots.AsTime()
-	return &ts, nil
-}
-
-func resolveComputeImageID(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-	r := resource.Item.(*compute.Image)
-	return resource.Set("image_id", r.GetId())
 }
 
 func resolveComputeImageOsType(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {

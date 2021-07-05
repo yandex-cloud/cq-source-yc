@@ -3,8 +3,8 @@ package resources
 import (
 	"context"
 
-	"github.com/GennadySpb/cq-provider-yandex/client"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/yandex-cloud/cq-provider-yandex/client"
 
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/kms/v1"
 )
