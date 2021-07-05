@@ -3,10 +3,11 @@ package client
 import (
 	"context"
 	"fmt"
-	"github.com/yandex-cloud/go-sdk/iamkey"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/yandex-cloud/go-sdk/iamkey"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
