@@ -17,3 +17,5 @@ There are four ways to authenticate cloudquery with Yandex Cloud account:
 
 To authenticate with IAM and OAuth token specify `YC_TOKEN`. Path to file with service account 
 key should be passed with `YC_SERVICE_ACCOUNT_KEY_FILE`. Authentication from service account on instance is used by default.
+
+`YC_TOKEN` has higher priority then `YC_SERVICE_ACCOUNT_KEY_FILE` (i.e., if both variables specified, `YC_TOKEN` will be used).
