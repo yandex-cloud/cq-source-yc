@@ -3,7 +3,7 @@ module github.com/yandex-cloud/cq-provider-yandex
 go 1.16
 
 require (
-	github.com/cloudquery/cq-provider-sdk v0.2.8
+	github.com/cloudquery/cq-provider-sdk v0.3.0-rc1
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v0.16.1
 	github.com/iancoleman/strcase v0.1.3 // indirect
