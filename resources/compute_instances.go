@@ -9,15 +9,15 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 )
 
-func ComputeImages() *schema.Table {
+func ComputeInstances() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_compute_images",
+		"yandex_compute_instances",
 		"Compute",
-		"Image",
-		"resources/proto/image.proto",
-		tools.GetCommonDefaultColumns("image"),
+		"Instance",
+		"resources/proto/instance.proto",
+		tools.GetCommonDefaultColumns("instance"),
 		tools.IgnoredColumns{},
-		fetchComputeImages,
+		fetchComputeInstances,
 	)
 	if err != nil {
 		return nil
@@ -29,14 +29,14 @@ func ComputeImages() *schema.Table {
 	return table
 }
 
-func fetchComputeImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchComputeInstances(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
-		req := &compute.ListImagesRequest{FolderId: f}
-		it := c.Services.Compute.Image().ImageIterator(ctx, req)
+		req := &compute.ListInstancesRequest{FolderId: f}
+		it := c.Services.Compute.Instance().InstanceIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

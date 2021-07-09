@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+	"github.com/yandex-cloud/cq-provider-yandex/tools"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
@@ -10,42 +11,35 @@ import (
 )
 
 func KmsKeyring() *schema.Table {
-	return &schema.Table{
-		Name:         "yandex_kms_symmetric_keys",
-		Resolver:     fetchKmsSymmetricKeys,
-		Multiplex:    client.FolderMultiplex,
-		DeleteFilter: client.DeleteFolderFilter,
-		IgnoreError:  client.IgnoreErrorHandler,
-		//PostResourceResolver: client.AddGcpMetadata,
-		Columns: []schema.Column{
-			{
-				Name:     "folder_id",
-				Type:     schema.TypeString,
-				Resolver: client.ResolveFolderID,
-			},
-			{
-				Name: "create_time",
-				Type: schema.TypeString,
-			},
-			{
-				Name: "name",
-				Type: schema.TypeString,
-			},
-		},
+	gen, err := tools.NewTableGenerator(
+		"yandex_kms_symmetric_keys",
+		"Kms",
+		"SymmetricKey",
+		"resources/proto/symmetric_key.proto",
+		tools.GetCommonDefaultColumns("symmetric_key"),
+		tools.IgnoredColumns{},
+		fetchKmsSymmetricKeys,
+	)
+	if err != nil {
+		return nil
 	}
+	table, err := gen.Generate()
+	if err != nil {
+		return nil
+	}
+	return table
 }
 
 func fetchKmsSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	// TODO: iterate over all  folders ???
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &kms.ListSymmetricKeysRequest{FolderId: f}
 		it := c.Services.Kms.SymmetricKey().SymmetricKeyIterator(ctx, req)
 		for it.Next() {
-			res <- it.Value().GetId()
+			res <- it.Value()
 		}
 	}
 	return nil
