@@ -11,13 +11,11 @@ import (
 
 func ComputeDisks() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_compute_disks",
 		"Compute",
 		"Disk",
-		"resources/proto/disk.proto",
-		tools.GetCommonDefaultColumns("disk"),
-		tools.IgnoredColumns{},
-		fetchComputeDisks,
+		tools.WithProtoFile("resources/proto/disk.proto"),
+		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("disk")),
+		tools.WithFetcher(fetchComputeDisks),
 	)
 	if err != nil {
 		return nil

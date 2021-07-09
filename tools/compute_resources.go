@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/thoas/go-funk"
@@ -74,32 +75,25 @@ func (pf protoField) getPath() string {
 	return strings.Join(path, ".")
 }
 
-func NewTableGenerator(tableName string, serviceName string, resourceName string, path string, defaultCols DefaultColumns,
-	ignoreCols []string, fetcher schema.TableResolver) (*TableGenerator, error) {
-	parser := protoparse.Parser{IncludeSourceCodeInfo: true}
-	protoFiles, err := parser.ParseFiles(path)
-	if err != nil {
-		return nil, err
-	}
-	protoFile := protoFiles[0]
-
-	ignoreColsMap := make(map[string]bool)
-	for _, col := range ignoreCols {
-		ignoreColsMap[col] = true
-	}
-
-	return &TableGenerator{
-		tableName:    tableName,
+func NewTableGenerator(serviceName string, resourceName string, opts ...Option) (*TableGenerator, error) {
+	tg := &TableGenerator{
+		tableName:    fmt.Sprintf("yandex_%v_%v", strcase.ToSnake(serviceName), strcase.ToSnake(resourceName)),
 		serviceName:  serviceName,
 		resourceName: resourceName,
-		protoFile:    protoFile,
-		defaultCols:  defaultCols,
-		ignoreCols:   ignoreColsMap,
-		fetcher:      fetcher,
-	}, nil
+	}
+
+	for _, opt := range opts {
+		opt.Apply(tg)
+	}
+
+	return tg, nil
 }
 
 func (tg *TableGenerator) Generate() (*schema.Table, error) {
+	if tg.protoFile == nil {
+		return nil, fmt.Errorf("proto file wasn't parsed")
+	}
+
 	resourceQualifiedName := tg.protoFile.GetPackage() + "." + tg.resourceName
 	mes := tg.protoFile.FindMessage(resourceQualifiedName)
 	if mes == nil {

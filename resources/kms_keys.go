@@ -12,13 +12,11 @@ import (
 
 func KmsKeyring() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_kms_symmetric_keys",
 		"Kms",
 		"SymmetricKey",
-		"resources/proto/symmetric_key.proto",
-		tools.GetCommonDefaultColumns("symmetric_key"),
-		tools.IgnoredColumns{},
-		fetchKmsSymmetricKeys,
+		tools.WithProtoFile("resources/proto/symmetric_key.proto"),
+		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("symmetric_key")),
+		tools.WithFetcher(fetchKmsSymmetricKeys),
 	)
 	if err != nil {
 		return nil

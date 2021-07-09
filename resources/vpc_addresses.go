@@ -12,16 +12,12 @@ import (
 
 func VpcAddresses() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_vpc_public_addresses",
 		"Vpc",
 		"Address",
-		"resources/proto/address.proto",
-		tools.GetCommonDefaultColumns("address"),
-		tools.IgnoredColumns{
-			"Type",
-			"IpVersion",
-		},
-		fetchVpcAddresses,
+		tools.WithProtoFile("resources/proto/address.proto"),
+		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("address")),
+		tools.WithIgnoredColumns("Type", "IpVersion"),
+		tools.WithFetcher(fetchVpcAddresses),
 	)
 	if err != nil {
 		return nil

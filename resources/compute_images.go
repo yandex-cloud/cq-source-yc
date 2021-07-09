@@ -11,13 +11,11 @@ import (
 
 func ComputeImages() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_compute_images",
 		"Compute",
 		"Image",
-		"resources/proto/image.proto",
-		tools.GetCommonDefaultColumns("image"),
-		tools.IgnoredColumns{},
-		fetchComputeImages,
+		tools.WithProtoFile("resources/proto/image.proto"),
+		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("image")),
+		tools.WithFetcher(fetchComputeImages),
 	)
 	if err != nil {
 		return nil

@@ -11,13 +11,11 @@ import (
 
 func ComputeInstances() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"yandex_compute_instances",
 		"Compute",
 		"Instance",
-		"resources/proto/instance.proto",
-		tools.GetCommonDefaultColumns("instance"),
-		tools.IgnoredColumns{},
-		fetchComputeInstances,
+		tools.WithProtoFile("resources/proto/instance.proto"),
+		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("instance")),
+		tools.WithFetcher(fetchComputeInstances),
 	)
 	if err != nil {
 		return nil
