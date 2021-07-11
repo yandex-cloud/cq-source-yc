@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+
 	"github.com/yandex-cloud/cq-provider-yandex/tools"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 

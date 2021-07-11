@@ -3,13 +3,14 @@ package tools
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/thoas/go-funk"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
-	"strings"
 )
 
 type DefaultColumns map[string]schema.Column
