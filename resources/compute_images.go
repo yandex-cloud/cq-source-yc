@@ -14,7 +14,6 @@ func ComputeImages() *schema.Table {
 		"Compute",
 		"Image",
 		tools.WithProtoFile("resources/proto/image.proto"),
-		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("image")),
 		tools.WithFetcher(fetchComputeImages),
 	)
 	if err != nil {

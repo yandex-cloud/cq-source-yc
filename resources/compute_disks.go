@@ -14,7 +14,6 @@ func ComputeDisks() *schema.Table {
 		"Compute",
 		"Disk",
 		tools.WithProtoFile("resources/proto/disk.proto"),
-		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("disk")),
 		tools.WithFetcher(fetchComputeDisks),
 	)
 	if err != nil {

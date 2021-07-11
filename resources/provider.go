@@ -11,14 +11,14 @@ func Provider() *provider.Provider {
 		Name:      "yandex",
 		Configure: client.Configure,
 		ResourceMap: map[string]*schema.Table{
-			"kms.keys":          KmsKeyring(),
-			"compute.images":    ComputeImages(),
-			"compute.instances": ComputeInstances(),
-			"compute.disks":     ComputeDisks(),
-			//"vpc.networks":         VpcNetworks(),
-			//"vpc.subnets":          VpcSubnetworks(),
-			"vpc.addresses": VpcAddresses(),
-			//"iam.service_accounts": IamServiceAccounts(),
+			"kms.keys":             KmsKeyring(),
+			"compute.images":       ComputeImages(),
+			"compute.instances":    ComputeInstances(),
+			"compute.disks":        ComputeDisks(),
+			"vpc.networks":         VpcNetworks(),
+			"vpc.subnets":          VpcSubnetworks(),
+			"vpc.addresses":        VpcAddresses(),
+			"iam.service_accounts": IamServiceAccounts(),
 		},
 		Config: func() provider.Config {
 			return &client.Config{}

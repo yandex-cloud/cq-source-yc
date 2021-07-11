@@ -14,7 +14,6 @@ func ComputeInstances() *schema.Table {
 		"Compute",
 		"Instance",
 		tools.WithProtoFile("resources/proto/instance.proto"),
-		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("instance")),
 		tools.WithFetcher(fetchComputeInstances),
 	)
 	if err != nil {

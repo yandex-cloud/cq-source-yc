@@ -7,7 +7,6 @@ import (
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
-	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/thoas/go-funk"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"strings"
@@ -15,10 +14,10 @@ import (
 
 type DefaultColumns map[string]schema.Column
 
-func GetCommonDefaultColumns(resourceName string) DefaultColumns {
-	return DefaultColumns{
+func getCommonYCDefaultCols(resourceName string) Option {
+	return WithDefaultColumns(DefaultColumns{
 		"Id": {
-			Name:     resourceName + "_id",
+			Name:     strcase.ToSnake(resourceName) + "_id",
 			Type:     schema.TypeString,
 			Resolver: client.ResolveResourceId,
 		},
@@ -37,7 +36,7 @@ func GetCommonDefaultColumns(resourceName string) DefaultColumns {
 			Type:     schema.TypeJSON,
 			Resolver: client.ResolveLabels,
 		},
-	}
+	})
 }
 
 type IgnoredColumns []string
@@ -85,6 +84,8 @@ func NewTableGenerator(serviceName string, resourceName string, opts ...Option) 
 	for _, opt := range opts {
 		opt.Apply(tg)
 	}
+
+	getCommonYCDefaultCols(resourceName).Apply(tg)
 
 	return tg, nil
 }
@@ -175,15 +176,6 @@ func (tg *TableGenerator) hasDefaultValue(path string) bool {
 func (tg *TableGenerator) isIgnored(path string) bool {
 	_, ok := tg.ignoreCols[path]
 	return ok
-}
-
-func parseProtoFile(path string) (*desc.FileDescriptor, error) {
-	parser := protoparse.Parser{IncludeSourceCodeInfo: true}
-	protoFiles, err := parser.ParseFiles(path)
-	if err != nil {
-		return nil, err
-	}
-	return protoFiles[0], nil
 }
 
 func isExpandable(field *desc.FieldDescriptor) bool {

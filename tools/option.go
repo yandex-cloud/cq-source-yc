@@ -28,7 +28,7 @@ func WithProtoFile(protoFile string) Option {
 	return withProtoFile{protoFile: protoFile}
 }
 
-// Table name
+// table name
 
 type withTableName struct {
 	tableName string

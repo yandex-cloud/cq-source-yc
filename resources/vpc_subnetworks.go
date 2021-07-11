@@ -3,19 +3,18 @@ package resources
 import (
 	"context"
 	"github.com/yandex-cloud/cq-provider-yandex/tools"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
-
-	"github.com/yandex-cloud/go-genproto/yandex/cloud/kms/v1"
 )
 
-func KmsKeyring() *schema.Table {
+func VpcSubnetworks() *schema.Table {
 	gen, err := tools.NewTableGenerator(
-		"Kms",
-		"SymmetricKey",
-		tools.WithProtoFile("resources/proto/symmetric_key.proto"),
-		tools.WithFetcher(fetchKmsSymmetricKeys),
+		"Vpc",
+		"Subnet",
+		tools.WithProtoFile("resources/proto/subnet.proto"),
+		tools.WithFetcher(fetchVpcSubnetworks),
 	)
 	if err != nil {
 		return nil
@@ -27,14 +26,14 @@ func KmsKeyring() *schema.Table {
 	return table
 }
 
-func fetchKmsSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVpcSubnetworks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
-		req := &kms.ListSymmetricKeysRequest{FolderId: f}
-		it := c.Services.Kms.SymmetricKey().SymmetricKeyIterator(ctx, req)
+		req := &vpc.ListSubnetsRequest{FolderId: f}
+		it := c.Services.Vpc.Subnet().SubnetIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

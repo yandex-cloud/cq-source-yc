@@ -15,7 +15,6 @@ func VpcAddresses() *schema.Table {
 		"Vpc",
 		"Address",
 		tools.WithProtoFile("resources/proto/address.proto"),
-		tools.WithDefaultColumns(tools.GetCommonDefaultColumns("address")),
 		tools.WithIgnoredColumns("Type", "IpVersion"),
 		tools.WithFetcher(fetchVpcAddresses),
 	)
