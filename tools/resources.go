@@ -58,7 +58,7 @@ type protoField struct {
 }
 
 func (pf protoField) getColName() string {
-	var path []string
+	path := make([]string, 0, len(pf.path)+1)
 	for _, field := range pf.path {
 		path = append(path, field.GetName())
 	}
@@ -67,7 +67,7 @@ func (pf protoField) getColName() string {
 }
 
 func (pf protoField) getPath() string {
-	var path []string
+	path := make([]string, 0, len(pf.path)+1)
 	for _, field := range pf.path {
 		path = append(path, strings.Title(field.GetJSONName()))
 	}
@@ -118,7 +118,8 @@ func (tg *TableGenerator) Generate() (*schema.Table, error) {
 
 func (tg *TableGenerator) expandFields(fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []protoField) {
 	for _, field := range fields {
-		newPath := append(path, field)
+		newPath := path
+		newPath = append(newPath, field)
 		newProtoField := protoField{field, path}
 		switch {
 		case tg.isIgnored(newProtoField.getPath()):
