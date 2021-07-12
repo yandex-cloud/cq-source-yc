@@ -15,3 +15,5 @@ require (
 	google.golang.org/genproto v0.0.0-20210510173355-fb37daa5cd7a // indirect
 	google.golang.org/grpc v1.37.0
 )
+
+replace github.com/jhump/protoreflect v1.8.2 => github.com/daniil-ushkov/protoreflect v1.8.3-0.20210712150801-61ee4345795a

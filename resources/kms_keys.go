@@ -15,7 +15,7 @@ func KmsKeyring() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Kms",
 		"SymmetricKey",
-		tools.WithProtoFile("resources/proto/symmetric_key.proto"),
+		tools.WithProtoFile("yandex/cloud/kms/v1/symmetric_key.proto", "cloudapi"),
 		tools.WithFetcher(fetchKmsSymmetricKeys),
 	)
 	if err != nil {

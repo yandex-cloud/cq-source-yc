@@ -14,7 +14,7 @@ func VpcNetworks() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Vpc",
 		"Network",
-		tools.WithProtoFile("resources/proto/network.proto"),
+		tools.WithProtoFile("yandex/cloud/vpc/v1/network.proto", "cloudapi"),
 		tools.WithFetcher(fetchVpcNetworks),
 	)
 	if err != nil {

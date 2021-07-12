@@ -15,7 +15,7 @@ func VpcAddresses() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Vpc",
 		"Address",
-		tools.WithProtoFile("resources/proto/address.proto"),
+		tools.WithProtoFile("yandex/cloud/vpc/v1/address.proto", "cloudapi"),
 		tools.WithIgnoredColumns("Type", "IpVersion"),
 		tools.WithFetcher(fetchVpcAddresses),
 	)

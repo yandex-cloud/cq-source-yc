@@ -14,7 +14,7 @@ func ComputeDisks() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Compute",
 		"Disk",
-		tools.WithProtoFile("resources/proto/disk.proto"),
+		tools.WithProtoFile("yandex/cloud/compute/v1/disk.proto", "cloudapi"),
 		tools.WithFetcher(fetchComputeDisks),
 	)
 	if err != nil {

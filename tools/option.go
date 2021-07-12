@@ -13,10 +13,11 @@ type Option interface {
 
 type withProtoFile struct {
 	protoFile string
+	paths     []string
 }
 
 func (w withProtoFile) Apply(tg *TableGenerator) {
-	parser := protoparse.Parser{IncludeSourceCodeInfo: true}
+	parser := protoparse.Parser{IncludeSourceCodeInfo: true, ImportPaths: w.paths}
 	protoFiles, err := parser.ParseFiles(w.protoFile)
 	if err != nil {
 		return
@@ -24,8 +25,8 @@ func (w withProtoFile) Apply(tg *TableGenerator) {
 	tg.protoFile = protoFiles[0]
 }
 
-func WithProtoFile(protoFile string) Option {
-	return withProtoFile{protoFile: protoFile}
+func WithProtoFile(protoFile string, paths ...string) Option {
+	return withProtoFile{protoFile: protoFile, paths: paths}
 }
 
 // table name

@@ -14,7 +14,7 @@ func ComputeInstances() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Compute",
 		"Instance",
-		tools.WithProtoFile("resources/proto/instance.proto"),
+		tools.WithProtoFile("yandex/cloud/compute/v1/instance.proto", "cloudapi"),
 		tools.WithFetcher(fetchComputeInstances),
 	)
 	if err != nil {

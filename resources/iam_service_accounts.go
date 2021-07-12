@@ -13,7 +13,7 @@ func IamServiceAccounts() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Iam",
 		"ServiceAccount",
-		tools.WithProtoFile("resources/proto/service_account.proto"),
+		tools.WithProtoFile("yandex/cloud/iam/v1/service_account.proto", "cloudapi"),
 		tools.WithFetcher(fetchIamServiceAccounts),
 	)
 	if err != nil {

@@ -14,7 +14,7 @@ func ComputeImages() *schema.Table {
 	gen, err := tools.NewTableGenerator(
 		"Compute",
 		"Image",
-		tools.WithProtoFile("resources/proto/image.proto"),
+		tools.WithProtoFile("yandex/cloud/compute/v1/image.proto", "cloudapi"),
 		tools.WithFetcher(fetchComputeImages),
 	)
 	if err != nil {
