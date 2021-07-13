@@ -11,18 +11,13 @@ import (
 )
 
 func VpcNetworks() *schema.Table {
-	gen, err := tools.NewTableGenerator(
-		"Vpc",
-		"Network",
-		tools.WithProtoFile("yandex/cloud/vpc/v1/network.proto", "cloudapi"),
-		tools.WithFetcher(fetchVpcNetworks),
+	table, err := tools.GenerateTable(
+		tools.WithTableName("yandex_vpc_networks"),
+		tools.WithProtoFile("Network", "yandex/cloud/vpc/v1/network.proto", "cloudapi"),
+		tools.WithResolver(fetchVpcNetworks),
 	)
 	if err != nil {
-		return nil
-	}
-	table, err := gen.Generate()
-	if err != nil {
-		return nil
+		return &schema.Table{}
 	}
 	return table
 }

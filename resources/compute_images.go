@@ -11,18 +11,13 @@ import (
 )
 
 func ComputeImages() *schema.Table {
-	gen, err := tools.NewTableGenerator(
-		"Compute",
-		"Image",
-		tools.WithProtoFile("yandex/cloud/compute/v1/image.proto", "cloudapi"),
-		tools.WithFetcher(fetchComputeImages),
+	table, err := tools.GenerateTable(
+		tools.WithTableName("yandex_computes_images"),
+		tools.WithProtoFile("Image", "yandex/cloud/compute/v1/image.proto", "cloudapi"),
+		tools.WithResolver(fetchComputeImages),
 	)
 	if err != nil {
-		return nil
-	}
-	table, err := gen.Generate()
-	if err != nil {
-		return nil
+		return &schema.Table{}
 	}
 	return table
 }

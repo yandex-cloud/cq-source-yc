@@ -10,18 +10,13 @@ import (
 )
 
 func IamServiceAccounts() *schema.Table {
-	gen, err := tools.NewTableGenerator(
-		"Iam",
-		"ServiceAccount",
-		tools.WithProtoFile("yandex/cloud/iam/v1/service_account.proto", "cloudapi"),
-		tools.WithFetcher(fetchIamServiceAccounts),
+	table, err := tools.GenerateTable(
+		tools.WithTableName("yandex_iam_service_accounts"),
+		tools.WithProtoFile("ServiceAccount", "yandex/cloud/iam/v1/service_account.proto", "cloudapi"),
+		tools.WithResolver(fetchIamServiceAccounts),
 	)
 	if err != nil {
-		return nil
-	}
-	table, err := gen.Generate()
-	if err != nil {
-		return nil
+		return &schema.Table{}
 	}
 	return table
 }

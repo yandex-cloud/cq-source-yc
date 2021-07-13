@@ -11,18 +11,13 @@ import (
 )
 
 func ComputeInstances() *schema.Table {
-	gen, err := tools.NewTableGenerator(
-		"Compute",
-		"Instance",
-		tools.WithProtoFile("yandex/cloud/compute/v1/instance.proto", "cloudapi"),
-		tools.WithFetcher(fetchComputeInstances),
+	table, err := tools.GenerateTable(
+		tools.WithTableName("yandex_computes_instances"),
+		tools.WithProtoFile("Instance", "yandex/cloud/compute/v1/instance.proto", "cloudapi"),
+		tools.WithResolver(fetchComputeInstances),
 	)
 	if err != nil {
-		return nil
-	}
-	table, err := gen.Generate()
-	if err != nil {
-		return nil
+		return &schema.Table{}
 	}
 	return table
 }

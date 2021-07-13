@@ -11,18 +11,13 @@ import (
 )
 
 func VpcSubnetworks() *schema.Table {
-	gen, err := tools.NewTableGenerator(
-		"Vpc",
-		"Subnet",
-		tools.WithProtoFile("yandex/cloud/vpc/v1/subnet.proto", "cloudapi"),
-		tools.WithFetcher(fetchVpcSubnetworks),
+	table, err := tools.GenerateTable(
+		tools.WithTableName("yandex_vpc_networks"),
+		tools.WithProtoFile("Subnet", "yandex/cloud/vpc/v1/subnet.proto", "cloudapi"),
+		tools.WithResolver(fetchVpcSubnetworks),
 	)
 	if err != nil {
-		return nil
-	}
-	table, err := gen.Generate()
-	if err != nil {
-		return nil
+		return &schema.Table{}
 	}
 	return table
 }
