@@ -12,7 +12,7 @@ import (
 
 func VpcSubnetworks() *schema.Table {
 	table, err := tools.GenerateTable(
-		tools.WithTableName("yandex_vpc_networks"),
+		tools.WithTableName("yandex_vpc_subnetworks"),
 		tools.WithProtoFile("Subnet", "yandex/cloud/vpc/v1/subnet.proto", "cloudapi"),
 		tools.WithResolver(fetchVpcSubnetworks),
 	)
