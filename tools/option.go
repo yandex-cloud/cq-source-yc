@@ -104,3 +104,16 @@ func (w withResolver) Apply(co *collapsedOptions) error {
 func WithResolver(resolver schema.TableResolver) Option {
 	return withResolver{resolver: resolver}
 }
+
+type withMultiplex struct {
+	multipex func(meta schema.ClientMeta) []schema.ClientMeta
+}
+
+func (w withMultiplex) Apply(co *collapsedOptions) error {
+	co.multiplex = w.multipex
+	return nil
+}
+
+func WithMultiplex(multiplex func(meta schema.ClientMeta) []schema.ClientMeta) Option {
+	return withMultiplex{multipex: multiplex}
+}

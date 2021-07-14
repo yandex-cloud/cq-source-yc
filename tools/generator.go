@@ -16,6 +16,7 @@ type collapsedOptions struct {
 	tableName      string
 	message        *desc.MessageDescriptor
 	resolver       schema.TableResolver
+	multiplex      func(meta schema.ClientMeta) []schema.ClientMeta
 	defaultColumns map[string]schema.Column
 	ignoredFields  map[string]struct{}
 }
@@ -54,7 +55,8 @@ func (ef expandedField) getColumnName() string {
 }
 
 func GenerateTable(opts ...Option) (*schema.Table, error) {
-	co := &collapsedOptions{}
+	// default values for options
+	co := &collapsedOptions{multiplex: client.FolderMultiplex}
 
 	for _, opt := range opts {
 		err := opt.Apply(co)
@@ -73,7 +75,7 @@ func GenerateTable(opts ...Option) (*schema.Table, error) {
 	return &schema.Table{
 		Name:         co.tableName,
 		Resolver:     co.resolver,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    co.multiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns:      generateColumns(co, forColumns),
@@ -170,6 +172,7 @@ func generateRelations(co *collapsedOptions, fields []expandedField) (tables []*
 			WithTableName(co.tableName+"_"+field.getColumnName()),
 			WithMessage(field.GetMessageType()),
 			WithResolver(getRelationResolver(field.getPathToResolve())),
+			WithMultiplex(func(meta schema.ClientMeta) []schema.ClientMeta { return []schema.ClientMeta{meta} }), // identity
 		)
 		if err != nil {
 			continue
@@ -181,7 +184,12 @@ func generateRelations(co *collapsedOptions, fields []expandedField) (tables []*
 
 func getRelationResolver(relativeFieldName string) schema.TableResolver {
 	return func(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
-		// TODO
+		values := funk.Get(parent.Item, relativeFieldName)
+		if funk.IsIteratee(values) {
+			funk.ForEach(values, func(value interface{}) {
+				res <- value
+			})
+		}
 		return nil
 	}
 }
