@@ -12,9 +12,10 @@ import (
 
 func ComputeInstances() *schema.Table {
 	table, err := tools.GenerateTable(
-		tools.WithTableName("yandex_computes_instances"),
+		tools.WithTableName("yandex_compute_instances"),
 		tools.WithProtoFile("Instance", "yandex/cloud/compute/v1/instance.proto", "cloudapi"),
 		tools.WithResolver(fetchComputeInstances),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

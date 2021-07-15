@@ -15,6 +15,7 @@ func VpcSubnetworks() *schema.Table {
 		tools.WithTableName("yandex_vpc_subnetworks"),
 		tools.WithProtoFile("Subnet", "yandex/cloud/vpc/v1/subnet.proto", "cloudapi"),
 		tools.WithResolver(fetchVpcSubnetworks),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

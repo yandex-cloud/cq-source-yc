@@ -14,6 +14,7 @@ func IamServiceAccounts() *schema.Table {
 		tools.WithTableName("yandex_iam_service_accounts"),
 		tools.WithProtoFile("ServiceAccount", "yandex/cloud/iam/v1/service_account.proto", "cloudapi"),
 		tools.WithResolver(fetchIamServiceAccounts),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

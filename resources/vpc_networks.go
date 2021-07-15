@@ -15,6 +15,7 @@ func VpcNetworks() *schema.Table {
 		tools.WithTableName("yandex_vpc_networks"),
 		tools.WithProtoFile("Network", "yandex/cloud/vpc/v1/network.proto", "cloudapi"),
 		tools.WithResolver(fetchVpcNetworks),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

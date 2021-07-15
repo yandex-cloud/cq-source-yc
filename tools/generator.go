@@ -56,7 +56,11 @@ func (ef expandedField) getColumnName() string {
 
 func GenerateTable(opts ...Option) (*schema.Table, error) {
 	// default values for options
-	co := &collapsedOptions{multiplex: client.FolderMultiplex}
+	co := &collapsedOptions{
+		multiplex:      client.FolderMultiplex,
+		defaultColumns: map[string]schema.Column{},
+		ignoredFields:  map[string]struct{}{},
+	}
 
 	for _, opt := range opts {
 		err := opt.Apply(co)

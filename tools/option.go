@@ -3,6 +3,9 @@ package tools
 import (
 	"fmt"
 
+	"github.com/iancoleman/strcase"
+	"github.com/yandex-cloud/cq-provider-yandex/client"
+
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
@@ -116,4 +119,37 @@ func (w withMultiplex) Apply(co *collapsedOptions) error {
 
 func WithMultiplex(multiplex func(meta schema.ClientMeta) []schema.ClientMeta) Option {
 	return withMultiplex{multipex: multiplex}
+}
+
+type withYCDefaultColumns struct{}
+
+func (w withYCDefaultColumns) Apply(co *collapsedOptions) error {
+	if co.message == nil {
+		return fmt.Errorf("specify message before using of WithYCDefaultColumns")
+	}
+	co.defaultColumns["Id"] = schema.Column{
+		Name:     strcase.ToSnake(co.message.GetName()) + "_id",
+		Type:     schema.TypeString,
+		Resolver: client.ResolveResourceId,
+	}
+	co.defaultColumns["FolderId"] = schema.Column{
+		Name:     "folder_id",
+		Type:     schema.TypeString,
+		Resolver: client.ResolveFolderID,
+	}
+	co.defaultColumns["CreatedAt"] = schema.Column{
+		Name:     "created_at",
+		Type:     schema.TypeTimestamp,
+		Resolver: client.ResolveAsTime,
+	}
+	co.defaultColumns["Labels"] = schema.Column{
+		Name:     "labels",
+		Type:     schema.TypeJSON,
+		Resolver: client.ResolveLabels,
+	}
+	return nil
+}
+
+func WithYCDefaultColumns() Option {
+	return withYCDefaultColumns{}
 }

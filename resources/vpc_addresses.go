@@ -16,6 +16,7 @@ func VpcAddresses() *schema.Table {
 		tools.WithTableName("yandex_vpc_address"),
 		tools.WithProtoFile("Address", "yandex/cloud/vpc/v1/address.proto", "cloudapi"),
 		tools.WithResolver(fetchVpcAddresses),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

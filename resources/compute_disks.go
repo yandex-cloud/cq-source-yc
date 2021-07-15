@@ -12,9 +12,10 @@ import (
 
 func ComputeDisks() *schema.Table {
 	table, err := tools.GenerateTable(
-		tools.WithTableName("yandex_computes_disks"),
+		tools.WithTableName("yandex_compute_disks"),
 		tools.WithProtoFile("Disk", "yandex/cloud/compute/v1/disk.proto", "cloudapi"),
 		tools.WithResolver(fetchComputeDisks),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

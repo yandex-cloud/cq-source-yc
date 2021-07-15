@@ -12,9 +12,10 @@ import (
 
 func ComputeImages() *schema.Table {
 	table, err := tools.GenerateTable(
-		tools.WithTableName("yandex_computes_images"),
+		tools.WithTableName("yandex_compute_images"),
 		tools.WithProtoFile("Image", "yandex/cloud/compute/v1/image.proto", "cloudapi"),
 		tools.WithResolver(fetchComputeImages),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}

@@ -16,6 +16,7 @@ func KmsKeyring() *schema.Table {
 		tools.WithTableName("yandex_kms_symmetric_key"),
 		tools.WithProtoFile("SymmetricKey", "yandex/cloud/kms/v1/symmetric_key.proto", "cloudapi"),
 		tools.WithResolver(fetchKmsSymmetricKeys),
+		tools.WithYCDefaultColumns(),
 	)
 	if err != nil {
 		return &schema.Table{}
