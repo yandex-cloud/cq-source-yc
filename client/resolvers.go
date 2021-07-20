@@ -119,3 +119,9 @@ func ResolvePathAsDict(path string) schema.ColumnResolver {
 func ResolvePathAsTime(path string) schema.ColumnResolver {
 	return resolvePathAsSmth(path, timeConverter)
 }
+
+func EnumPathResolver(path string) schema.ColumnResolver {
+	return func(_ context.Context, meta schema.ClientMeta, r *schema.Resource, c schema.Column) error {
+		return r.Set(c.Name, funk.Get(r.Item, path, funk.WithAllowZero()).(fmt.Stringer).String())
+	}
+}
