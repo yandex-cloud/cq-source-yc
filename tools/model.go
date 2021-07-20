@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/jhump/protoreflect/desc"
 	"strings"
+
+	"github.com/jhump/protoreflect/desc"
 
 	"github.com/jinzhu/inflection"
 

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/iancoleman/strcase"
 	"os"
 	"text/template"
+
+	"github.com/iancoleman/strcase"
 )
 
 func Generate(service, resource, pathToProto string, opts ...Option) error {
