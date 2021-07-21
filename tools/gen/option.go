@@ -1,4 +1,4 @@
-package main
+package gen
 
 type CollapsedOptions struct {
 	paths          []string

@@ -1,4 +1,4 @@
-package main
+package gen
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-func Generate(service, resource, pathToProto string, opts ...Option) error {
+func Generate(service, resource, pathToProto, outDir string, opts ...Option) error {
 	co := NewCollapsedOptions(opts)
 
 	tableBuilder := TableBuilder{
@@ -32,19 +32,19 @@ func Generate(service, resource, pathToProto string, opts ...Option) error {
 		return err
 	}
 
-	file, err := os.Create(fmt.Sprintf("../resources/%v_%v.go", tableModel.ServiceSnake(), tableModel.ResourcesSnake()))
+	file, err := os.Create(fmt.Sprintf("%v/%v_%v.go", outDir, tableModel.ServiceSnake(), tableModel.ResourcesSnake()))
 
 	if err != nil {
 		return err
 	}
 
 	tmpl, err := template.New("resource.go.tmpl").ParseFiles(
-		"template/column.go.tmpl",
-		"template/relation_resolver.go.tmpl",
-		"template/resource_resolver.go.tmpl",
-		"template/resource.go.tmpl",
-		"template/relation.go.tmpl",
-		"template/table.go.tmpl",
+		"tools/gen/template/column.go.tmpl",
+		"tools/gen/template/relation_resolver.go.tmpl",
+		"tools/gen/template/resource_resolver.go.tmpl",
+		"tools/gen/template/resource.go.tmpl",
+		"tools/gen/template/relation.go.tmpl",
+		"tools/gen/template/table.go.tmpl",
 	)
 
 	if err != nil {
@@ -54,6 +54,12 @@ func Generate(service, resource, pathToProto string, opts ...Option) error {
 	resourceFileModel := ResourceFileModel{tableModel, expandRelations(tableModel)}
 
 	err = tmpl.Execute(file, resourceFileModel)
+
+	if err != nil {
+		return err
+	}
+
+	err = file.Close()
 
 	if err != nil {
 		return err
