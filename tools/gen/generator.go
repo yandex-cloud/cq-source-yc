@@ -59,13 +59,7 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 		return err
 	}
 
-	err = file.Close()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return file.Close()
 }
 
 func (b TableBuilder) setDefaultYCColumns() {

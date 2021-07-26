@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/GennadySpb/cq-provider-yandex v0.0.6
-	github.com/cloudquery/cq-provider-sdk v0.3.0-rc1
+	github.com/cloudquery/cq-provider-sdk v0.2.8
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v0.16.1
 	github.com/iancoleman/strcase v0.1.3

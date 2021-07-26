@@ -1,8 +1,4 @@
-gen_out := resources
-
-goimports_w_out = find $(gen_out) -name "*.go" -exec goimports -w {} \;
-
-yc_token != cat yc_token
+GOIMPORTS_RESOURCES = find resources -name "*.go" -exec goimports -w {} \;
 
 cloudapi:
 	git clone https://github.com/yandex-cloud/cloudapi.git
@@ -10,8 +6,8 @@ cloudapi:
 .PHONY: generate-resources
 generate-resources: cloudapi
 	go run tools/genresources.go
-	$(goimports_w_out)
+	$(GOIMPORTS_RESOURCES)
 
 .PHONY: debug
 debug:
-	env CQ_PROVIDER_DEBUG=1 YC_TOKEN=$(yc_token) go run main.go
+	env CQ_PROVIDER_DEBUG=1 YC_TOKEN=$(YC_TOKEN) go run main.go

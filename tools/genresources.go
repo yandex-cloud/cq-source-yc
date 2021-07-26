@@ -56,6 +56,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	err = gen.Generate(
 		"Vpc",
 		"Network",
