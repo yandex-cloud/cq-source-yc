@@ -10,16 +10,16 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 )
 
-func ComputeImages() *schema.Table {
+func ComputeDisks() *schema.Table {
 	return &schema.Table{
-		Name:         "yandex_compute_images",
-		Resolver:     fetchComputeImages,
+		Name:         "yandex_compute_disks",
+		Resolver:     fetchComputeDisks,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "image_id",
+				Name:        "disk_id",
 				Type:        schema.TypeString,
 				Description: "",
 				Resolver:    client.ResolveResourceId,
@@ -39,13 +39,13 @@ func ComputeImages() *schema.Table {
 			{
 				Name:        "name",
 				Type:        schema.TypeString,
-				Description: "Name of the image. 1-63 characters long.",
+				Description: "Name of the disk. 1-63 characters long.",
 				Resolver:    schema.PathResolver("Name"),
 			},
 			{
 				Name:        "description",
 				Type:        schema.TypeString,
-				Description: "Description of the image. 0-256 characters long.",
+				Description: "Description of the disk. 0-256 characters long.",
 				Resolver:    schema.PathResolver("Description"),
 			},
 			{
@@ -55,22 +55,28 @@ func ComputeImages() *schema.Table {
 				Resolver:    client.ResolveLabels,
 			},
 			{
-				Name:        "family",
+				Name:        "type_id",
 				Type:        schema.TypeString,
-				Description: "The name of the image family to which this image belongs.\n\n You can get the most recent image from a family by using\n the [yandex.cloud.compute.v1.ImageService.GetLatestByFamily] request\n and create the disk from this image.",
-				Resolver:    schema.PathResolver("Family"),
+				Description: "ID of the disk type.",
+				Resolver:    schema.PathResolver("TypeId"),
 			},
 			{
-				Name:        "storage_size",
-				Type:        schema.TypeBigInt,
-				Description: "The size of the image, specified in bytes.",
-				Resolver:    schema.PathResolver("StorageSize"),
+				Name:        "zone_id",
+				Type:        schema.TypeString,
+				Description: "ID of the availability zone where the disk resides.",
+				Resolver:    schema.PathResolver("ZoneId"),
 			},
 			{
-				Name:        "min_disk_size",
+				Name:        "size",
 				Type:        schema.TypeBigInt,
-				Description: "Minimum size of the disk which will be created from this image.",
-				Resolver:    schema.PathResolver("MinDiskSize"),
+				Description: "Size of the disk, specified in bytes.",
+				Resolver:    schema.PathResolver("Size"),
+			},
+			{
+				Name:        "block_size",
+				Type:        schema.TypeBigInt,
+				Description: "Block size of the disk, specifiedin bytes.",
+				Resolver:    schema.PathResolver("BlockSize"),
 			},
 			{
 				Name:        "product_ids",
@@ -81,28 +87,46 @@ func ComputeImages() *schema.Table {
 			{
 				Name:        "status",
 				Type:        schema.TypeString,
-				Description: "Current status of the image.",
+				Description: "Current status of the disk.",
 				Resolver:    client.EnumPathResolver("Status"),
 			},
 			{
-				Name:        "os_type",
+				Name:        "source_image_id",
 				Type:        schema.TypeString,
-				Description: "Operating system type. The default is `LINUX`.\n\n This field is used to correctly emulate a vCPU and calculate the cost of using an instance.",
-				Resolver:    client.EnumPathResolver("Os.Type"),
+				Description: "ID of the image that was used for disk creation.",
+				Resolver:    schema.PathResolver("SourceImageId"),
+			},
+			{
+				Name:        "source_snapshot_id",
+				Type:        schema.TypeString,
+				Description: "ID of the snapshot that was used for disk creation.",
+				Resolver:    schema.PathResolver("SourceSnapshotId"),
+			},
+			{
+				Name:        "instance_ids",
+				Type:        schema.TypeStringArray,
+				Description: "Array of instances to which the disk is attached.",
+				Resolver:    schema.PathResolver("InstanceIds"),
+			},
+			{
+				Name:        "disk_placement_policy_placement_group_id",
+				Type:        schema.TypeString,
+				Description: "Placement group ID.",
+				Resolver:    schema.PathResolver("DiskPlacementPolicy.PlacementGroupId"),
 			},
 		},
 	}
 
 }
 
-func fetchComputeImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchComputeDisks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
-		req := &compute.ListImagesRequest{FolderId: f}
-		it := c.Services.Compute.Image().ImageIterator(ctx, req)
+		req := &compute.ListDisksRequest{FolderId: f}
+		it := c.Services.Compute.Disk().DiskIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

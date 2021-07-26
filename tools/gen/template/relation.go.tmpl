@@ -1,0 +1,15 @@
+{
+		Name:         {{print "yandex_" .ServiceSnake "_" .ResourceSnake "_" .AbsolutFieldPathSnake | printf "%q"}},
+		Resolver:     fetch{{.ServiceCamel}}{{.ResourceCamel}}{{.AbsolutFieldPathCamel}},
+		Multiplex:    {{.Multiplex}},
+		IgnoreError:  client.IgnoreErrorHandler,
+		DeleteFilter: client.DeleteFolderFilter,
+		Columns: []schema.Column{
+{{range .Columns}}{{template "column.go.tmpl" .}}{{end}}
+		},
+{{with .Relations}}
+		Relations: []*schema.Table{
+{{range .}}{{template "relation.go.tmpl" .}}{{end}}
+		},
+{{end}}
+},

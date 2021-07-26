@@ -10,3 +10,7 @@ func FolderMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
 	}
 	return l
 }
+
+func IdentityMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
+	return []schema.ClientMeta{meta}
+}

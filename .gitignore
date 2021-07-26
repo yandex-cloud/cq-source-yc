@@ -23,3 +23,9 @@ vendor/
 modules.xml
 .idea/misc.xml
 *.ipr
+/yc_token
+/config.hcl
+/scripts/
+/run.sh
+/cq-provider-yandex
+/cloudapi/
