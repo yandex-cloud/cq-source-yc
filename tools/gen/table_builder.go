@@ -112,7 +112,7 @@ func expandFields(b *TableBuilder, fields []*desc.FieldDescriptor, path []*desc.
 		newExpandedField := expandedField{field, path}
 
 		switch {
-		// TODO: support ignoring of oneof fiels
+		// TODO: support ignoring of oneof fields
 		case b.containsIgnoredField(newExpandedField.getPathToResolve()):
 			continue
 		case isExpandable(field) && !b.containsDefaultColumn(newExpandedField.getPathToResolve()):
