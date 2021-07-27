@@ -23,13 +23,13 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "instance_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the instance.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the instance belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -53,7 +53,7 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{

@@ -21,13 +21,13 @@ func ComputeDisks() *schema.Table {
 			{
 				Name:        "disk_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the disk.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the disk belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func ComputeDisks() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{

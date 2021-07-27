@@ -52,7 +52,7 @@ func main() {
 		"yandex/cloud/compute/v1/disk.proto",
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
-		gen.WithIgnoredColumns("SourceImageId", "SourceSnapshotId"), // to avoid tests fail due to empty columns corresponding oneof fields
+		gen.WithIgnoredColumns("Source.SourceImageId", "Source.SourceSnapshotId"), // to avoid tests fail due to empty columns corresponding oneof fields
 	)
 
 	if err != nil {

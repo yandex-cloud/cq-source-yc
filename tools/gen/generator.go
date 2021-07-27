@@ -63,25 +63,33 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 }
 
 func (b TableBuilder) setDefaultYCColumns() {
+	name := strcase.ToSnake(b.resource.GetName())
+
 	b.defaultColumns["Id"] = &ColumnModel{
-		Name:     strcase.ToSnake(b.resource.GetName()) + "_id",
-		Type:     "schema.TypeString",
-		Resolver: "client.ResolveResourceId",
+		Name:        name + "_id",
+		Type:        "schema.TypeString",
+		Description: fmt.Sprintf("ID of the %v.", name),
+		Resolver:    "client.ResolveResourceId",
 	}
+
 	b.defaultColumns["FolderId"] = &ColumnModel{
-		Name:     "folder_id",
-		Type:     "schema.TypeString",
-		Resolver: "client.ResolveFolderID",
+		Name:        "folder_id",
+		Type:        "schema.TypeString",
+		Description: fmt.Sprintf("ID of the folder that the %v belongs to.", name),
+		Resolver:    "client.ResolveFolderID",
 	}
+
 	b.defaultColumns["CreatedAt"] = &ColumnModel{
 		Name:     "created_at",
 		Type:     "schema.TypeTimestamp",
 		Resolver: "client.ResolveAsTime",
 	}
+
 	b.defaultColumns["Labels"] = &ColumnModel{
-		Name:     "labels",
-		Type:     "schema.TypeJSON",
-		Resolver: "client.ResolveLabels",
+		Name:        "labels",
+		Type:        "schema.TypeJSON",
+		Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
+		Resolver:    "client.ResolveLabels",
 	}
 }
 

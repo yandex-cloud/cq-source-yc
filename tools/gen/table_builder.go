@@ -18,26 +18,38 @@ type expandedField struct {
 
 func (f expandedField) getPathToResolve() string {
 	path := f.getPath()
+
 	for i := range path {
 		path[i] = strcase.ToCamel(path[i])
 	}
+
 	return strings.Join(path, ".")
 }
 
 func (f expandedField) getColumnName() string {
 	path := f.getPath()
+
 	for i := range path {
 		path[i] = strcase.ToSnake(path[i])
 	}
+
 	return strings.Join(path, "_")
 }
 
 func (f expandedField) getPath() []string {
 	path := make([]string, 0, len(f.path)+1)
+
+	// if f is a field within oneof
+	if f.GetOneOf() != nil {
+		path = append(path, strcase.ToCamel(f.GetOneOf().GetName()))
+	}
+
 	for _, field := range f.path {
 		path = append(path, strcase.ToCamel(field.GetJSONName()))
 	}
+
 	path = append(path, strcase.ToCamel(f.GetJSONName()))
+
 	return path
 }
 
@@ -58,15 +70,19 @@ type TableBuilder struct {
 
 func (b *TableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
 	parser := protoparse.Parser{IncludeSourceCodeInfo: true, ImportPaths: paths}
+
 	protoFiles, err := parser.ParseFiles(pathToProto)
 	if err != nil {
 		return err
 	}
+
 	protoFile := protoFiles[0]
+
 	b.messageDesc = protoFile.FindMessage(protoFile.GetPackage() + "." + messageName)
 	if b.messageDesc == nil {
 		return fmt.Errorf("messageDesc %v not found", messageName)
 	}
+
 	b.resource = b.messageDesc
 	return nil
 }
@@ -91,13 +107,14 @@ func (b *TableBuilder) Build() (*TableModel, error) {
 	}, nil
 }
 
-// TODO: bug in oneof expansion
 func expandFields(b *TableBuilder, fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []expandedField) {
 	for _, field := range fields {
 		newPath := path
 		newPath = append(newPath, field)
 		newExpandedField := expandedField{field, path}
+
 		switch {
+		// TODO: support ignoring of oneof fiels
 		case b.containsIgnoredField(newExpandedField.getPathToResolve()):
 			continue
 		case isExpandable(field) && !b.containsDefaultColumn(newExpandedField.getPathToResolve()):
@@ -123,14 +140,18 @@ func filterFields(b *TableBuilder, fields []expandedField) (forColumns []expande
 func (b *TableBuilder) containsDefaultColumn(path string) bool {
 	absolutFieldPath := fieldsToStrings(b.absolutFieldPath)
 	absolutFieldPath = append(absolutFieldPath, path)
+
 	_, ok := b.defaultColumns[strings.Join(absolutFieldPath, ".")]
+
 	return ok
 }
 
 func (b *TableBuilder) containsIgnoredField(path string) bool {
 	absolutFieldPath := fieldsToStrings(b.absolutFieldPath)
 	absolutFieldPath = append(absolutFieldPath, path)
+
 	_, ok := b.ignoredFields[strings.Join(absolutFieldPath, ".")]
+
 	return ok
 }
 
@@ -161,6 +182,7 @@ func generateColumns(b *TableBuilder, fields []expandedField) (columns []*Column
 			} else {
 				resolver = "client.EnumPathResolver"
 			}
+
 			columns = append(columns, &ColumnModel{
 				Name:        field.getColumnName(),
 				Type:        getType(field),
@@ -195,6 +217,7 @@ func getType(field expandedField) string {
 
 func generateRelations(b *TableBuilder, fields []expandedField) []*TableModel {
 	tables := make([]*TableModel, 0, len(fields))
+
 	for _, field := range fields {
 
 		relativeFieldPath := field.path
@@ -223,5 +246,6 @@ func generateRelations(b *TableBuilder, fields []expandedField) []*TableModel {
 
 		tables = append(tables, table)
 	}
+
 	return tables
 }

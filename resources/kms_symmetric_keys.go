@@ -21,13 +21,13 @@ func KmsSymmetricKeys() *schema.Table {
 			{
 				Name:        "symmetric_key_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the symmetric_key.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the symmetric_key belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func KmsSymmetricKeys() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
