@@ -51,7 +51,9 @@ func main() {
 		"Disk",
 		"yandex/cloud/compute/v1/disk.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"))
+		gen.WithProtoPaths("cloudapi"),
+		gen.WithIgnoredColumns("SourceImageId", "SourceSnapshotId"), // to avoid tests fail due to empty columns corresponding oneof fields
+	)
 
 	if err != nil {
 		fmt.Println(err)

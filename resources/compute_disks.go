@@ -91,18 +91,6 @@ func ComputeDisks() *schema.Table {
 				Resolver:    client.EnumPathResolver("Status"),
 			},
 			{
-				Name:        "source_image_id",
-				Type:        schema.TypeString,
-				Description: "ID of the image that was used for disk creation.",
-				Resolver:    schema.PathResolver("SourceImageId"),
-			},
-			{
-				Name:        "source_snapshot_id",
-				Type:        schema.TypeString,
-				Description: "ID of the snapshot that was used for disk creation.",
-				Resolver:    schema.PathResolver("SourceSnapshotId"),
-			},
-			{
 				Name:        "instance_ids",
 				Type:        schema.TypeStringArray,
 				Description: "Array of instances to which the disk is attached.",

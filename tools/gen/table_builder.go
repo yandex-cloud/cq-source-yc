@@ -91,6 +91,7 @@ func (b *TableBuilder) Build() (*TableModel, error) {
 	}, nil
 }
 
+// TODO: bug in oneof expansion
 func expandFields(b *TableBuilder, fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []expandedField) {
 	for _, field := range fields {
 		newPath := path
