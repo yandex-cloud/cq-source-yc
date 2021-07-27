@@ -12,19 +12,19 @@ import (
 )
 
 type Services struct {
-	Kms             *kms.KMS
+	KMS             *kms.KMS
 	Compute         *compute.Compute
-	Vpc             *vpc.VPC
-	Iam             *iam.IAM
+	VPC             *vpc.VPC
+	IAM             *iam.IAM
 	ResourceManager *resourcemanager.ResourceManager
 }
 
-func initServices(ctx context.Context, sdk *ycsdk.SDK) (*Services, error) {
+func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 	return &Services{
-		Kms:             sdk.KMS(),
+		KMS:             sdk.KMS(),
 		Compute:         sdk.Compute(),
-		Vpc:             sdk.VPC(),
-		Iam:             sdk.IAM(),
+		VPC:             sdk.VPC(),
+		IAM:             sdk.IAM(),
 		ResourceManager: sdk.ResourceManager(),
 	}, nil
 }

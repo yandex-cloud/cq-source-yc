@@ -59,7 +59,6 @@ type TableBuilder struct {
 
 	absolutFieldPath []*desc.FieldDescriptor
 
-	parentMessage     *desc.MessageDescriptor
 	relativeFieldPath []*desc.FieldDescriptor
 
 	multiplex      string
@@ -97,10 +96,9 @@ func (b *TableBuilder) Build() (*TableModel, error) {
 
 	return &TableModel{
 		Service:           b.service,
-		Resource:          b.resource,
-		AbsolutFieldPath:  b.absolutFieldPath,
-		ParentMessage:     b.parentMessage,
-		RelativeFieldPath: b.relativeFieldPath,
+		Resource:          strcase.ToCamel(b.resource.GetName()),
+		AbsolutFieldPath:  fieldsToStrings(b.absolutFieldPath),
+		RelativeFieldPath: fieldsToStrings(b.relativeFieldPath),
 		Multiplex:         b.multiplex,
 		Columns:           generateColumns(b, forColumns),
 		Relations:         generateRelations(b, forRelations),
@@ -230,7 +228,6 @@ func generateRelations(b *TableBuilder, fields []expandedField) []*TableModel {
 			service:           b.service,
 			resource:          b.resource,
 			absolutFieldPath:  absolutFieldPath,
-			parentMessage:     b.messageDesc,
 			relativeFieldPath: relativeFieldPath,
 			multiplex:         "client.IdentityMultiplex",
 			messageDesc:       field.GetMessageType(),

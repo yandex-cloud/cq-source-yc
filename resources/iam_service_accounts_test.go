@@ -17,19 +17,19 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
-	compute1 "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
-	"github.com/yandex-cloud/go-sdk/gen/compute"
+	iam1 "github.com/yandex-cloud/go-genproto/yandex/cloud/iam/v1"
+	"github.com/yandex-cloud/go-sdk/gen/iam"
 )
 
-func TestComputeDisks(t *testing.T) {
+func TestIAMServiceAccounts(t *testing.T) {
 	var serv *grpc.Server
 	resource := providertest.ResourceTestData{
-		Table: resources.ComputeDisks(),
+		Table: resources.IAMServiceAccounts(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			computeSvc, serv1, err := createDiskServer()
+			iamSvc, serv1, err := createServiceAccountServer()
 			serv = serv1
 			if err != nil {
 				return nil, err
@@ -37,7 +37,7 @@ func TestComputeDisks(t *testing.T) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
-				Compute: computeSvc,
+				IAM: iamSvc,
 			})
 			return c, nil
 		},
@@ -46,26 +46,26 @@ func TestComputeDisks(t *testing.T) {
 	serv.Stop()
 }
 
-type FakeDiskServiceServer struct {
-	compute1.UnimplementedDiskServiceServer
-	Disk *compute1.Disk
+type FakeServiceAccountServiceServer struct {
+	iam1.UnimplementedServiceAccountServiceServer
+	ServiceAccount *iam1.ServiceAccount
 }
 
-func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
-	var disk compute1.Disk
+func NewFakeServiceAccountServiceServer() (*FakeServiceAccountServiceServer, error) {
+	var service_account iam1.ServiceAccount
 	faker.SetIgnoreInterface(true)
-	err := faker.FakeData(&disk)
+	err := faker.FakeData(&service_account)
 	if err != nil {
 		return nil, err
 	}
-	return &FakeDiskServiceServer{Disk: &disk}, nil
+	return &FakeServiceAccountServiceServer{ServiceAccount: &service_account}, nil
 }
 
-func (s *FakeDiskServiceServer) List(context.Context, *compute1.ListDisksRequest) (*compute1.ListDisksResponse, error) {
-	return &compute1.ListDisksResponse{Disks: []*compute1.Disk{s.Disk}}, nil
+func (s *FakeServiceAccountServiceServer) List(context.Context, *iam1.ListServiceAccountsRequest) (*iam1.ListServiceAccountsResponse, error) {
+	return &iam1.ListServiceAccountsResponse{ServiceAccounts: []*iam1.ServiceAccount{s.ServiceAccount}}, nil
 }
 
-func createDiskServer() (*compute.Compute, *grpc.Server, error) {
+func createServiceAccountServer() (*iam.IAM, *grpc.Server, error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -73,13 +73,13 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 	}
 
 	serv := grpc.NewServer()
-	fakeDiskServiceServer, err := NewFakeDiskServiceServer()
+	fakeServiceAccountServiceServer, err := NewFakeServiceAccountServiceServer()
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	compute1.RegisterDiskServiceServer(serv, fakeDiskServiceServer)
+	iam1.RegisterServiceAccountServiceServer(serv, fakeServiceAccountServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
@@ -94,7 +94,7 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 		return nil, nil, err
 	}
 
-	return compute.NewCompute(
+	return iam.NewIAM(
 		func(ctx context.Context) (*grpc.ClientConn, error) {
 			return conn, nil
 		},

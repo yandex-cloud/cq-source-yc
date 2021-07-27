@@ -5,6 +5,8 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/jinzhu/inflection"
+
 	"github.com/iancoleman/strcase"
 )
 
@@ -32,13 +34,15 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 		return err
 	}
 
-	file, err := os.Create(fmt.Sprintf("%v/%v_%v.go", outDir, tableModel.ServiceSnake(), tableModel.ResourcesSnake()))
+	file, err := os.Create(fmt.Sprintf("%v/%v_%v.go",
+		outDir, strcase.ToSnake(tableModel.Service),
+		strcase.ToSnake(inflection.Plural(tableModel.Resource))))
 
 	if err != nil {
 		return err
 	}
 
-	tmpl, err := template.New("resource.go.tmpl").ParseFiles(
+	tmpl, err := template.New("resource.go.tmpl").Funcs(generatorTemplateFunctions).ParseFiles(
 		"tools/gen/template/column.go.tmpl",
 		"tools/gen/template/relation_resolver.go.tmpl",
 		"tools/gen/template/resource_resolver.go.tmpl",
@@ -99,4 +103,29 @@ func expandRelations(table *TableModel) (tables []*TableModel) {
 		tables = append(tables, relation)
 	}
 	return
+}
+
+func GenerateTests(service, resource, outDir string) error {
+	file, err := os.Create(fmt.Sprintf("%v/%v_%v_test.go",
+		outDir, strcase.ToSnake(service), strcase.ToSnake(inflection.Plural(resource))))
+
+	if err != nil {
+		return err
+	}
+
+	tmpl, err := template.New("resource_test.go.tmpl").Funcs(generatorTemplateFunctions).ParseFiles(
+		"tools/gen/template/resource_test.go.tmpl",
+	)
+
+	if err != nil {
+		return err
+	}
+
+	err = tmpl.Execute(file, ResourceTestFileModel{Resource: resource, Service: service})
+
+	if err != nil {
+		return err
+	}
+
+	return file.Close()
 }

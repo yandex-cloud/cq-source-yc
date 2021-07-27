@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/GennadySpb/cq-provider-yandex v0.0.6
+	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
 	github.com/cloudquery/cq-provider-sdk v0.2.8
 	github.com/cloudquery/faker/v3 v3.7.4 // indirect
 	github.com/golang/protobuf v1.5.2
@@ -18,6 +19,4 @@ require (
 	google.golang.org/grpc v1.39.0
 )
 
-replace (
-	github.com/cloudquery/faker/v3 v3.7.4 => /home/udav318/IdeaProjects/faker
-)
+replace github.com/cloudquery/faker/v3 v3.7.4 => /home/udav318/IdeaProjects/faker

@@ -1,6 +1,6 @@
 {
-		Name:         {{print "yandex_" .ServiceSnake "_" .ResourceSnake "_" .AbsolutFieldPathSnake | printf "%q"}},
-		Resolver:     fetch{{.ServiceCamel}}{{.ResourceCamel}}{{.AbsolutFieldPathCamel}},
+		Name:         {{print "yandex_" (.Service | snake) "_" (.Resource | snake) "_" (.AbsolutFieldPath | asFullFieldName | join "" | snake) | printf "%q"}},
+		Resolver:     fetch{{.Service}}{{.Resource}}{{.AbsolutFieldPath | asFullFieldName | join ""}},
 		Multiplex:    {{.Multiplex}},
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,

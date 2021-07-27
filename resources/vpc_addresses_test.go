@@ -17,19 +17,19 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
-	compute1 "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
-	"github.com/yandex-cloud/go-sdk/gen/compute"
+	vpc1 "github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
+	"github.com/yandex-cloud/go-sdk/gen/vpc"
 )
 
-func TestComputeDisks(t *testing.T) {
+func TestVPCAddresses(t *testing.T) {
 	var serv *grpc.Server
 	resource := providertest.ResourceTestData{
-		Table: resources.ComputeDisks(),
+		Table: resources.VPCAddresses(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			computeSvc, serv1, err := createDiskServer()
+			vpcSvc, serv1, err := createAddressServer()
 			serv = serv1
 			if err != nil {
 				return nil, err
@@ -37,7 +37,7 @@ func TestComputeDisks(t *testing.T) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
-				Compute: computeSvc,
+				VPC: vpcSvc,
 			})
 			return c, nil
 		},
@@ -46,26 +46,26 @@ func TestComputeDisks(t *testing.T) {
 	serv.Stop()
 }
 
-type FakeDiskServiceServer struct {
-	compute1.UnimplementedDiskServiceServer
-	Disk *compute1.Disk
+type FakeAddressServiceServer struct {
+	vpc1.UnimplementedAddressServiceServer
+	Address *vpc1.Address
 }
 
-func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
-	var disk compute1.Disk
+func NewFakeAddressServiceServer() (*FakeAddressServiceServer, error) {
+	var address vpc1.Address
 	faker.SetIgnoreInterface(true)
-	err := faker.FakeData(&disk)
+	err := faker.FakeData(&address)
 	if err != nil {
 		return nil, err
 	}
-	return &FakeDiskServiceServer{Disk: &disk}, nil
+	return &FakeAddressServiceServer{Address: &address}, nil
 }
 
-func (s *FakeDiskServiceServer) List(context.Context, *compute1.ListDisksRequest) (*compute1.ListDisksResponse, error) {
-	return &compute1.ListDisksResponse{Disks: []*compute1.Disk{s.Disk}}, nil
+func (s *FakeAddressServiceServer) List(context.Context, *vpc1.ListAddressesRequest) (*vpc1.ListAddressesResponse, error) {
+	return &vpc1.ListAddressesResponse{Addresses: []*vpc1.Address{s.Address}}, nil
 }
 
-func createDiskServer() (*compute.Compute, *grpc.Server, error) {
+func createAddressServer() (*vpc.VPC, *grpc.Server, error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -73,13 +73,13 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 	}
 
 	serv := grpc.NewServer()
-	fakeDiskServiceServer, err := NewFakeDiskServiceServer()
+	fakeAddressServiceServer, err := NewFakeAddressServiceServer()
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	compute1.RegisterDiskServiceServer(serv, fakeDiskServiceServer)
+	vpc1.RegisterAddressServiceServer(serv, fakeAddressServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
@@ -94,7 +94,7 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 		return nil, nil, err
 	}
 
-	return compute.NewCompute(
+	return vpc.NewVPC(
 		func(ctx context.Context) (*grpc.ClientConn, error) {
 			return conn, nil
 		},

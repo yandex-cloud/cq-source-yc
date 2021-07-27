@@ -1,6 +1,6 @@
 {
-		Name:         {{print "yandex_" .ServiceSnake "_" .ResourcesSnake | printf "%q"}},
-		Resolver:     fetch{{.ServiceCamel}}{{.ResourcesCamel}},
+		Name:         {{print "yandex_" (.Service | snake) "_" (.Resource | snake | plural) | printf "%q"}},
+		Resolver:     fetch{{.Service}}{{.Resource | plural}},
 		Multiplex:    {{.Multiplex}},
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,

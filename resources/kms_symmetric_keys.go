@@ -10,10 +10,10 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/kms/v1"
 )
 
-func KmsSymmetricKeys() *schema.Table {
+func KMSSymmetricKeys() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_kms_symmetric_keys",
-		Resolver:     fetchKmsSymmetricKeys,
+		Resolver:     fetchKMSSymmetricKeys,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
@@ -115,12 +115,6 @@ func KmsSymmetricKeys() *schema.Table {
 				Resolver:    schema.PathResolver("PrimaryVersion.DestroyAt.Nanos"),
 			},
 			{
-				Name:        "primary_version_hosted_by_hsm",
-				Type:        schema.TypeBool,
-				Description: "Indication of the version that is hosted by HSM.",
-				Resolver:    schema.PathResolver("PrimaryVersion.HostedByHsm"),
-			},
-			{
 				Name:        "default_algorithm",
 				Type:        schema.TypeString,
 				Description: "Default encryption algorithm to be used with new versions of the key.",
@@ -161,14 +155,14 @@ func KmsSymmetricKeys() *schema.Table {
 
 }
 
-func fetchKmsSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchKMSSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &kms.ListSymmetricKeysRequest{FolderId: f}
-		it := c.Services.Kms.SymmetricKey().SymmetricKeyIterator(ctx, req)
+		it := c.Services.KMS.SymmetricKey().SymmetricKeyIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

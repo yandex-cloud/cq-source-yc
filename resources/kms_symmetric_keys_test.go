@@ -17,19 +17,19 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
-	compute1 "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
-	"github.com/yandex-cloud/go-sdk/gen/compute"
+	kms1 "github.com/yandex-cloud/go-genproto/yandex/cloud/kms/v1"
+	"github.com/yandex-cloud/go-sdk/gen/kms"
 )
 
-func TestComputeDisks(t *testing.T) {
+func TestKMSSymmetricKeys(t *testing.T) {
 	var serv *grpc.Server
 	resource := providertest.ResourceTestData{
-		Table: resources.ComputeDisks(),
+		Table: resources.KMSSymmetricKeys(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			computeSvc, serv1, err := createDiskServer()
+			kmsSvc, serv1, err := createSymmetricKeyServer()
 			serv = serv1
 			if err != nil {
 				return nil, err
@@ -37,7 +37,7 @@ func TestComputeDisks(t *testing.T) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
-				Compute: computeSvc,
+				KMS: kmsSvc,
 			})
 			return c, nil
 		},
@@ -46,26 +46,26 @@ func TestComputeDisks(t *testing.T) {
 	serv.Stop()
 }
 
-type FakeDiskServiceServer struct {
-	compute1.UnimplementedDiskServiceServer
-	Disk *compute1.Disk
+type FakeSymmetricKeyServiceServer struct {
+	kms1.UnimplementedSymmetricKeyServiceServer
+	SymmetricKey *kms1.SymmetricKey
 }
 
-func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
-	var disk compute1.Disk
+func NewFakeSymmetricKeyServiceServer() (*FakeSymmetricKeyServiceServer, error) {
+	var symmetric_key kms1.SymmetricKey
 	faker.SetIgnoreInterface(true)
-	err := faker.FakeData(&disk)
+	err := faker.FakeData(&symmetric_key)
 	if err != nil {
 		return nil, err
 	}
-	return &FakeDiskServiceServer{Disk: &disk}, nil
+	return &FakeSymmetricKeyServiceServer{SymmetricKey: &symmetric_key}, nil
 }
 
-func (s *FakeDiskServiceServer) List(context.Context, *compute1.ListDisksRequest) (*compute1.ListDisksResponse, error) {
-	return &compute1.ListDisksResponse{Disks: []*compute1.Disk{s.Disk}}, nil
+func (s *FakeSymmetricKeyServiceServer) List(context.Context, *kms1.ListSymmetricKeysRequest) (*kms1.ListSymmetricKeysResponse, error) {
+	return &kms1.ListSymmetricKeysResponse{Keys: []*kms1.SymmetricKey{s.SymmetricKey}}, nil
 }
 
-func createDiskServer() (*compute.Compute, *grpc.Server, error) {
+func createSymmetricKeyServer() (*kms.KMS, *grpc.Server, error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -73,13 +73,13 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 	}
 
 	serv := grpc.NewServer()
-	fakeDiskServiceServer, err := NewFakeDiskServiceServer()
+	fakeSymmetricKeyServiceServer, err := NewFakeSymmetricKeyServiceServer()
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	compute1.RegisterDiskServiceServer(serv, fakeDiskServiceServer)
+	kms1.RegisterSymmetricKeyServiceServer(serv, fakeSymmetricKeyServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
@@ -94,7 +94,7 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 		return nil, nil, err
 	}
 
-	return compute.NewCompute(
+	return kms.NewKMS(
 		func(ctx context.Context) (*grpc.ClientConn, error) {
 			return conn, nil
 		},

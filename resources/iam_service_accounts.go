@@ -10,10 +10,10 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/iam/v1"
 )
 
-func IamServiceAccounts() *schema.Table {
+func IAMServiceAccounts() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_iam_service_accounts",
-		Resolver:     fetchIamServiceAccounts,
+		Resolver:     fetchIAMServiceAccounts,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
@@ -53,14 +53,14 @@ func IamServiceAccounts() *schema.Table {
 
 }
 
-func fetchIamServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchIAMServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &iam.ListServiceAccountsRequest{FolderId: f}
-		it := c.Services.Iam.ServiceAccount().ServiceAccountIterator(ctx, req)
+		it := c.Services.IAM.ServiceAccount().ServiceAccountIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

@@ -10,10 +10,10 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 )
 
-func VpcSubnets() *schema.Table {
+func VPCSubnets() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_subnets",
-		Resolver:     fetchVpcSubnets,
+		Resolver:     fetchVPCSubnets,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
@@ -107,14 +107,14 @@ func VpcSubnets() *schema.Table {
 
 }
 
-func fetchVpcSubnets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVPCSubnets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &vpc.ListSubnetsRequest{FolderId: f}
-		it := c.Services.Vpc.Subnet().SubnetIterator(ctx, req)
+		it := c.Services.VPC.Subnet().SubnetIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

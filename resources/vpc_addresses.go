@@ -10,10 +10,10 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 )
 
-func VpcAddresses() *schema.Table {
+func VPCAddresses() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_addresses",
-		Resolver:     fetchVpcAddresses,
+		Resolver:     fetchVPCAddresses,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
@@ -55,30 +55,6 @@ func VpcAddresses() *schema.Table {
 				Resolver:    client.ResolveLabels,
 			},
 			{
-				Name:        "external_ipv_4_address_address",
-				Type:        schema.TypeString,
-				Description: "Value of address.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Address"),
-			},
-			{
-				Name:        "external_ipv_4_address_zone_id",
-				Type:        schema.TypeString,
-				Description: "Availability zone from which the address will be allocated.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.ZoneId"),
-			},
-			{
-				Name:        "external_ipv_4_address_requirements_ddos_protection_provider",
-				Type:        schema.TypeString,
-				Description: "DDoS protection provider ID.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Requirements.DdosProtectionProvider"),
-			},
-			{
-				Name:        "external_ipv_4_address_requirements_outgoing_smtp_capability",
-				Type:        schema.TypeString,
-				Description: "Capability to send SMTP traffic.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
-			},
-			{
 				Name:        "reserved",
 				Type:        schema.TypeBool,
 				Description: "Specifies if address is reserved or not.",
@@ -107,14 +83,14 @@ func VpcAddresses() *schema.Table {
 
 }
 
-func fetchVpcAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVPCAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &vpc.ListAddressesRequest{FolderId: f}
-		it := c.Services.Vpc.Address().AddressIterator(ctx, req)
+		it := c.Services.VPC.Address().AddressIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

@@ -21,15 +21,15 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 )
 
-func TestComputeDisks(t *testing.T) {
+func TestComputeInstances(t *testing.T) {
 	var serv *grpc.Server
 	resource := providertest.ResourceTestData{
-		Table: resources.ComputeDisks(),
+		Table: resources.ComputeInstances(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			computeSvc, serv1, err := createDiskServer()
+			computeSvc, serv1, err := createInstanceServer()
 			serv = serv1
 			if err != nil {
 				return nil, err
@@ -46,26 +46,26 @@ func TestComputeDisks(t *testing.T) {
 	serv.Stop()
 }
 
-type FakeDiskServiceServer struct {
-	compute1.UnimplementedDiskServiceServer
-	Disk *compute1.Disk
+type FakeInstanceServiceServer struct {
+	compute1.UnimplementedInstanceServiceServer
+	Instance *compute1.Instance
 }
 
-func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
-	var disk compute1.Disk
+func NewFakeInstanceServiceServer() (*FakeInstanceServiceServer, error) {
+	var instance compute1.Instance
 	faker.SetIgnoreInterface(true)
-	err := faker.FakeData(&disk)
+	err := faker.FakeData(&instance)
 	if err != nil {
 		return nil, err
 	}
-	return &FakeDiskServiceServer{Disk: &disk}, nil
+	return &FakeInstanceServiceServer{Instance: &instance}, nil
 }
 
-func (s *FakeDiskServiceServer) List(context.Context, *compute1.ListDisksRequest) (*compute1.ListDisksResponse, error) {
-	return &compute1.ListDisksResponse{Disks: []*compute1.Disk{s.Disk}}, nil
+func (s *FakeInstanceServiceServer) List(context.Context, *compute1.ListInstancesRequest) (*compute1.ListInstancesResponse, error) {
+	return &compute1.ListInstancesResponse{Instances: []*compute1.Instance{s.Instance}}, nil
 }
 
-func createDiskServer() (*compute.Compute, *grpc.Server, error) {
+func createInstanceServer() (*compute.Compute, *grpc.Server, error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -73,13 +73,13 @@ func createDiskServer() (*compute.Compute, *grpc.Server, error) {
 	}
 
 	serv := grpc.NewServer()
-	fakeDiskServiceServer, err := NewFakeDiskServiceServer()
+	fakeInstanceServiceServer, err := NewFakeInstanceServiceServer()
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	compute1.RegisterDiskServiceServer(serv, fakeDiskServiceServer)
+	compute1.RegisterInstanceServiceServer(serv, fakeInstanceServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
