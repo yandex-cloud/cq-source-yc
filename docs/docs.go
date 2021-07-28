@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/GennadySpb/cq-provider-yandex/resources"
 	"github.com/cloudquery/cq-provider-sdk/provider/docs"
+	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
 func main() {

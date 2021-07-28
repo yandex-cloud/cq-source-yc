@@ -1,6 +1,6 @@
 {
-		Name:         {{print "yandex_" (.Service | snake) "_" (.Resource | snake) "_" (.AbsolutFieldPath | asFullFieldName | join "" | snake) | printf "%q"}},
-		Resolver:     fetch{{.Service}}{{.Resource}}{{.AbsolutFieldPath | asFullFieldName | join ""}},
+		Name:         {{print "yandex_" (.Service | snake) "_" (.Resource | snake) "_" (.AbsolutPath | asFullFieldName | join "" | snake) | printf "%q"}},
+		Resolver:     fetch{{.Service}}{{.Resource}}{{.AbsolutPath | asFullFieldName | join ""}},
 		Multiplex:    {{.Multiplex}},
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,

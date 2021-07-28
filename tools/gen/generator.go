@@ -13,7 +13,7 @@ import (
 func Generate(service, resource, pathToProto, outDir string, opts ...Option) error {
 	co := NewCollapsedOptions(opts)
 
-	tableBuilder := TableBuilder{
+	tableBuilder := tableBuilder{
 		service:        service,
 		multiplex:      "client.FolderMultiplex",
 		defaultColumns: co.defaultColumns,
@@ -66,7 +66,7 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	return file.Close()
 }
 
-func (b TableBuilder) setDefaultYCColumns() {
+func (b tableBuilder) setDefaultYCColumns() {
 	name := strcase.ToSnake(b.resource.GetName())
 
 	b.defaultColumns["Id"] = &ColumnModel{

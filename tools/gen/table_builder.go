@@ -6,60 +6,16 @@ import (
 
 	"github.com/iancoleman/strcase"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 )
 
-type expandedField struct {
-	*desc.FieldDescriptor
-	path []*desc.FieldDescriptor
-}
-
-func (f expandedField) getPathToResolve() string {
-	path := f.getPath()
-
-	for i := range path {
-		path[i] = strcase.ToCamel(path[i])
-	}
-
-	return strings.Join(path, ".")
-}
-
-func (f expandedField) getColumnName() string {
-	path := f.getPath()
-
-	for i := range path {
-		path[i] = strcase.ToSnake(path[i])
-	}
-
-	return strings.Join(path, "_")
-}
-
-func (f expandedField) getPath() []string {
-	path := make([]string, 0, len(f.path)+1)
-
-	// if f is a field within oneof
-	if f.GetOneOf() != nil {
-		path = append(path, strcase.ToCamel(f.GetOneOf().GetName()))
-	}
-
-	for _, field := range f.path {
-		path = append(path, strcase.ToCamel(field.GetJSONName()))
-	}
-
-	path = append(path, strcase.ToCamel(f.GetJSONName()))
-
-	return path
-}
-
-type TableBuilder struct {
+type tableBuilder struct {
 	service  string
 	resource *desc.MessageDescriptor
 
-	absolutFieldPath []*desc.FieldDescriptor
-
-	relativeFieldPath []*desc.FieldDescriptor
+	absolutPath  []*desc.FieldDescriptor
+	relativePath []*desc.FieldDescriptor
 
 	multiplex      string
 	messageDesc    *desc.MessageDescriptor
@@ -67,7 +23,7 @@ type TableBuilder struct {
 	ignoredFields  map[string]struct{}
 }
 
-func (b *TableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
+func (b *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
 	parser := protoparse.Parser{IncludeSourceCodeInfo: true, ImportPaths: paths}
 
 	protoFiles, err := parser.ParseFiles(pathToProto)
@@ -86,37 +42,37 @@ func (b *TableBuilder) WithMessageFromProto(messageName, pathToProto string, pat
 	return nil
 }
 
-func (b *TableBuilder) Build() (*TableModel, error) {
+func (b *tableBuilder) Build() (*TableModel, error) {
 	if b.messageDesc == nil {
 		return nil, fmt.Errorf("source of messageDesc wasn't specified")
 	}
 
-	expandedFields := expandFields(b, b.messageDesc.GetFields(), nil)
-	forColumns, forRelations := filterFields(b, expandedFields)
+	expandedFields := b.expandFields(b.messageDesc.GetFields(), nil)
+	forColumns, forRelations := b.filterFields(expandedFields)
 
 	return &TableModel{
-		Service:           b.service,
-		Resource:          strcase.ToCamel(b.resource.GetName()),
-		AbsolutFieldPath:  fieldsToStrings(b.absolutFieldPath),
-		RelativeFieldPath: fieldsToStrings(b.relativeFieldPath),
-		Multiplex:         b.multiplex,
-		Columns:           generateColumns(b, forColumns),
-		Relations:         generateRelations(b, forRelations),
+		Service:      b.service,
+		Resource:     strcase.ToCamel(b.resource.GetName()),
+		AbsolutPath:  fieldsToStrings(b.absolutPath),
+		RelativePath: fieldsToStrings(b.relativePath),
+		Multiplex:    b.multiplex,
+		Columns:      b.generateColumns(forColumns),
+		Relations:    b.generateRelations(forRelations),
 	}, nil
 }
 
-func expandFields(b *TableBuilder, fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []expandedField) {
+func (b *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []expandedField) {
 	for _, field := range fields {
-		newPath := path
-		newPath = append(newPath, field)
 		newExpandedField := expandedField{field, path}
 
+		newPath := path
+		newPath = append(newPath, field)
+
 		switch {
-		// TODO: support ignoring of oneof fields
-		case b.containsIgnoredField(newExpandedField.getPathToResolve()):
+		case b.containsIgnoredField(newExpandedField):
 			continue
-		case isExpandable(field) && !b.containsDefaultColumn(newExpandedField.getPathToResolve()):
-			expandedFields = append(expandedFields, expandFields(b, field.GetMessageType().GetFields(), newPath)...)
+		case isExpandable(field) && !b.containsDefaultColumn(newExpandedField):
+			expandedFields = append(expandedFields, b.expandFields(field.GetMessageType().GetFields(), newPath)...)
 		default:
 			expandedFields = append(expandedFields, newExpandedField)
 		}
@@ -124,9 +80,9 @@ func expandFields(b *TableBuilder, fields []*desc.FieldDescriptor, path []*desc.
 	return
 }
 
-func filterFields(b *TableBuilder, fields []expandedField) (forColumns []expandedField, forRelations []expandedField) {
+func (b *tableBuilder) filterFields(fields []expandedField) (forColumns []expandedField, forRelations []expandedField) {
 	for _, field := range fields {
-		if !isConvertableToRelation(field) || b.containsDefaultColumn(field.getPathToResolve()) {
+		if !isConvertableToRelation(field) || b.containsDefaultColumn(field) {
 			forColumns = append(forColumns, field)
 		} else {
 			forRelations = append(forRelations, field)
@@ -135,104 +91,51 @@ func filterFields(b *TableBuilder, fields []expandedField) (forColumns []expande
 	return
 }
 
-func (b *TableBuilder) containsDefaultColumn(path string) bool {
-	absolutFieldPath := fieldsToStrings(b.absolutFieldPath)
-	absolutFieldPath = append(absolutFieldPath, path)
-
-	_, ok := b.defaultColumns[strings.Join(absolutFieldPath, ".")]
-
+func (b *tableBuilder) containsDefaultColumn(field expandedField) bool {
+	_, ok := b.defaultColumns[field.getAbsolutPath(b.absolutPath)]
 	return ok
 }
 
-func (b *TableBuilder) containsIgnoredField(path string) bool {
-	absolutFieldPath := fieldsToStrings(b.absolutFieldPath)
-	absolutFieldPath = append(absolutFieldPath, path)
-
-	_, ok := b.ignoredFields[strings.Join(absolutFieldPath, ".")]
-
+func (b *tableBuilder) containsIgnoredField(field expandedField) bool {
+	_, ok := b.ignoredFields[field.getAbsolutPath(b.absolutPath)]
 	return ok
 }
 
-func fieldsToStrings(fields []*desc.FieldDescriptor) []string {
-	result := make([]string, 0, len(fields))
+func (b *tableBuilder) generateColumns(fields []expandedField) (columns []*ColumnModel) {
 	for _, field := range fields {
-		result = append(result, strcase.ToCamel(field.GetJSONName()))
-	}
-	return result
-}
-
-func isExpandable(field *desc.FieldDescriptor) bool {
-	return !field.IsRepeated() && !field.IsMap() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
-}
-
-func isConvertableToRelation(field expandedField) bool {
-	return field.IsRepeated() && !field.IsMap() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
-}
-
-func generateColumns(b *TableBuilder, fields []expandedField) (columns []*ColumnModel) {
-	for _, field := range fields {
-		if col, defined := b.defaultColumns[field.getPathToResolve()]; defined {
+		if col, defined := b.defaultColumns[field.getAbsolutPath(b.absolutPath)]; defined {
 			columns = append(columns, col)
 		} else {
-			var resolver string
-			if field.GetEnumType() == nil {
-				resolver = "schema.PathResolver"
-			} else {
-				resolver = "client.EnumPathResolver"
-			}
-
 			columns = append(columns, &ColumnModel{
 				Name:        field.getColumnName(),
-				Type:        getType(field),
+				Type:        field.getType(),
 				Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
-				Resolver:    fmt.Sprintf("%v(\"%v\")", resolver, field.getPathToResolve()),
+				Resolver:    fmt.Sprintf("%v(\"%v\")", field.getResolver(), field.getPath()),
 			})
 		}
 	}
 	return
 }
 
-func getType(field expandedField) string {
-	switch {
-	case field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_STRING:
-		return "schema.TypeStringArray"
-	case !field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_STRING:
-		return "schema.TypeString"
-	case !field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_INT64:
-		return "schema.TypeBigInt"
-	case !field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_INT32:
-		return "schema.TypeInt"
-	case field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_INT32:
-		return "schema.TypeIntArray"
-	case !field.IsRepeated() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_BOOL:
-		return "schema.TypeBool"
-	case field.IsMap():
-		return "schema.TypeJSON"
-	default:
-		return "schema.TypeString"
-	}
-}
-
-func generateRelations(b *TableBuilder, fields []expandedField) []*TableModel {
+func (b *tableBuilder) generateRelations(fields []expandedField) []*TableModel {
 	tables := make([]*TableModel, 0, len(fields))
 
 	for _, field := range fields {
+		relativePath := field.path
+		relativePath = append(relativePath, field.FieldDescriptor)
 
-		relativeFieldPath := field.path
-		relativeFieldPath = append(relativeFieldPath, field.FieldDescriptor)
+		absolutPath := b.absolutPath
+		absolutPath = append(absolutPath, relativePath...)
 
-		absolutFieldPath := b.absolutFieldPath
-		absolutFieldPath = append(absolutFieldPath, relativeFieldPath...)
-
-		builder := TableBuilder{
-			service:           b.service,
-			resource:          b.resource,
-			absolutFieldPath:  absolutFieldPath,
-			relativeFieldPath: relativeFieldPath,
-			multiplex:         "client.IdentityMultiplex",
-			messageDesc:       field.GetMessageType(),
-			ignoredFields:     b.ignoredFields,
-			defaultColumns:    b.defaultColumns,
+		builder := tableBuilder{
+			service:        b.service,
+			resource:       b.resource,
+			absolutPath:    absolutPath,
+			relativePath:   relativePath,
+			multiplex:      "client.IdentityMultiplex",
+			messageDesc:    field.GetMessageType(),
+			ignoredFields:  b.ignoredFields,
+			defaultColumns: b.defaultColumns,
 		}
 
 		table, err := builder.Build()
