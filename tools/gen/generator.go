@@ -13,22 +13,22 @@ import (
 func Generate(service, resource, pathToProto, outDir string, opts ...Option) error {
 	co := NewCollapsedOptions(opts)
 
-	tableBuilder := tableBuilder{
+	tb := tableBuilder{
 		service:        service,
 		multiplex:      "client.FolderMultiplex",
 		defaultColumns: co.defaultColumns,
 		ignoredFields:  co.ignoredFields,
 	}
 
-	err := tableBuilder.WithMessageFromProto(resource, pathToProto, co.paths...)
+	err := tb.WithMessageFromProto(resource, pathToProto, co.paths...)
 
 	if err != nil {
 		return err
 	}
 
-	tableBuilder.setDefaultYCColumns()
+	tb.setDefaultYCColumns()
 
-	tableModel, err := tableBuilder.Build()
+	tableModel, err := tb.Build()
 
 	if err != nil {
 		return err
@@ -66,30 +66,30 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	return file.Close()
 }
 
-func (b tableBuilder) setDefaultYCColumns() {
-	name := strcase.ToSnake(b.resource.GetName())
+func (tb tableBuilder) setDefaultYCColumns() {
+	name := strcase.ToSnake(tb.resource)
 
-	b.defaultColumns["Id"] = &ColumnModel{
+	tb.defaultColumns["Id"] = &ColumnModel{
 		Name:        name + "_id",
 		Type:        "schema.TypeString",
 		Description: fmt.Sprintf("ID of the %v.", name),
 		Resolver:    "client.ResolveResourceId",
 	}
 
-	b.defaultColumns["FolderId"] = &ColumnModel{
+	tb.defaultColumns["FolderId"] = &ColumnModel{
 		Name:        "folder_id",
 		Type:        "schema.TypeString",
 		Description: fmt.Sprintf("ID of the folder that the %v belongs to.", name),
 		Resolver:    "client.ResolveFolderID",
 	}
 
-	b.defaultColumns["CreatedAt"] = &ColumnModel{
+	tb.defaultColumns["CreatedAt"] = &ColumnModel{
 		Name:     "created_at",
 		Type:     "schema.TypeTimestamp",
 		Resolver: "client.ResolveAsTime",
 	}
 
-	b.defaultColumns["Labels"] = &ColumnModel{
+	tb.defaultColumns["Labels"] = &ColumnModel{
 		Name:        "labels",
 		Type:        "schema.TypeJSON",
 		Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",

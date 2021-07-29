@@ -6,10 +6,10 @@ type ResourceFileModel struct {
 }
 
 type TableModel struct {
-	// All fields below should be in camel case
+	// Should be in camel case
 	Service      string
 	Resource     string
-	AbsolutPath  []string
+	AbsolutePath []string
 	RelativePath []string
 
 	Multiplex string

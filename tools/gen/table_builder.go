@@ -4,26 +4,24 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/iancoleman/strcase"
-
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 )
 
 type tableBuilder struct {
-	service  string
-	resource *desc.MessageDescriptor
+	service      string
+	resource     string
+	absolutePath []string
+	relativePath []string
+	multiplex    string
 
-	absolutPath  []*desc.FieldDescriptor
-	relativePath []*desc.FieldDescriptor
+	messageDesc *desc.MessageDescriptor
 
-	multiplex      string
-	messageDesc    *desc.MessageDescriptor
 	defaultColumns map[string]*ColumnModel
 	ignoredFields  map[string]struct{}
 }
 
-func (b *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
+func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
 	parser := protoparse.Parser{IncludeSourceCodeInfo: true, ImportPaths: paths}
 
 	protoFiles, err := parser.ParseFiles(pathToProto)
@@ -33,46 +31,46 @@ func (b *tableBuilder) WithMessageFromProto(messageName, pathToProto string, pat
 
 	protoFile := protoFiles[0]
 
-	b.messageDesc = protoFile.FindMessage(protoFile.GetPackage() + "." + messageName)
-	if b.messageDesc == nil {
+	tb.messageDesc = protoFile.FindMessage(protoFile.GetPackage() + "." + messageName)
+	if tb.messageDesc == nil {
 		return fmt.Errorf("messageDesc %v not found", messageName)
 	}
 
-	b.resource = b.messageDesc
+	tb.resource = getCamelName(tb.messageDesc)
 	return nil
 }
 
-func (b *tableBuilder) Build() (*TableModel, error) {
-	if b.messageDesc == nil {
+func (tb *tableBuilder) Build() (*TableModel, error) {
+	if tb.messageDesc == nil {
 		return nil, fmt.Errorf("source of messageDesc wasn't specified")
 	}
 
-	expandedFields := b.expandFields(b.messageDesc.GetFields(), nil)
-	forColumns, forRelations := b.filterFields(expandedFields)
+	expandedFields := tb.expandFields(tb.messageDesc.GetFields(), nil)
+	forColumns, forRelations := tb.filterFields(expandedFields)
 
 	return &TableModel{
-		Service:      b.service,
-		Resource:     strcase.ToCamel(b.resource.GetName()),
-		AbsolutPath:  fieldsToStrings(b.absolutPath),
-		RelativePath: fieldsToStrings(b.relativePath),
-		Multiplex:    b.multiplex,
-		Columns:      b.generateColumns(forColumns),
-		Relations:    b.generateRelations(forRelations),
+		Service:      tb.service,
+		Resource:     tb.resource,
+		AbsolutePath: tb.absolutePath,
+		RelativePath: tb.relativePath,
+		Multiplex:    tb.multiplex,
+		Columns:      tb.generateColumns(forColumns),
+		Relations:    tb.generateRelations(forRelations),
 	}, nil
 }
 
-func (b *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []*desc.FieldDescriptor) (expandedFields []expandedField) {
+func (tb *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []string) (expandedFields []expandedField) {
 	for _, field := range fields {
 		newExpandedField := expandedField{field, path}
 
 		newPath := path
-		newPath = append(newPath, field)
+		newPath = append(newPath, getCamelName(field))
 
 		switch {
-		case b.containsIgnoredField(newExpandedField):
+		case tb.containsIgnoredField(newExpandedField):
 			continue
-		case isExpandable(field) && !b.containsDefaultColumn(newExpandedField):
-			expandedFields = append(expandedFields, b.expandFields(field.GetMessageType().GetFields(), newPath)...)
+		case isExpandable(field) && !tb.containsDefaultColumn(newExpandedField):
+			expandedFields = append(expandedFields, tb.expandFields(field.GetMessageType().GetFields(), newPath)...)
 		default:
 			expandedFields = append(expandedFields, newExpandedField)
 		}
@@ -80,9 +78,9 @@ func (b *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []*desc
 	return
 }
 
-func (b *tableBuilder) filterFields(fields []expandedField) (forColumns []expandedField, forRelations []expandedField) {
+func (tb *tableBuilder) filterFields(fields []expandedField) (forColumns []expandedField, forRelations []expandedField) {
 	for _, field := range fields {
-		if !isConvertableToRelation(field) || b.containsDefaultColumn(field) {
+		if !field.isConvertableToRelation() || tb.containsDefaultColumn(field) {
 			forColumns = append(forColumns, field)
 		} else {
 			forRelations = append(forRelations, field)
@@ -91,19 +89,19 @@ func (b *tableBuilder) filterFields(fields []expandedField) (forColumns []expand
 	return
 }
 
-func (b *tableBuilder) containsDefaultColumn(field expandedField) bool {
-	_, ok := b.defaultColumns[field.getAbsolutPath(b.absolutPath)]
+func (tb *tableBuilder) containsDefaultColumn(field expandedField) bool {
+	_, ok := tb.defaultColumns[field.resolvePath(tb.absolutePath)]
 	return ok
 }
 
-func (b *tableBuilder) containsIgnoredField(field expandedField) bool {
-	_, ok := b.ignoredFields[field.getAbsolutPath(b.absolutPath)]
+func (tb *tableBuilder) containsIgnoredField(field expandedField) bool {
+	_, ok := tb.ignoredFields[field.resolvePath(tb.absolutePath)]
 	return ok
 }
 
-func (b *tableBuilder) generateColumns(fields []expandedField) (columns []*ColumnModel) {
+func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*ColumnModel) {
 	for _, field := range fields {
-		if col, defined := b.defaultColumns[field.getAbsolutPath(b.absolutPath)]; defined {
+		if col, defined := tb.defaultColumns[field.resolvePath(tb.absolutePath)]; defined {
 			columns = append(columns, col)
 		} else {
 			columns = append(columns, &ColumnModel{
@@ -117,25 +115,25 @@ func (b *tableBuilder) generateColumns(fields []expandedField) (columns []*Colum
 	return
 }
 
-func (b *tableBuilder) generateRelations(fields []expandedField) []*TableModel {
+func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel {
 	tables := make([]*TableModel, 0, len(fields))
 
 	for _, field := range fields {
 		relativePath := field.path
-		relativePath = append(relativePath, field.FieldDescriptor)
+		relativePath = append(relativePath, getCamelName(field))
 
-		absolutPath := b.absolutPath
-		absolutPath = append(absolutPath, relativePath...)
+		absolutePath := tb.absolutePath
+		absolutePath = append(absolutePath, relativePath...)
 
 		builder := tableBuilder{
-			service:        b.service,
-			resource:       b.resource,
-			absolutPath:    absolutPath,
+			service:        tb.service,
+			resource:       tb.resource,
+			absolutePath:   absolutePath,
 			relativePath:   relativePath,
 			multiplex:      "client.IdentityMultiplex",
 			messageDesc:    field.GetMessageType(),
-			ignoredFields:  b.ignoredFields,
-			defaultColumns: b.defaultColumns,
+			ignoredFields:  tb.ignoredFields,
+			defaultColumns: tb.defaultColumns,
 		}
 
 		table, err := builder.Build()

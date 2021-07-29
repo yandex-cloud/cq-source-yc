@@ -1,4 +1,4 @@
-func fetch{{.Service}}{{.Resource}}{{.AbsolutPath | asFullFieldName | join ""}}(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+func fetch{{.Service}}{{.Resource}}{{.AbsolutePath | asFullFieldName | join ""}}(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
     values := funk.Get(parent.Item, {{.RelativePath | join "." | printf "%q"}})
 
 	if funk.IsIteratee(values) {

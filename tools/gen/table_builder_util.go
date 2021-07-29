@@ -9,15 +9,23 @@ import (
 	"github.com/jhump/protoreflect/desc"
 )
 
+func getCamelName(d desc.Descriptor) string {
+	return strcase.ToCamel(d.GetName())
+}
+
+func isExpandable(f *desc.FieldDescriptor) bool {
+	return !f.IsRepeated() && !f.IsMap() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
+}
+
 type expandedField struct {
 	*desc.FieldDescriptor
-	path []*desc.FieldDescriptor
+	path []string
 }
 
 func (f expandedField) getPath() string {
 	var path []string
 
-	path = append(path, fieldsToStrings(f.path)...)
+	path = append(path, f.path...)
 
 	// if f is a field within oneof
 	if f.GetOneOf() != nil {
@@ -29,10 +37,13 @@ func (f expandedField) getPath() string {
 	return strings.Join(path, ".")
 }
 
-func (f expandedField) getAbsolutPath(relationAbsolutPath []*desc.FieldDescriptor) string {
-	path := fieldsToStrings(relationAbsolutPath)
+func (f expandedField) resolvePath(path []string) string {
 	path = append(path, f.getPath())
 	return strings.Join(path, ".")
+}
+
+func (f expandedField) isConvertableToRelation() bool {
+	return f.IsRepeated() && !f.IsMap() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
 }
 
 func (f expandedField) getColumnName() string {
@@ -72,22 +83,4 @@ func (f expandedField) getResolver() string {
 	} else {
 		return "client.EnumPathResolver"
 	}
-}
-
-func fieldsToStrings(fields []*desc.FieldDescriptor) []string {
-	result := make([]string, 0, len(fields))
-
-	for _, field := range fields {
-		result = append(result, strcase.ToCamel(field.GetName()))
-	}
-
-	return result
-}
-
-func isExpandable(field *desc.FieldDescriptor) bool {
-	return !field.IsRepeated() && !field.IsMap() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
-}
-
-func isConvertableToRelation(field expandedField) bool {
-	return field.IsRepeated() && !field.IsMap() && field.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
 }
