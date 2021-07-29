@@ -1,9 +1,10 @@
 package gen
 
 type CollapsedOptions struct {
-	paths          []string
-	defaultColumns map[string]*ColumnModel
-	ignoredFields  map[string]struct{}
+	paths           []string
+	defaultColumns  map[string]*ColumnModel
+	ignoredFields   map[string]struct{}
+	relationAliases map[string]string
 }
 
 type Option interface {
@@ -12,9 +13,10 @@ type Option interface {
 
 func NewCollapsedOptions(opts []Option) CollapsedOptions {
 	co := CollapsedOptions{
-		paths:          []string{"."},
-		defaultColumns: map[string]*ColumnModel{},
-		ignoredFields:  map[string]struct{}{},
+		paths:           []string{"."},
+		defaultColumns:  map[string]*ColumnModel{},
+		ignoredFields:   map[string]struct{}{},
+		relationAliases: map[string]string{},
 	}
 	for _, opt := range opts {
 		opt.Apply(&co)
@@ -58,4 +60,17 @@ func (w withIgnoredColumns) Apply(co *CollapsedOptions) {
 
 func WithIgnoredColumns(ignoredFields ...string) Option {
 	return withIgnoredColumns{ignoredFields: ignoredFields}
+}
+
+type withRelationAlias struct {
+	path  string
+	alias string
+}
+
+func (w withRelationAlias) Apply(co *CollapsedOptions) {
+	co.relationAliases[w.path] = w.alias
+}
+
+func WithRelationAlias(path, alias string) Option {
+	return withRelationAlias{path: path, alias: alias}
 }

@@ -2,6 +2,8 @@ GOIMPORTS_RESOURCES = find resources -name "*.go" -exec goimports -w {} \;
 RED=\033[0;32m
 NC=\033[0m
 
+# Provider generation
+
 cloudapi:
 	@git clone https://github.com/yandex-cloud/cloudapi.git
 
@@ -10,9 +12,13 @@ generate-resources: cloudapi
 	@go run tools/genresources.go
 	@$(GOIMPORTS_RESOURCES)
 
+# Debug
+
 .PHONY: debug
 debug:
 	@env CQ_PROVIDER_DEBUG=1 YC_TOKEN=$(YC_TOKEN) go run main.go
+
+# Tests
 
 .PHONY: docker-build
 docker-build:
@@ -43,7 +49,6 @@ test: docker-postgresql docker-build
 	--name=cq_provider_yandex_test \
 	--network=cq_provider_yandex_net \
 	cq_provider_yandex_image
-
 
 .PHONY: clean
 clean: clean-docker-postgresql clean-docker-net clean-image

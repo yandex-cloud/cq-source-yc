@@ -54,9 +54,22 @@ func main() {
 		"yandex/cloud/compute/v1/instance.proto",
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
-
-		// TODO: names of corresponding columns greater then PostgreSQL limit (64 bytes)
-		gen.WithIgnoredColumns("NetworkInterfaces.PrimaryV4Address", "NetworkInterfaces.PrimaryV6Address"),
+		gen.WithRelationAlias(
+			"NetworkInterfaces.PrimaryV4Address.DnsRecords",
+			"yandex_compute_instance_net_interface_ipv4_dns_records",
+		),
+		gen.WithRelationAlias(
+			"NetworkInterfaces.PrimaryV4Address.OneToOneNat.DnsRecords",
+			"yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
+		),
+		gen.WithRelationAlias(
+			"NetworkInterfaces.PrimaryV6Address.DnsRecords",
+			"yandex_compute_instance_net_interface_ipv6_dns_records",
+		),
+		gen.WithRelationAlias(
+			"NetworkInterfaces.PrimaryV6Address.OneToOneNat.DnsRecords",
+			"yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
+		),
 	)
 
 	if err != nil {

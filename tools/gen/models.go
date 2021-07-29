@@ -16,6 +16,8 @@ type TableModel struct {
 
 	Columns   []*ColumnModel
 	Relations []*TableModel
+
+	Alias string
 }
 
 type ColumnModel struct {

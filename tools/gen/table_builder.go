@@ -17,8 +17,9 @@ type tableBuilder struct {
 
 	messageDesc *desc.MessageDescriptor
 
-	defaultColumns map[string]*ColumnModel
-	ignoredFields  map[string]struct{}
+	defaultColumns  map[string]*ColumnModel
+	ignoredFields   map[string]struct{}
+	relationAliases map[string]string
 }
 
 func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
@@ -56,6 +57,7 @@ func (tb *tableBuilder) Build() (*TableModel, error) {
 		Multiplex:    tb.multiplex,
 		Columns:      tb.generateColumns(forColumns),
 		Relations:    tb.generateRelations(forRelations),
+		Alias:        tb.relationAliases[strings.Join(tb.absolutePath, ".")],
 	}, nil
 }
 
@@ -126,14 +128,15 @@ func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel 
 		absolutePath = append(absolutePath, relativePath...)
 
 		builder := tableBuilder{
-			service:        tb.service,
-			resource:       tb.resource,
-			absolutePath:   absolutePath,
-			relativePath:   relativePath,
-			multiplex:      "client.IdentityMultiplex",
-			messageDesc:    field.GetMessageType(),
-			ignoredFields:  tb.ignoredFields,
-			defaultColumns: tb.defaultColumns,
+			service:         tb.service,
+			resource:        tb.resource,
+			absolutePath:    absolutePath,
+			relativePath:    relativePath,
+			multiplex:       "client.IdentityMultiplex",
+			messageDesc:     field.GetMessageType(),
+			ignoredFields:   tb.ignoredFields,
+			defaultColumns:  tb.defaultColumns,
+			relationAliases: tb.relationAliases,
 		}
 
 		table, err := builder.Build()
