@@ -16,7 +16,7 @@ func main() {
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
 
-		// Field doesn't exist in corresponding struct
+		// Field doesn't exist in used version of sdk
 		gen.WithIgnoredColumns("PrimaryVersion.HostedByHsm"),
 	)
 
@@ -24,11 +24,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("KMS", "SymmetricKey", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("KMS", "SymmetricKey", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"Compute",
@@ -42,11 +42,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("Compute", "Image", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("Compute", "Image", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"Compute",
@@ -54,19 +54,19 @@ func main() {
 		"yandex/cloud/compute/v1/instance.proto",
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
-		gen.WithRelationAlias(
+		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.DnsRecords",
 			"yandex_compute_instance_net_interface_ipv4_dns_records",
 		),
-		gen.WithRelationAlias(
+		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.OneToOneNat.DnsRecords",
 			"yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
 		),
-		gen.WithRelationAlias(
+		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.DnsRecords",
 			"yandex_compute_instance_net_interface_ipv6_dns_records",
 		),
-		gen.WithRelationAlias(
+		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.OneToOneNat.DnsRecords",
 			"yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
 		),
@@ -76,11 +76,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("Compute", "Instance", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("Compute", "Instance", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"Compute",
@@ -88,20 +88,17 @@ func main() {
 		"yandex/cloud/compute/v1/disk.proto",
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
-
-		// TODO: test framework from sdk fails on empty columns, so oneof fields ignored for a while
-		gen.WithIgnoredColumns("Source.SourceImageId", "Source.SourceSnapshotId"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("Compute", "Disk", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("Compute", "Disk", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"VPC",
@@ -115,11 +112,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("VPC", "Network", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("VPC", "Network", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"VPC",
@@ -133,11 +130,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("VPC", "Subnet", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("VPC", "Subnet", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"VPC",
@@ -145,20 +142,25 @@ func main() {
 		"yandex/cloud/vpc/v1/address.proto",
 		"resources",
 		gen.WithProtoPaths("cloudapi"),
-
-		// TODO: test framework from sdk fails on empty columns, so oneof fields ignored for a while
-		gen.WithIgnoredColumns("Address.ExternalIpv4Address"),
+		gen.WithAlias(
+			"Address.ExternalIpv4Address.Requirements.DdosProtectionProvider",
+			"addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
+		),
+		gen.WithAlias(
+			"Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability",
+			"addr_ext_ipv_4_addr_requirements_out_smtp_cap",
+		),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("VPC", "Address", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("VPC", "Address", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = gen.Generate(
 		"IAM",
@@ -172,9 +174,9 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.GenerateTests("IAM", "ServiceAccount", "resources")
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = gen.GenerateTests("IAM", "ServiceAccount", "resources")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }

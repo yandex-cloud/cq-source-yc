@@ -41,6 +41,14 @@ func TestComputeDisks(t *testing.T) {
 			})
 			return c, nil
 		},
+		AtLeastOne: map[string][][]string{
+			"yandex_compute_disks": {
+				{
+					"source_source_image_id",
+					"source_source_snapshot_id",
+				},
+			},
+		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
 	serv.Stop()
@@ -58,6 +66,12 @@ func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
+	var source compute1.Disk_SourceImageId
+	err = faker.FakeData(&source)
+	if err != nil {
+		return nil, err
+	}
+	disk.Source = &source
 	return &FakeDiskServiceServer{Disk: &disk}, nil
 }
 

@@ -14,11 +14,11 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	co := NewCollapsedOptions(opts)
 
 	tb := tableBuilder{
-		service:         service,
-		multiplex:       "client.FolderMultiplex",
-		defaultColumns:  co.defaultColumns,
-		ignoredFields:   co.ignoredFields,
-		relationAliases: co.relationAliases,
+		service:        service,
+		multiplex:      "client.FolderMultiplex",
+		defaultColumns: co.defaultColumns,
+		ignoredFields:  co.ignoredFields,
+		Aliases:        co.relationAliases,
 	}
 
 	err := tb.WithMessageFromProto(resource, pathToProto, co.paths...)

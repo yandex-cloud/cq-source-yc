@@ -16,4 +16,7 @@ require (
 	google.golang.org/grpc v1.29.1
 )
 
-replace github.com/cloudquery/faker/v3 v3.7.4 => github.com/daniil-ushkov/faker v1.5.1-0.20210727155430-974b577181cb
+replace (
+	github.com/cloudquery/cq-provider-sdk v0.2.8 => github.com/daniil-ushkov/cq-provider-sdk v0.2.9-0.20210730123517-7d13b025400e
+	github.com/cloudquery/faker/v3 v3.7.4 => github.com/daniil-ushkov/faker v1.5.1-0.20210727155430-974b577181cb
+)

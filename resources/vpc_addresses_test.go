@@ -58,6 +58,12 @@ func NewFakeAddressServiceServer() (*FakeAddressServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
+	var externalIpv4Address vpc1.ExternalIpv4Address
+	err = faker.FakeData(&externalIpv4Address)
+	if err != nil {
+		return nil, err
+	}
+	address.Address = &vpc1.Address_ExternalIpv4Address{ExternalIpv4Address: &externalIpv4Address}
 	return &FakeAddressServiceServer{Address: &address}, nil
 }
 

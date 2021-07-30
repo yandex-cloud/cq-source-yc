@@ -17,9 +17,9 @@ type tableBuilder struct {
 
 	messageDesc *desc.MessageDescriptor
 
-	defaultColumns  map[string]*ColumnModel
-	ignoredFields   map[string]struct{}
-	relationAliases map[string]string
+	defaultColumns map[string]*ColumnModel
+	ignoredFields  map[string]struct{}
+	Aliases        map[string]string
 }
 
 func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
@@ -57,7 +57,7 @@ func (tb *tableBuilder) Build() (*TableModel, error) {
 		Multiplex:    tb.multiplex,
 		Columns:      tb.generateColumns(forColumns),
 		Relations:    tb.generateRelations(forRelations),
-		Alias:        tb.relationAliases[strings.Join(tb.absolutePath, ".")],
+		Alias:        tb.Aliases[strings.Join(tb.absolutePath, ".")],
 	}, nil
 }
 
@@ -106,8 +106,14 @@ func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*Colu
 		if col, defined := tb.defaultColumns[field.resolvePath(tb.absolutePath)]; defined {
 			columns = append(columns, col)
 		} else {
+			var name string
+			if alias, ok := tb.Aliases[field.resolvePath(tb.absolutePath)]; ok {
+				name = alias
+			} else {
+				name = field.getColumnName()
+			}
 			columns = append(columns, &ColumnModel{
-				Name:        field.getColumnName(),
+				Name:        name,
 				Type:        field.getType(),
 				Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
 				Resolver:    fmt.Sprintf("%v(\"%v\")", field.getResolver(), field.getPath()),
@@ -128,15 +134,15 @@ func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel 
 		absolutePath = append(absolutePath, relativePath...)
 
 		builder := tableBuilder{
-			service:         tb.service,
-			resource:        tb.resource,
-			absolutePath:    absolutePath,
-			relativePath:    relativePath,
-			multiplex:       "client.IdentityMultiplex",
-			messageDesc:     field.GetMessageType(),
-			ignoredFields:   tb.ignoredFields,
-			defaultColumns:  tb.defaultColumns,
-			relationAliases: tb.relationAliases,
+			service:        tb.service,
+			resource:       tb.resource,
+			absolutePath:   absolutePath,
+			relativePath:   relativePath,
+			multiplex:      "client.IdentityMultiplex",
+			messageDesc:    field.GetMessageType(),
+			ignoredFields:  tb.ignoredFields,
+			defaultColumns: tb.defaultColumns,
+			Aliases:        tb.Aliases,
 		}
 
 		table, err := builder.Build()

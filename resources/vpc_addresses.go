@@ -55,6 +55,30 @@ func VPCAddresses() *schema.Table {
 				Resolver:    client.ResolveLabels,
 			},
 			{
+				Name:        "address_external_ipv_4_address_address",
+				Type:        schema.TypeString,
+				Description: "Value of address.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Address"),
+			},
+			{
+				Name:        "address_external_ipv_4_address_zone_id",
+				Type:        schema.TypeString,
+				Description: "Availability zone from which the address will be allocated.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.ZoneId"),
+			},
+			{
+				Name:        "addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
+				Type:        schema.TypeString,
+				Description: "DDoS protection provider ID.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.DdosProtectionProvider"),
+			},
+			{
+				Name:        "addr_ext_ipv_4_addr_requirements_out_smtp_cap",
+				Type:        schema.TypeString,
+				Description: "Capability to send SMTP traffic.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
+			},
+			{
 				Name:        "reserved",
 				Type:        schema.TypeBool,
 				Description: "Specifies if address is reserved or not.",

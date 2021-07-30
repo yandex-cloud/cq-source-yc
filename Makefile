@@ -37,7 +37,7 @@ docker-postgresql: docker-create-net
 	docker run -d --rm \
     --name=cq_provider_yandex_postgresql \
     --network=cq_provider_yandex_net \
-    -e POSTGRES_PASSWORD=12345 \
+    -e POSTGRES_PASSWORD=pass \
     -p 5432:5432 \
     postgres
 

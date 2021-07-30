@@ -9,7 +9,14 @@ import (
 	"github.com/jhump/protoreflect/desc"
 )
 
+type OneOfer interface {
+	GetOneOf() *desc.OneOfDescriptor
+}
+
 func getCamelName(d desc.Descriptor) string {
+	if fd, ok := d.(OneOfer); ok && fd.GetOneOf() != nil {
+		return strcase.ToCamel(fd.GetOneOf().GetName()) + "." + strcase.ToCamel(d.GetName())
+	}
 	return strcase.ToCamel(d.GetName())
 }
 
@@ -27,12 +34,7 @@ func (f expandedField) getPath() string {
 
 	path = append(path, f.path...)
 
-	// if f is a field within oneof
-	if f.GetOneOf() != nil {
-		path = append(path, strcase.ToCamel(f.GetOneOf().GetName()))
-	}
-
-	path = append(path, strcase.ToCamel(f.GetName()))
+	path = append(path, getCamelName(f))
 
 	return strings.Join(path, ".")
 }

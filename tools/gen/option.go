@@ -62,15 +62,15 @@ func WithIgnoredColumns(ignoredFields ...string) Option {
 	return withIgnoredColumns{ignoredFields: ignoredFields}
 }
 
-type withRelationAlias struct {
+type withAlias struct {
 	path  string
 	alias string
 }
 
-func (w withRelationAlias) Apply(co *CollapsedOptions) {
+func (w withAlias) Apply(co *CollapsedOptions) {
 	co.relationAliases[w.path] = w.alias
 }
 
-func WithRelationAlias(path, alias string) Option {
-	return withRelationAlias{path: path, alias: alias}
+func WithAlias(path, alias string) Option {
+	return withAlias{path: path, alias: alias}
 }
