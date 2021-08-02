@@ -82,8 +82,8 @@ github.com/creack/pty v1.1.7/go.mod h1:lj5s0c3V2DBrqTV7llrYr5NG6My20zk30Fl46Y7Do
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/creasty/defaults v1.5.1 h1:j8WexcS3d/t4ZmllX4GEkl4wIB/trOr035ajcLHCISM=
 github.com/creasty/defaults v1.5.1/go.mod h1:FPZ+Y0WNrbqOVw+c6av63eyHUAl6pMHZwqLPvXUZGfY=
-github.com/daniil-ushkov/cq-provider-sdk v0.2.9-0.20210730123517-7d13b025400e h1:03PlAfXn9aGvdzl1UP0ff8I2sVWvNqc7P2zrLi19c3Q=
-github.com/daniil-ushkov/cq-provider-sdk v0.2.9-0.20210730123517-7d13b025400e/go.mod h1:vhsYWDKwjyL0omQRJ068UfLCoAWXBc8GH6vtpF31txc=
+github.com/daniil-ushkov/cq-provider-sdk v0.2.9-0.20210803072609-3458aa2c2e18 h1:6n/BV3+B2ZMfsV4aTWLniwv1vRgRAa4krFYacAaXWho=
+github.com/daniil-ushkov/cq-provider-sdk v0.2.9-0.20210803072609-3458aa2c2e18/go.mod h1:vhsYWDKwjyL0omQRJ068UfLCoAWXBc8GH6vtpF31txc=
 github.com/daniil-ushkov/faker v1.5.1-0.20210727155430-974b577181cb h1:MjqjexWIVpN8gblk/yLPxEGYcd2KRxILE4qzouOVe5w=
 github.com/daniil-ushkov/faker v1.5.1-0.20210727155430-974b577181cb/go.mod h1:JHT5uf439GHqrJDkPP0QUzdQo8djq8TYDtHglxqikeQ=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
