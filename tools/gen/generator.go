@@ -11,14 +11,17 @@ import (
 )
 
 func Generate(service, resource, pathToProto, outDir string, opts ...Option) error {
-	co := NewCollapsedOptions(opts)
+	defaultOptions := getDefaultYCColumns(resource)
+
+	defaultOptions = append(defaultOptions, opts...)
+
+	co := NewCollapsedOptions(defaultOptions)
 
 	tb := tableBuilder{
-		service:        service,
-		multiplex:      "client.FolderMultiplex",
-		defaultColumns: co.defaultColumns,
-		ignoredFields:  co.ignoredFields,
-		Aliases:        co.relationAliases,
+		service:       service,
+		multiplex:     "client.FolderMultiplex",
+		ignoredFields: co.ignoredFields,
+		aliases:       co.aliases,
 	}
 
 	err := tb.WithMessageFromProto(resource, pathToProto, co.paths...)
@@ -26,8 +29,6 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	if err != nil {
 		return err
 	}
-
-	tb.setDefaultYCColumns()
 
 	tableModel, err := tb.Build()
 
@@ -67,34 +68,44 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	return file.Close()
 }
 
-func (tb tableBuilder) setDefaultYCColumns() {
-	name := strcase.ToSnake(tb.resource)
-
-	tb.defaultColumns["Id"] = &ColumnModel{
-		Name:        name + "_id",
-		Type:        "schema.TypeString",
-		Description: fmt.Sprintf("ID of the %v.", name),
-		Resolver:    "client.ResolveResourceId",
-	}
-
-	tb.defaultColumns["FolderId"] = &ColumnModel{
-		Name:        "folder_id",
-		Type:        "schema.TypeString",
-		Description: fmt.Sprintf("ID of the folder that the %v belongs to.", name),
-		Resolver:    "client.ResolveFolderID",
-	}
-
-	tb.defaultColumns["CreatedAt"] = &ColumnModel{
-		Name:     "created_at",
-		Type:     "schema.TypeTimestamp",
-		Resolver: "client.ResolveAsTime",
-	}
-
-	tb.defaultColumns["Labels"] = &ColumnModel{
-		Name:        "labels",
-		Type:        "schema.TypeJSON",
-		Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
-		Resolver:    "client.ResolveLabels",
+func getDefaultYCColumns(resource string) []Option {
+	name := strcase.ToSnake(resource)
+	return []Option{
+		WithAlias("Id", ChangeColumn(
+			&ColumnModel{
+				Name:        name + "_id",
+				Type:        "schema.TypeString",
+				Description: fmt.Sprintf("ID of the %v.", name),
+				Resolver:    "client.ResolveResourceId",
+			},
+		),
+		),
+		WithAlias("FolderId", ChangeColumn(
+			&ColumnModel{
+				Name:        "folder_id",
+				Type:        "schema.TypeString",
+				Description: fmt.Sprintf("ID of the folder that the %v belongs to.", name),
+				Resolver:    "client.ResolveFolderID",
+			},
+		),
+		),
+		WithAlias("CreatedAt", ChangeColumn(
+			&ColumnModel{
+				Name:     "created_at",
+				Type:     "schema.TypeTimestamp",
+				Resolver: "client.ResolveAsTime",
+			},
+		),
+		),
+		WithAlias("Labels", ChangeColumn(
+			&ColumnModel{
+				Name:        "labels",
+				Type:        "schema.TypeJSON",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
+				Resolver:    "client.ResolveLabels",
+			},
+		),
+		),
 	}
 }
 

@@ -11,15 +11,14 @@ import (
 type tableBuilder struct {
 	service      string
 	resource     string
-	absolutePath []string
-	relativePath []string
+	absolutePath string
+	relativePath string
 	multiplex    string
 
 	messageDesc *desc.MessageDescriptor
 
-	defaultColumns map[string]*ColumnModel
-	ignoredFields  map[string]struct{}
-	Aliases        map[string]string
+	ignoredFields map[string]struct{}
+	aliases       map[string]Alias
 }
 
 func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
@@ -49,16 +48,21 @@ func (tb *tableBuilder) Build() (*TableModel, error) {
 	expandedFields := tb.expandFields(tb.messageDesc.GetFields(), nil)
 	forColumns, forRelations := tb.filterFields(expandedFields)
 
-	return &TableModel{
+	table := &TableModel{
 		Service:      tb.service,
 		Resource:     tb.resource,
-		AbsolutePath: tb.absolutePath,
-		RelativePath: tb.relativePath,
+		AbsolutePath: split(tb.absolutePath),
+		RelativePath: split(tb.relativePath),
 		Multiplex:    tb.multiplex,
 		Columns:      tb.generateColumns(forColumns),
 		Relations:    tb.generateRelations(forRelations),
-		Alias:        tb.Aliases[strings.Join(tb.absolutePath, ".")],
-	}, nil
+	}
+
+	if alias, ok := tb.aliases[tb.absolutePath]; ok {
+		alias.ApplyToTable(table)
+	}
+
+	return table, nil
 }
 
 func (tb *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []string) (expandedFields []expandedField) {
@@ -71,7 +75,7 @@ func (tb *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []stri
 		switch {
 		case tb.containsIgnoredField(newExpandedField):
 			continue
-		case isExpandable(field) && !tb.containsDefaultColumn(newExpandedField):
+		case isExpandable(field) && !tb.containsAliases(newExpandedField):
 			expandedFields = append(expandedFields, tb.expandFields(field.GetMessageType().GetFields(), newPath)...)
 		default:
 			expandedFields = append(expandedFields, newExpandedField)
@@ -82,7 +86,7 @@ func (tb *tableBuilder) expandFields(fields []*desc.FieldDescriptor, path []stri
 
 func (tb *tableBuilder) filterFields(fields []expandedField) (forColumns []expandedField, forRelations []expandedField) {
 	for _, field := range fields {
-		if !field.isConvertableToRelation() || tb.containsDefaultColumn(field) {
+		if !field.isConvertableToRelation() {
 			forColumns = append(forColumns, field)
 		} else {
 			forRelations = append(forRelations, field)
@@ -91,34 +95,30 @@ func (tb *tableBuilder) filterFields(fields []expandedField) (forColumns []expan
 	return
 }
 
-func (tb *tableBuilder) containsDefaultColumn(field expandedField) bool {
-	_, ok := tb.defaultColumns[field.resolvePath(tb.absolutePath)]
+func (tb *tableBuilder) containsIgnoredField(field expandedField) bool {
+	_, ok := tb.ignoredFields[join(tb.absolutePath, field.getPath())]
 	return ok
 }
 
-func (tb *tableBuilder) containsIgnoredField(field expandedField) bool {
-	_, ok := tb.ignoredFields[field.resolvePath(tb.absolutePath)]
+func (tb *tableBuilder) containsAliases(field expandedField) bool {
+	_, ok := tb.aliases[join(tb.absolutePath, field.getPath())]
 	return ok
 }
 
 func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*ColumnModel) {
 	for _, field := range fields {
-		if col, defined := tb.defaultColumns[field.resolvePath(tb.absolutePath)]; defined {
-			columns = append(columns, col)
-		} else {
-			var name string
-			if alias, ok := tb.Aliases[field.resolvePath(tb.absolutePath)]; ok {
-				name = alias
-			} else {
-				name = field.getColumnName()
-			}
-			columns = append(columns, &ColumnModel{
-				Name:        name,
-				Type:        field.getType(),
-				Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
-				Resolver:    fmt.Sprintf("%v(\"%v\")", field.getResolver(), field.getPath()),
-			})
+		column := &ColumnModel{
+			Name:        field.getColumnName(),
+			Type:        field.getType(),
+			Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
+			Resolver:    fmt.Sprintf("%v(\"%v\")", field.getResolver(), field.getPath()),
 		}
+
+		if alias, ok := tb.aliases[join(tb.absolutePath, field.getPath())]; ok {
+			alias.ApplyToColumn(column)
+		}
+
+		columns = append(columns, column)
 	}
 	return
 }
@@ -127,22 +127,15 @@ func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel 
 	tables := make([]*TableModel, 0, len(fields))
 
 	for _, field := range fields {
-		relativePath := field.path
-		relativePath = append(relativePath, getCamelName(field))
-
-		absolutePath := tb.absolutePath
-		absolutePath = append(absolutePath, relativePath...)
-
 		builder := tableBuilder{
-			service:        tb.service,
-			resource:       tb.resource,
-			absolutePath:   absolutePath,
-			relativePath:   relativePath,
-			multiplex:      "client.IdentityMultiplex",
-			messageDesc:    field.GetMessageType(),
-			ignoredFields:  tb.ignoredFields,
-			defaultColumns: tb.defaultColumns,
-			Aliases:        tb.Aliases,
+			service:       tb.service,
+			resource:      tb.resource,
+			absolutePath:  join(tb.absolutePath, field.getPath()),
+			relativePath:  field.getPath(),
+			multiplex:     "client.IdentityMultiplex",
+			messageDesc:   field.GetMessageType(),
+			ignoredFields: tb.ignoredFields,
+			aliases:       tb.aliases,
 		}
 
 		table, err := builder.Build()

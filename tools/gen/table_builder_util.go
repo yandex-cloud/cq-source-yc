@@ -86,3 +86,17 @@ func (f expandedField) getResolver() string {
 		return "client.EnumPathResolver"
 	}
 }
+
+func join(paths ...string) string {
+	var filteredPaths []string
+	for _, path := range paths {
+		if len(path) != 0 {
+			filteredPaths = append(filteredPaths, path)
+		}
+	}
+	return strings.Join(filteredPaths, ".")
+}
+
+func split(path string) []string {
+	return strings.Split(path, ".")
+}

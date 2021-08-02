@@ -56,19 +56,19 @@ func main() {
 		gen.WithProtoPaths("cloudapi"),
 		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.DnsRecords",
-			"yandex_compute_instance_net_interface_ipv4_dns_records",
+			gen.ChangeName("yandex_compute_instance_net_interface_ipv4_dns_records"),
 		),
 		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.OneToOneNat.DnsRecords",
-			"yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
+			gen.ChangeName("yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records"),
 		),
 		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.DnsRecords",
-			"yandex_compute_instance_net_interface_ipv6_dns_records",
+			gen.ChangeName("yandex_compute_instance_net_interface_ipv6_dns_records"),
 		),
 		gen.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.OneToOneNat.DnsRecords",
-			"yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
+			gen.ChangeName("yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records"),
 		),
 	)
 
@@ -144,11 +144,11 @@ func main() {
 		gen.WithProtoPaths("cloudapi"),
 		gen.WithAlias(
 			"Address.ExternalIpv4Address.Requirements.DdosProtectionProvider",
-			"addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
+			gen.ChangeName("addr_ext_ipv_4_addr_requirements_ddos_protect_prov"),
 		),
 		gen.WithAlias(
 			"Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability",
-			"addr_ext_ipv_4_addr_requirements_out_smtp_cap",
+			gen.ChangeName("addr_ext_ipv_4_addr_requirements_out_smtp_cap"),
 		),
 	)
 
