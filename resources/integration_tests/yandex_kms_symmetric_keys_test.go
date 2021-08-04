@@ -1,15 +1,23 @@
 package integration_tests
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
 )
 
 func TestIntegrationKMSSymmetricKeys(t *testing.T) {
+	var tfTmpl = `
+resource "yandex_kms_symmetric_key" "cq-keys-test-keys-%[1]s" {
+  name = "cq-keys-test-keys-%[1]s"
+}
+`
+	suffix := acctest.RandString(10)
 	yandexTestIntegrationHelper(t, resources.KMSSymmetricKeys(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_kms_symmetric_keys",
@@ -19,9 +27,9 @@ func TestIntegrationKMSSymmetricKeys(t *testing.T) {
 			ExpectedValues: []providertest.ExpectedValue{{
 				Count: 1,
 				Data: map[string]interface{}{
-					"name": "cq-keys-test-keys",
+					"name": fmt.Sprintf("cq-keys-test-keys-%s", suffix),
 				},
 			}},
 		}
-	})
+	}, tfTmpl, suffix)
 }

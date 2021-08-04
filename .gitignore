@@ -36,3 +36,6 @@ vendor/
 modules.xml
 .idea/misc.xml
 *.ipr
+
+# Secrets
+/key.json

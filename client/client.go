@@ -2,11 +2,14 @@ package client
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/yandex-cloud/go-sdk/iamkey"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
@@ -54,7 +57,7 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 
 func buildSDK() (*ycsdk.SDK, error) {
 	ctx := context.Background()
-	cred, err := getCredentials()
+	cred, err := credentials()
 	if err != nil {
 		return nil, err
 	}
@@ -67,22 +70,60 @@ func buildSDK() (*ycsdk.SDK, error) {
 	return sdk, err
 }
 
-func getCredentials() (ycsdk.Credentials, error) {
-	if token, ok := os.LookupEnv("YC_TOKEN"); ok {
-		if strings.HasPrefix(token, "t1") {
-			return ycsdk.NewIAMTokenCredentials(token), nil
-		} else {
-			return ycsdk.OAuthToken(token), nil
+func credentials() (ycsdk.Credentials, error) {
+	if val, ok := os.LookupEnv("YC_SERVICE_ACCOUNT_KEY_FILE"); ok {
+		contents, _, err := pathOrContents(val)
+		if err != nil {
+			return nil, fmt.Errorf("Error loading credentials: %s", err)
 		}
-	}
-	if keyFile, ok := os.LookupEnv("YC_SERVICE_ACCOUNT_KEY_FILE"); ok {
-		key, err := iamkey.ReadFromJSONFile(keyFile)
+
+		key, err := iamKeyFromJSONContent(contents)
 		if err != nil {
 			return nil, err
 		}
 		return ycsdk.ServiceAccountKey(key)
 	}
+
+	if val, ok := os.LookupEnv("YC_TOKEN"); ok {
+		if strings.HasPrefix(val, "t1.") && strings.Count(val, ".") == 2 {
+			return ycsdk.NewIAMTokenCredentials(val), nil
+		}
+		return ycsdk.OAuthToken(val), nil
+	}
+
 	return ycsdk.InstanceServiceAccount(), nil
+}
+
+// copy of github.com/hashicorp/terraform-plugin-sdk/helper/pathorcontents.Read()
+func pathOrContents(poc string) (string, bool, error) {
+	if len(poc) == 0 {
+		return poc, false, nil
+	}
+
+	path := poc
+	if path[0] == '~' {
+		var err error
+		path, err = homedir.Expand(path)
+		if err != nil {
+			return path, true, err
+		}
+	}
+
+	if _, err := os.Stat(path); err == nil {
+		contents, err := ioutil.ReadFile(path)
+		return string(contents), true, err
+	}
+
+	return poc, false, nil
+}
+
+func iamKeyFromJSONContent(content string) (*iamkey.Key, error) {
+	key := &iamkey.Key{}
+	err := json.Unmarshal([]byte(content), key)
+	if err != nil {
+		return nil, fmt.Errorf("key unmarshal fail: %s", err)
+	}
+	return key, nil
 }
 
 func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudID string) ([]string, error) {

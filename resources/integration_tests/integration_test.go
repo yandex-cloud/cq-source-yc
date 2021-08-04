@@ -11,45 +11,47 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-// IntegrationTestsEnabledVar is the name of the environment variable that enables integration tests from this package.
-// Set it to one of "1", "y", "yes", "true" to enable the tests.
-const IntegrationTestsEnabledVar = "INTEGRATION_TESTS"
-
-func yandexTestIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification) {
+func yandexTestIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification, tfTmpl string, suffix string) {
 	cfg := client.Config{
 		CloudID:   os.Getenv("YC_CLOUD_ID"),
 		FolderIDs: []string{os.Getenv("YC_FOLDER_ID")},
 	}
 
+	file, err := os.Create(table.Name + ".tf")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = file.WriteString(fmt.Sprintf(tfTmpl, suffix))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = file.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer os.Remove(table.Name + ".tf")
+
 	providertest.IntegrationTest(t, resources.Provider, providertest.ResourceIntegrationTestData{
 		Table:               table,
 		Config:              cfg,
 		Configure:           client.Configure,
+		Suffix:              suffix,
 		VerificationBuilder: verificationBuilder,
 	})
 }
 
 func TestMain(m *testing.M) {
-	enabled := os.Getenv(IntegrationTestsEnabledVar)
-	enabledValues := map[string]struct{}{
-		"1":       {},
-		"y":       {},
-		"yes":     {},
-		"true":    {},
-		"enable":  {},
-		"enabled": {},
-	}
-
-	if _, ok := enabledValues[enabled]; !ok {
-		fmt.Fprintln(os.Stderr, "Integration tests are skipped. Set INTEGRATION_TESTS=1 environment variable to enable.")
-	}
-
 	if _, ok := os.LookupEnv("YC_CLOUD_ID"); !ok {
 		fmt.Fprintln(os.Stderr, "YC_CLOUD_ID wasn't specified.")
+		return
 	}
 
 	if _, ok := os.LookupEnv("YC_FOLDER_ID"); !ok {
 		fmt.Fprintln(os.Stderr, "YC_FOLDER_ID wasn't specified.")
+		return
 	}
 
 	os.Exit(m.Run())
