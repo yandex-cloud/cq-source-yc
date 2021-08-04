@@ -3,6 +3,7 @@ module github.com/yandex-cloud/cq-provider-yandex
 go 1.16
 
 require (
+	github.com/Masterminds/squirrel v1.5.0
 	github.com/cloudquery/cq-provider-sdk v0.2.8
 	github.com/cloudquery/faker/v3 v3.7.4
 	github.com/golang/protobuf v1.5.2

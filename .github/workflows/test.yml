@@ -47,5 +47,9 @@ jobs:
       run: go build -v .
 
     - name: Test
+      env:
+        YC_TOKEN: ${{ secrets.YC_TOKEN }}
+        YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+        YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
       run: go test -v ./... --tags=integration
     
