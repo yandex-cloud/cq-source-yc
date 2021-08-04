@@ -10,7 +10,6 @@ on:
 jobs:
   postgres:
     strategy:
-      max-parallel: 1
       matrix:
         dbversion: ['postgres:latest', 'postgres:12', 'postgres:11']
         go: ['1.15']
