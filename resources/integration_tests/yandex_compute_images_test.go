@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
@@ -18,7 +17,6 @@ resource "yandex_compute_image" "cq-image-test-image-%[1]s" {
   source_image = "fd8vmcue7aajpmeo39kk"
 }
 `
-	suffix := acctest.RandString(10)
 	yandexTestIntegrationHelper(t, resources.ComputeImages(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_compute_images",
@@ -32,5 +30,5 @@ resource "yandex_compute_image" "cq-image-test-image-%[1]s" {
 				},
 			}},
 		}
-	}, tfTmpl, suffix)
+	}, tfTmpl)
 }

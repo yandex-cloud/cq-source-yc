@@ -7,11 +7,14 @@ import (
 
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-func yandexTestIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification, tfTmpl string, suffix string) {
+var suffix = acctest.RandString(10)
+
+func yandexTestIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification, tfTmpl string) {
 	cfg := client.Config{
 		CloudID:   os.Getenv("YC_CLOUD_ID"),
 		FolderIDs: []string{os.Getenv("YC_FOLDER_ID")},

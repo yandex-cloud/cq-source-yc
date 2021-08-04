@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
@@ -23,7 +22,6 @@ resource "yandex_vpc_subnet" "cq-subnet-test-subnet-%[1]s" {
   name           = "cq-subnet-test-subnet-%[1]s"
 }
 `
-	suffix := acctest.RandString(10)
 	yandexTestIntegrationHelper(t, resources.VPCSubnets(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_vpc_subnets",
@@ -38,17 +36,6 @@ resource "yandex_vpc_subnet" "cq-subnet-test-subnet-%[1]s" {
 					},
 				},
 			},
-			//Relations: []*providertest.ResourceIntegrationVerification{
-			//	{
-			//		Name:           "yandex_vpc_networks",
-			//		ForeignKeyName: "network_id",
-			//		ExpectedValues: []providertest.ExpectedValue{
-			//			{
-			//				Count: 1,
-			//			},
-			//		},
-			//	},
-			//},
 		}
-	}, tfTmpl, suffix)
+	}, tfTmpl)
 }
