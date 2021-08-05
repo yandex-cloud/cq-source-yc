@@ -40,11 +40,10 @@ docker-postgresql: docker-create-net
     -e POSTGRES_PASSWORD=pass \
     -p 5432:5432 \
     postgres
-
+    @echo "$(RED)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432; do echo -n .;sleep 1;done;echo ""
 
 .PHONY: test
 test: docker-postgresql docker-build
-	@echo "$(RED)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432; do echo -n .;sleep 1;done;echo ""
 	@docker run -it --rm \
 	--name=cq_provider_yandex_test \
 	--network=cq_provider_yandex_net \
