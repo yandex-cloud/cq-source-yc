@@ -1,11 +1,11 @@
-func fetch{{.ServiceCamel}}{{.ResourcesCamel}}(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetch{{.Service}}{{.Resource | plural}}(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
-		req := &{{.ServiceSnake}}.List{{.ResourcesCamel}}Request{FolderId: f}
-		it := c.Services.{{.ServiceCamel}}.{{.ResourceCamel}}().{{.ResourceCamel}}Iterator(ctx, req)
+		req := &{{.Service | snake}}.List{{.Resource | plural}}Request{FolderId: f}
+		it := c.Services.{{.Service}}.{{.Resource}}().{{.Resource}}Iterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

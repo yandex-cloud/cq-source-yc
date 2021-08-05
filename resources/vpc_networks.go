@@ -10,24 +10,24 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 )
 
-func VpcNetworks() *schema.Table {
+func VPCNetworks() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_networks",
-		Resolver:     fetchVpcNetworks,
+		Resolver:     fetchVPCNetworks,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "network_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the network.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the network belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func VpcNetworks() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
@@ -65,14 +65,14 @@ func VpcNetworks() *schema.Table {
 
 }
 
-func fetchVpcNetworks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVPCNetworks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &vpc.ListNetworksRequest{FolderId: f}
-		it := c.Services.Vpc.Network().NetworkIterator(ctx, req)
+		it := c.Services.VPC.Network().NetworkIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

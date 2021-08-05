@@ -10,24 +10,24 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/iam/v1"
 )
 
-func IamServiceAccounts() *schema.Table {
+func IAMServiceAccounts() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_iam_service_accounts",
-		Resolver:     fetchIamServiceAccounts,
+		Resolver:     fetchIAMServiceAccounts,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "service_account_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the service_account.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the service_account belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -53,14 +53,14 @@ func IamServiceAccounts() *schema.Table {
 
 }
 
-func fetchIamServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchIAMServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &iam.ListServiceAccountsRequest{FolderId: f}
-		it := c.Services.Iam.ServiceAccount().ServiceAccountIterator(ctx, req)
+		it := c.Services.IAM.ServiceAccount().ServiceAccountIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

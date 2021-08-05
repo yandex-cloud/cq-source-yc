@@ -10,24 +10,24 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 )
 
-func VpcSubnets() *schema.Table {
+func VPCSubnets() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_subnets",
-		Resolver:     fetchVpcSubnets,
+		Resolver:     fetchVPCSubnets,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "subnet_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the subnet.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the subnet belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func VpcSubnets() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
@@ -107,14 +107,14 @@ func VpcSubnets() *schema.Table {
 
 }
 
-func fetchVpcSubnets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVPCSubnets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &vpc.ListSubnetsRequest{FolderId: f}
-		it := c.Services.Vpc.Subnet().SubnetIterator(ctx, req)
+		it := c.Services.VPC.Subnet().SubnetIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

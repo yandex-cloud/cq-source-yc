@@ -1,9 +1,9 @@
 package gen
 
 type CollapsedOptions struct {
-	paths          []string
-	defaultColumns map[string]*ColumnModel
-	ignoredFields  map[string]struct{}
+	paths         []string
+	ignoredFields map[string]struct{}
+	aliases       map[string]Alias
 }
 
 type Option interface {
@@ -12,9 +12,9 @@ type Option interface {
 
 func NewCollapsedOptions(opts []Option) CollapsedOptions {
 	co := CollapsedOptions{
-		paths:          []string{"."},
-		defaultColumns: map[string]*ColumnModel{},
-		ignoredFields:  map[string]struct{}{},
+		paths:         []string{"."},
+		ignoredFields: map[string]struct{}{},
+		aliases:       map[string]Alias{},
 	}
 	for _, opt := range opts {
 		opt.Apply(&co)
@@ -34,18 +34,6 @@ func WithProtoPaths(paths ...string) Option {
 	return withProtoPaths{paths: paths}
 }
 
-type withDefaultColumns struct {
-	defaultColumns map[string]*ColumnModel
-}
-
-func (w withDefaultColumns) Apply(co *CollapsedOptions) {
-	co.defaultColumns = w.defaultColumns
-}
-
-func WithDefaultColumns(defaultColumns map[string]*ColumnModel) Option {
-	return withDefaultColumns{defaultColumns: defaultColumns}
-}
-
 type withIgnoredColumns struct {
 	ignoredFields []string
 }
@@ -58,4 +46,17 @@ func (w withIgnoredColumns) Apply(co *CollapsedOptions) {
 
 func WithIgnoredColumns(ignoredFields ...string) Option {
 	return withIgnoredColumns{ignoredFields: ignoredFields}
+}
+
+type withAlias struct {
+	path  string
+	alias Alias
+}
+
+func (w withAlias) Apply(co *CollapsedOptions) {
+	co.aliases[w.path] = w.alias
+}
+
+func WithAlias(path string, alias Alias) Option {
+	return withAlias{path: path, alias: alias}
 }

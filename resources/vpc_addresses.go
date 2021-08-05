@@ -10,24 +10,24 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
 )
 
-func VpcAddresses() *schema.Table {
+func VPCAddresses() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_addresses",
-		Resolver:     fetchVpcAddresses,
+		Resolver:     fetchVPCAddresses,
 		Multiplex:    client.FolderMultiplex,
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "address_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the address.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the address belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,32 +51,32 @@ func VpcAddresses() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
-				Name:        "external_ipv_4_address_address",
+				Name:        "address_external_ipv_4_address_address",
 				Type:        schema.TypeString,
 				Description: "Value of address.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Address"),
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Address"),
 			},
 			{
-				Name:        "external_ipv_4_address_zone_id",
+				Name:        "address_external_ipv_4_address_zone_id",
 				Type:        schema.TypeString,
 				Description: "Availability zone from which the address will be allocated.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.ZoneId"),
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.ZoneId"),
 			},
 			{
-				Name:        "external_ipv_4_address_requirements_ddos_protection_provider",
+				Name:        "addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
 				Type:        schema.TypeString,
 				Description: "DDoS protection provider ID.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Requirements.DdosProtectionProvider"),
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.DdosProtectionProvider"),
 			},
 			{
-				Name:        "external_ipv_4_address_requirements_outgoing_smtp_capability",
+				Name:        "addr_ext_ipv_4_addr_requirements_out_smtp_cap",
 				Type:        schema.TypeString,
 				Description: "Capability to send SMTP traffic.",
-				Resolver:    schema.PathResolver("ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
 			},
 			{
 				Name:        "reserved",
@@ -107,14 +107,14 @@ func VpcAddresses() *schema.Table {
 
 }
 
-func fetchVpcAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchVPCAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
 		req := &vpc.ListAddressesRequest{FolderId: f}
-		it := c.Services.Vpc.Address().AddressIterator(ctx, req)
+		it := c.Services.VPC.Address().AddressIterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()
 		}

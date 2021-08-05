@@ -19,15 +19,15 @@ func ComputeImages() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "image_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the image.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the image belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func ComputeImages() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{

@@ -20,12 +20,22 @@ vendor/
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
 *.iml
+
+# Api of YC
+/cloudapi/
+
+# Scripts for developing
+/scripts/
+
+# Files for running CQ with provider
+/config.hcl
+/cq-provider-yandex
+/.cq_reattach
+
+# Idea project files
 modules.xml
 .idea/misc.xml
 *.ipr
-/yc_token
-/config.hcl
-/scripts/
-/run.sh
-/cq-provider-yandex
-/cloudapi/
+
+# Secrets
+/key.json

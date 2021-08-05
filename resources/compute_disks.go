@@ -19,15 +19,15 @@ func ComputeDisks() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "disk_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the disk.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the disk belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -51,7 +51,7 @@ func ComputeDisks() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
@@ -91,16 +91,16 @@ func ComputeDisks() *schema.Table {
 				Resolver:    client.EnumPathResolver("Status"),
 			},
 			{
-				Name:        "source_image_id",
+				Name:        "source_source_image_id",
 				Type:        schema.TypeString,
 				Description: "ID of the image that was used for disk creation.",
-				Resolver:    schema.PathResolver("SourceImageId"),
+				Resolver:    schema.PathResolver("Source.SourceImageId"),
 			},
 			{
-				Name:        "source_snapshot_id",
+				Name:        "source_source_snapshot_id",
 				Type:        schema.TypeString,
 				Description: "ID of the snapshot that was used for disk creation.",
-				Resolver:    schema.PathResolver("SourceSnapshotId"),
+				Resolver:    schema.PathResolver("Source.SourceSnapshotId"),
 			},
 			{
 				Name:        "instance_ids",

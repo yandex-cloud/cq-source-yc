@@ -21,15 +21,15 @@ func ComputeInstances() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "instance_id",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the instance.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "",
+				Description: "ID of the folder that the instance belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -53,7 +53,7 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "labels",
 				Type:        schema.TypeJSON,
-				Description: "",
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
 				Resolver:    client.ResolveLabels,
 			},
 			{
@@ -162,12 +162,23 @@ func ComputeInstances() *schema.Table {
 
 		Relations: []*schema.Table{
 			{
-				Name:         "yandex_compute_instance_secondary_disks",
-				Resolver:     fetchComputeInstanceSecondaryDisks,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_secondary_disks",
+				Resolver:    fetchComputeInstanceSecondaryDisks,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "mode",
 						Type:        schema.TypeString,
@@ -195,12 +206,23 @@ func ComputeInstances() *schema.Table {
 				},
 			},
 			{
-				Name:         "yandex_compute_instance_network_interfaces",
-				Resolver:     fetchComputeInstanceNetworkInterfaces,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_network_interfaces",
+				Resolver:    fetchComputeInstanceNetworkInterfaces,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "index",
 						Type:        schema.TypeString,
@@ -220,20 +242,222 @@ func ComputeInstances() *schema.Table {
 						Resolver:    schema.PathResolver("SubnetId"),
 					},
 					{
+						Name:        "primary_v_4_address_address",
+						Type:        schema.TypeString,
+						Description: "An IPv4 internal network address that is assigned to the instance for this network interface.",
+						Resolver:    schema.PathResolver("PrimaryV4Address.Address"),
+					},
+					{
+						Name:        "primary_v_4_address_one_to_one_nat_address",
+						Type:        schema.TypeString,
+						Description: "An external IP address associated with this instance.",
+						Resolver:    schema.PathResolver("PrimaryV4Address.OneToOneNat.Address"),
+					},
+					{
+						Name:        "primary_v_4_address_one_to_one_nat_ip_version",
+						Type:        schema.TypeString,
+						Description: "IP version for the external IP address.",
+						Resolver:    client.EnumPathResolver("PrimaryV4Address.OneToOneNat.IpVersion"),
+					},
+					{
+						Name:        "primary_v_6_address_address",
+						Type:        schema.TypeString,
+						Description: "An IPv4 internal network address that is assigned to the instance for this network interface.",
+						Resolver:    schema.PathResolver("PrimaryV6Address.Address"),
+					},
+					{
+						Name:        "primary_v_6_address_one_to_one_nat_address",
+						Type:        schema.TypeString,
+						Description: "An external IP address associated with this instance.",
+						Resolver:    schema.PathResolver("PrimaryV6Address.OneToOneNat.Address"),
+					},
+					{
+						Name:        "primary_v_6_address_one_to_one_nat_ip_version",
+						Type:        schema.TypeString,
+						Description: "IP version for the external IP address.",
+						Resolver:    client.EnumPathResolver("PrimaryV6Address.OneToOneNat.IpVersion"),
+					},
+					{
 						Name:        "security_group_ids",
 						Type:        schema.TypeStringArray,
 						Description: "ID's of security groups attached to the interface",
 						Resolver:    schema.PathResolver("SecurityGroupIds"),
 					},
 				},
+
+				Relations: []*schema.Table{
+					{
+						Name:        "yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressOneToOneNatDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
+						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
+							{
+								Name:        "fqdn",
+								Type:        schema.TypeString,
+								Description: "Name of the A/AAAA record as specified when creating the instance.\n Note that if `fqdn' has no trailing '.', it is specified relative to the zone (@see dns_zone_id).",
+								Resolver:    schema.PathResolver("Fqdn"),
+							},
+							{
+								Name:        "dns_zone_id",
+								Type:        schema.TypeString,
+								Description: "DNS zone id for the record (optional, if not set, some private zone is used).",
+								Resolver:    schema.PathResolver("DnsZoneId"),
+							},
+							{
+								Name:        "ttl",
+								Type:        schema.TypeBigInt,
+								Description: "DNS record ttl (optional, if not set, a reasonable default is used.)",
+								Resolver:    schema.PathResolver("Ttl"),
+							},
+							{
+								Name:        "ptr",
+								Type:        schema.TypeBool,
+								Description: "When true, indicates there is a corresponding auto-created PTR DNS record.",
+								Resolver:    schema.PathResolver("Ptr"),
+							},
+						},
+					},
+					{
+						Name:        "yandex_compute_instance_net_interface_ipv4_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
+						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
+							{
+								Name:        "fqdn",
+								Type:        schema.TypeString,
+								Description: "Name of the A/AAAA record as specified when creating the instance.\n Note that if `fqdn' has no trailing '.', it is specified relative to the zone (@see dns_zone_id).",
+								Resolver:    schema.PathResolver("Fqdn"),
+							},
+							{
+								Name:        "dns_zone_id",
+								Type:        schema.TypeString,
+								Description: "DNS zone id for the record (optional, if not set, some private zone is used).",
+								Resolver:    schema.PathResolver("DnsZoneId"),
+							},
+							{
+								Name:        "ttl",
+								Type:        schema.TypeBigInt,
+								Description: "DNS record ttl (optional, if not set, a reasonable default is used.)",
+								Resolver:    schema.PathResolver("Ttl"),
+							},
+							{
+								Name:        "ptr",
+								Type:        schema.TypeBool,
+								Description: "When true, indicates there is a corresponding auto-created PTR DNS record.",
+								Resolver:    schema.PathResolver("Ptr"),
+							},
+						},
+					},
+					{
+						Name:        "yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressOneToOneNatDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
+						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
+							{
+								Name:        "fqdn",
+								Type:        schema.TypeString,
+								Description: "Name of the A/AAAA record as specified when creating the instance.\n Note that if `fqdn' has no trailing '.', it is specified relative to the zone (@see dns_zone_id).",
+								Resolver:    schema.PathResolver("Fqdn"),
+							},
+							{
+								Name:        "dns_zone_id",
+								Type:        schema.TypeString,
+								Description: "DNS zone id for the record (optional, if not set, some private zone is used).",
+								Resolver:    schema.PathResolver("DnsZoneId"),
+							},
+							{
+								Name:        "ttl",
+								Type:        schema.TypeBigInt,
+								Description: "DNS record ttl (optional, if not set, a reasonable default is used.)",
+								Resolver:    schema.PathResolver("Ttl"),
+							},
+							{
+								Name:        "ptr",
+								Type:        schema.TypeBool,
+								Description: "When true, indicates there is a corresponding auto-created PTR DNS record.",
+								Resolver:    schema.PathResolver("Ptr"),
+							},
+						},
+					},
+					{
+						Name:        "yandex_compute_instance_net_interface_ipv6_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
+						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
+							{
+								Name:        "fqdn",
+								Type:        schema.TypeString,
+								Description: "Name of the A/AAAA record as specified when creating the instance.\n Note that if `fqdn' has no trailing '.', it is specified relative to the zone (@see dns_zone_id).",
+								Resolver:    schema.PathResolver("Fqdn"),
+							},
+							{
+								Name:        "dns_zone_id",
+								Type:        schema.TypeString,
+								Description: "DNS zone id for the record (optional, if not set, some private zone is used).",
+								Resolver:    schema.PathResolver("DnsZoneId"),
+							},
+							{
+								Name:        "ttl",
+								Type:        schema.TypeBigInt,
+								Description: "DNS record ttl (optional, if not set, a reasonable default is used.)",
+								Resolver:    schema.PathResolver("Ttl"),
+							},
+							{
+								Name:        "ptr",
+								Type:        schema.TypeBool,
+								Description: "When true, indicates there is a corresponding auto-created PTR DNS record.",
+								Resolver:    schema.PathResolver("Ptr"),
+							},
+						},
+					},
+				},
 			},
 			{
-				Name:         "yandex_compute_instance_placement_policy_host_affinity_rules",
-				Resolver:     fetchComputeInstancePlacementPolicyHostAffinityRules,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_placement_policy_host_affinity_rules",
+				Resolver:    fetchComputeInstancePlacementPolicyHostAffinityRules,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "key",
 						Type:        schema.TypeString,
@@ -277,6 +501,54 @@ func fetchComputeInstances(ctx context.Context, meta schema.ClientMeta, _ *schem
 
 func fetchComputeInstanceSecondaryDisks(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
 	values := funk.Get(parent.Item, "SecondaryDisks")
+
+	if funk.IsIteratee(values) {
+		funk.ForEach(values, func(value interface{}) {
+			res <- value
+		})
+	}
+
+	return nil
+}
+
+func fetchComputeInstanceNetworkInterfacePrimaryV4AddressOneToOneNatDnsRecords(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+	values := funk.Get(parent.Item, "PrimaryV4Address.OneToOneNat.DnsRecords")
+
+	if funk.IsIteratee(values) {
+		funk.ForEach(values, func(value interface{}) {
+			res <- value
+		})
+	}
+
+	return nil
+}
+
+func fetchComputeInstanceNetworkInterfacePrimaryV4AddressDnsRecords(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+	values := funk.Get(parent.Item, "PrimaryV4Address.DnsRecords")
+
+	if funk.IsIteratee(values) {
+		funk.ForEach(values, func(value interface{}) {
+			res <- value
+		})
+	}
+
+	return nil
+}
+
+func fetchComputeInstanceNetworkInterfacePrimaryV6AddressOneToOneNatDnsRecords(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+	values := funk.Get(parent.Item, "PrimaryV6Address.OneToOneNat.DnsRecords")
+
+	if funk.IsIteratee(values) {
+		funk.ForEach(values, func(value interface{}) {
+			res <- value
+		})
+	}
+
+	return nil
+}
+
+func fetchComputeInstanceNetworkInterfacePrimaryV6AddressDnsRecords(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+	values := funk.Get(parent.Item, "PrimaryV6Address.DnsRecords")
 
 	if funk.IsIteratee(values) {
 		funk.ForEach(values, func(value interface{}) {
