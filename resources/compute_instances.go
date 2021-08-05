@@ -21,7 +21,7 @@ func ComputeInstances() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "instance_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the instance.",
 				Resolver:    client.ResolveResourceId,
@@ -162,12 +162,23 @@ func ComputeInstances() *schema.Table {
 
 		Relations: []*schema.Table{
 			{
-				Name:         "yandex_compute_instance_secondary_disks",
-				Resolver:     fetchComputeInstanceSecondaryDisks,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_secondary_disks",
+				Resolver:    fetchComputeInstanceSecondaryDisks,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "mode",
 						Type:        schema.TypeString,
@@ -195,12 +206,23 @@ func ComputeInstances() *schema.Table {
 				},
 			},
 			{
-				Name:         "yandex_compute_instance_network_interfaces",
-				Resolver:     fetchComputeInstanceNetworkInterfaces,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_network_interfaces",
+				Resolver:    fetchComputeInstanceNetworkInterfaces,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "index",
 						Type:        schema.TypeString,
@@ -265,12 +287,17 @@ func ComputeInstances() *schema.Table {
 
 				Relations: []*schema.Table{
 					{
-						Name:         "yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
-						Resolver:     fetchComputeInstanceNetworkInterfacePrimaryV4AddressOneToOneNatDnsRecords,
-						Multiplex:    client.IdentityMultiplex,
-						IgnoreError:  client.IgnoreErrorHandler,
-						DeleteFilter: client.DeleteFolderFilter,
+						Name:        "yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressOneToOneNatDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
 							{
 								Name:        "fqdn",
 								Type:        schema.TypeString,
@@ -298,12 +325,17 @@ func ComputeInstances() *schema.Table {
 						},
 					},
 					{
-						Name:         "yandex_compute_instance_net_interface_ipv4_dns_records",
-						Resolver:     fetchComputeInstanceNetworkInterfacePrimaryV4AddressDnsRecords,
-						Multiplex:    client.IdentityMultiplex,
-						IgnoreError:  client.IgnoreErrorHandler,
-						DeleteFilter: client.DeleteFolderFilter,
+						Name:        "yandex_compute_instance_net_interface_ipv4_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
 							{
 								Name:        "fqdn",
 								Type:        schema.TypeString,
@@ -331,12 +363,17 @@ func ComputeInstances() *schema.Table {
 						},
 					},
 					{
-						Name:         "yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
-						Resolver:     fetchComputeInstanceNetworkInterfacePrimaryV6AddressOneToOneNatDnsRecords,
-						Multiplex:    client.IdentityMultiplex,
-						IgnoreError:  client.IgnoreErrorHandler,
-						DeleteFilter: client.DeleteFolderFilter,
+						Name:        "yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressOneToOneNatDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
 							{
 								Name:        "fqdn",
 								Type:        schema.TypeString,
@@ -364,12 +401,17 @@ func ComputeInstances() *schema.Table {
 						},
 					},
 					{
-						Name:         "yandex_compute_instance_net_interface_ipv6_dns_records",
-						Resolver:     fetchComputeInstanceNetworkInterfacePrimaryV6AddressDnsRecords,
-						Multiplex:    client.IdentityMultiplex,
-						IgnoreError:  client.IgnoreErrorHandler,
-						DeleteFilter: client.DeleteFolderFilter,
+						Name:        "yandex_compute_instance_net_interface_ipv6_dns_records",
+						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressDnsRecords,
+						Multiplex:   client.IdentityMultiplex,
+						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
+							{
+								Name:        "network_interfaces_cq_id",
+								Type:        schema.TypeUUID,
+								Description: "cq_id of parent network_interfaces",
+								Resolver:    schema.ParentIdResolver,
+							},
 							{
 								Name:        "fqdn",
 								Type:        schema.TypeString,
@@ -399,12 +441,23 @@ func ComputeInstances() *schema.Table {
 				},
 			},
 			{
-				Name:         "yandex_compute_instance_placement_policy_host_affinity_rules",
-				Resolver:     fetchComputeInstancePlacementPolicyHostAffinityRules,
-				Multiplex:    client.IdentityMultiplex,
-				IgnoreError:  client.IgnoreErrorHandler,
-				DeleteFilter: client.DeleteFolderFilter,
+				Name:        "yandex_compute_instance_placement_policy_host_affinity_rules",
+				Resolver:    fetchComputeInstancePlacementPolicyHostAffinityRules,
+				Multiplex:   client.IdentityMultiplex,
+				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
+					{
+						Name:        "instance_cq_id",
+						Type:        schema.TypeUUID,
+						Description: "cq_id of parent instance",
+						Resolver:    schema.ParentIdResolver,
+					},
+					{
+						Name:        "instance_id",
+						Type:        schema.TypeString,
+						Description: "id of parent instance",
+						Resolver:    schema.ParentResourceFieldResolver("id"),
+					},
 					{
 						Name:        "key",
 						Type:        schema.TypeString,

@@ -19,7 +19,7 @@ func VPCNetworks() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "network_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the network.",
 				Resolver:    client.ResolveResourceId,

@@ -19,7 +19,7 @@ func ComputeDisks() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "disk_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the disk.",
 				Resolver:    client.ResolveResourceId,

@@ -11,13 +11,13 @@ import (
 )
 
 func TestIntegrationComputeImages(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_compute_image" "cq-image-test-image-%[1]s" {
   name         = "cq-image-test-image-%[1]s"
   source_image = "fd8vmcue7aajpmeo39kk"
 }
-`
-	yandexTestIntegrationHelper(t, resources.ComputeImages(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.ComputeImages(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_compute_images",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

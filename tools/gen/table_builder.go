@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 )
@@ -19,6 +20,9 @@ type tableBuilder struct {
 
 	ignoredFields map[string]struct{}
 	aliases       map[string]Alias
+
+	field  *expandedField
+	parent *tableBuilder
 }
 
 func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, paths ...string) error {
@@ -33,7 +37,7 @@ func (tb *tableBuilder) WithMessageFromProto(messageName, pathToProto string, pa
 
 	tb.messageDesc = protoFile.FindMessage(protoFile.GetPackage() + "." + messageName)
 	if tb.messageDesc == nil {
-		return fmt.Errorf("messageDesc %v not found", messageName)
+		return fmt.Errorf("messageDesc %s not found", messageName)
 	}
 
 	tb.resource = getCamelName(tb.messageDesc)
@@ -48,6 +52,11 @@ func (tb *tableBuilder) Build() (*TableModel, error) {
 	expandedFields := tb.expandFields(tb.messageDesc.GetFields(), nil)
 	forColumns, forRelations := tb.filterFields(expandedFields)
 
+	relations, err := tb.generateRelations(forRelations)
+	if err != nil {
+		return nil, err
+	}
+
 	table := &TableModel{
 		Service:      tb.service,
 		Resource:     tb.resource,
@@ -55,7 +64,7 @@ func (tb *tableBuilder) Build() (*TableModel, error) {
 		RelativePath: split(tb.relativePath),
 		Multiplex:    tb.multiplex,
 		Columns:      tb.generateColumns(forColumns),
-		Relations:    tb.generateRelations(forRelations),
+		Relations:    relations,
 	}
 
 	if alias, ok := tb.aliases[tb.absolutePath]; ok {
@@ -106,12 +115,13 @@ func (tb *tableBuilder) containsAliases(field expandedField) bool {
 }
 
 func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*ColumnModel) {
+	columns = tb.appendIfRelation(columns)
 	for _, field := range fields {
 		column := &ColumnModel{
 			Name:        field.getColumnName(),
 			Type:        field.getType(),
 			Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
-			Resolver:    fmt.Sprintf("%v(\"%v\")", field.getResolver(), field.getPath()),
+			Resolver:    fmt.Sprintf("%s(\"%s\")", field.getResolver(), field.getPath()),
 		}
 
 		if alias, ok := tb.aliases[join(tb.absolutePath, field.getPath())]; ok {
@@ -123,7 +133,41 @@ func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*Colu
 	return
 }
 
-func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel {
+func (tb *tableBuilder) appendIfRelation(columns []*ColumnModel) []*ColumnModel {
+	if tb.parent != nil {
+		var (
+			parentName    string
+			parentMsgDesc *desc.MessageDescriptor
+		)
+
+		if tb.parent.field == nil {
+			parentName = strcase.ToSnake(tb.resource)
+			parentMsgDesc = tb.parent.messageDesc
+		} else {
+			parentName = tb.parent.field.getColumnName()
+			parentMsgDesc = tb.parent.field.GetMessageType()
+		}
+
+		columns = append(columns, &ColumnModel{
+			Name:        parentName + "_cq_id",
+			Type:        "schema.TypeUUID",
+			Description: fmt.Sprintf("cq_id of parent %s", parentName),
+			Resolver:    "schema.ParentIdResolver",
+		})
+
+		if parentMsgDesc.FindFieldByName("id") != nil {
+			columns = append(columns, &ColumnModel{
+				Name:        parentName + "_id",
+				Type:        "schema.TypeString",
+				Description: fmt.Sprintf("id of parent %s", parentName),
+				Resolver:    "schema.ParentResourceFieldResolver(\"id\")",
+			})
+		}
+	}
+	return columns
+}
+
+func (tb *tableBuilder) generateRelations(fields []expandedField) ([]*TableModel, error) {
 	tables := make([]*TableModel, 0, len(fields))
 
 	for _, field := range fields {
@@ -136,16 +180,18 @@ func (tb *tableBuilder) generateRelations(fields []expandedField) []*TableModel 
 			messageDesc:   field.GetMessageType(),
 			ignoredFields: tb.ignoredFields,
 			aliases:       tb.aliases,
+			field:         &field,
+			parent:        tb,
 		}
 
 		table, err := builder.Build()
 
 		if err != nil {
-			continue
+			return nil, err
 		}
 
 		tables = append(tables, table)
 	}
 
-	return tables
+	return tables, nil
 }

@@ -11,12 +11,12 @@ import (
 )
 
 func TestIntegrationVPCNetworks(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_vpc_network" "cq-net-test-net-%[1]s" {
   name = "cq-net-test-net-%[1]s"
 }
-`
-	yandexTestIntegrationHelper(t, resources.VPCNetworks(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.VPCNetworks(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_vpc_networks",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

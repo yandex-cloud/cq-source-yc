@@ -19,7 +19,7 @@ func VPCSubnets() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "subnet_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the subnet.",
 				Resolver:    client.ResolveResourceId,

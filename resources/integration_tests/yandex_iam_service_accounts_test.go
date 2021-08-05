@@ -11,12 +11,12 @@ import (
 )
 
 func TestIntegrationIAMServiceAccount(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_iam_service_account" "cq-sa-test-sa-%[1]s" {
   name = "cq-sa-test-sa-%[1]s"
 }
-`
-	yandexTestIntegrationHelper(t, resources.IAMServiceAccounts(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.IAMServiceAccounts(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_iam_service_accounts",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

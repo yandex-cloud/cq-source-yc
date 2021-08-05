@@ -73,7 +73,7 @@ func getDefaultYCColumns(resource string) []Option {
 	return []Option{
 		WithAlias("Id", ChangeColumn(
 			&ColumnModel{
-				Name:        name + "_id",
+				Name:        "id",
 				Type:        "schema.TypeString",
 				Description: fmt.Sprintf("ID of the %v.", name),
 				Resolver:    "client.ResolveResourceId",

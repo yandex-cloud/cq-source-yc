@@ -11,12 +11,12 @@ import (
 )
 
 func TestIntegrationComputeDisks(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_compute_disk" "cq-disk-test-disk-%[1]s" {
   name = "cq-disk-test-disk-%[1]s"
 }
-`
-	yandexTestIntegrationHelper(t, resources.ComputeDisks(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.ComputeDisks(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_compute_disks",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

@@ -19,7 +19,7 @@ func ComputeImages() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "image_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the image.",
 				Resolver:    client.ResolveResourceId,

@@ -19,7 +19,7 @@ func VPCAddresses() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "address_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the address.",
 				Resolver:    client.ResolveResourceId,

@@ -11,12 +11,12 @@ import (
 )
 
 func TestIntegrationKMSSymmetricKeys(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_kms_symmetric_key" "cq-keys-test-keys-%[1]s" {
   name = "cq-keys-test-keys-%[1]s"
 }
-`
-	yandexTestIntegrationHelper(t, resources.KMSSymmetricKeys(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.KMSSymmetricKeys(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_kms_symmetric_keys",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

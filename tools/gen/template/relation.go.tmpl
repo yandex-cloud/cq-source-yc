@@ -3,7 +3,6 @@
 		Resolver:     fetch{{.Service}}{{.Resource}}{{.AbsolutePath | asFullFieldName | join ""}},
 		Multiplex:    {{.Multiplex}},
 		IgnoreError:  client.IgnoreErrorHandler,
-		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 {{range .Columns}}{{template "column.go.tmpl" .}}{{end}}
 		},

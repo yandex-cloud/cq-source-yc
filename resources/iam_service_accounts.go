@@ -19,7 +19,7 @@ func IAMServiceAccounts() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "service_account_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the service_account.",
 				Resolver:    client.ResolveResourceId,

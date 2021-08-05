@@ -11,7 +11,7 @@ import (
 )
 
 func TestIntegrationVPCSubnets(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_vpc_network" "cq-subnet-test-net-%[1]s" {
   name = "cq-subnet-test-net-%[1]s"
 }
@@ -21,8 +21,8 @@ resource "yandex_vpc_subnet" "cq-subnet-test-subnet-%[1]s" {
   v4_cidr_blocks = ["10.2.0.0/16"]
   name           = "cq-subnet-test-subnet-%[1]s"
 }
-`
-	yandexTestIntegrationHelper(t, resources.VPCSubnets(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.VPCSubnets(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
 			Name: "yandex_vpc_subnets",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {

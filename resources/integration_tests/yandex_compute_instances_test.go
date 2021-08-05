@@ -4,22 +4,21 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Masterminds/squirrel"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
 )
 
 func TestIntegrationComputeInstances(t *testing.T) {
-	var tfTmpl = `
+	var tfTmpl = fmt.Sprintf(`
 resource "yandex_vpc_network" "cq-instance-test-net-%[1]s" {
   name = "cq-instance-test-net-%[1]s"
 }
 
 resource "yandex_vpc_subnet" "cq-instance-test-subnet-%[1]s" {
+  name           = "cq-instance-test-subnet-%[1]s"
   network_id     = yandex_vpc_network.cq-instance-test-net-%[1]s.id
   v4_cidr_blocks = ["10.2.0.0/16"]
-  name           = "cq-instance-test-subnet-%[1]s"
 }
 
 resource "yandex_compute_instance" "cq-instance-test-instance-%[1]s" {
@@ -37,19 +36,29 @@ resource "yandex_compute_instance" "cq-instance-test-instance-%[1]s" {
     memory = 4
   }
 }
-`
-	yandexTestIntegrationHelper(t, resources.ComputeInstances(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+`, suffix)
+	testIntegrationHelper(t, resources.ComputeInstances(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
-			Name: "yandex_compute_instances",
-			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {
-				return sq
-			},
+			Name:   "yandex_compute_instances",
+			Filter: IdentityFilter,
 			ExpectedValues: []providertest.ExpectedValue{{
 				Count: 1,
 				Data: map[string]interface{}{
 					"name": fmt.Sprintf("cq-instance-test-instance-%s", suffix),
 				},
 			}},
+			Relations: []*providertest.ResourceIntegrationVerification{
+				{
+					Name:           "yandex_compute_instance_network_interfaces",
+					ForeignKeyName: "instance_id",
+					Filter:         IdentityFilter,
+					ExpectedValues: []providertest.ExpectedValue{
+						{
+							Count: 1,
+						},
+					},
+				},
+			},
 		}
 	}, tfTmpl)
 }

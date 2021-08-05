@@ -19,7 +19,7 @@ func KMSSymmetricKeys() *schema.Table {
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "symmetric_key_id",
+				Name:        "id",
 				Type:        schema.TypeString,
 				Description: "ID of the symmetric_key.",
 				Resolver:    client.ResolveResourceId,
