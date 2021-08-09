@@ -27,6 +27,8 @@ type Client struct {
 	Services *Services
 	// this is set by table client multiplexer
 	FolderId string
+
+	CloudId string
 }
 
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
@@ -51,7 +53,7 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	if err != nil {
 		return nil, err
 	}
-	client := NewYandexClient(logger, folders, services)
+	client := NewYandexClient(logger, folders, services, providerConfig.CloudID)
 	return client, nil
 }
 
@@ -166,11 +168,12 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(log hclog.Logger, folders []string, services *Services) *Client {
+func NewYandexClient(log hclog.Logger, folders []string, services *Services, cloudId string) *Client {
 	return &Client{
 		logger:   log,
 		folders:  folders,
 		Services: services,
+		CloudId:  cloudId,
 	}
 }
 
@@ -185,5 +188,6 @@ func (c Client) withFolder(folder string) *Client {
 		Services: c.Services,
 		logger:   c.logger.With("folder_id", folder),
 		FolderId: folder,
+		CloudId:  c.CloudId,
 	}
 }
