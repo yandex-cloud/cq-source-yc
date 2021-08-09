@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/Masterminds/squirrel v1.5.0
+	github.com/aws/aws-sdk-go v1.37.0 // indirect
 	github.com/cloudquery/cq-provider-sdk v0.3.1
 	github.com/cloudquery/faker/v3 v3.7.4
 	github.com/golang/protobuf v1.5.2

@@ -22,6 +22,9 @@ func Provider() *provider.Provider {
 			"iam.service_accounts":      IAMServiceAccounts(),
 			"access_bindings_by_folder": AccessBindingsByFolder(),
 			"access_bindings_by_cloud":  AccessBindingsByCloud(),
+			"resourcemanager.clouds":    ResourceManagerClouds(),
+			"resourcemanager.folders":   ResourceManagerFolders(),
+			"storage_object":            StorageObjects(),
 		},
 		Config: func() provider.Config {
 			return &client.Config{}
