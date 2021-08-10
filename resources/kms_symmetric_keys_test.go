@@ -36,7 +36,7 @@ func TestKMSSymmetricKeys(t *testing.T) {
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
 				KMS: kmsSvc,
-			})
+			}, nil, "")
 			return c, nil
 		},
 	}

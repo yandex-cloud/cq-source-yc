@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/mitchellh/go-homedir"
 	"github.com/yandex-cloud/go-sdk/iamkey"
 
@@ -25,6 +26,8 @@ type Client struct {
 	logger  hclog.Logger
 	// All yandex services initialized by client
 	Services *Services
+	// S3 client to manage objects storages
+	S3Client *s3.S3
 	// this is set by table client multiplexer
 	FolderId string
 
@@ -53,13 +56,17 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	if err != nil {
 		return nil, err
 	}
-	client := NewYandexClient(logger, folders, services, providerConfig.CloudID)
+	s3Client, err := initS3Clint()
+	if err != nil {
+		return nil, err
+	}
+	client := NewYandexClient(logger, folders, services, s3Client, providerConfig.CloudID)
 	return client, nil
 }
 
 func buildSDK() (*ycsdk.SDK, error) {
 	ctx := context.Background()
-	cred, err := credentials()
+	cred, err := getCredentials()
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +79,7 @@ func buildSDK() (*ycsdk.SDK, error) {
 	return sdk, err
 }
 
-func credentials() (ycsdk.Credentials, error) {
+func getCredentials() (ycsdk.Credentials, error) {
 	if val, ok := os.LookupEnv("YC_SERVICE_ACCOUNT_KEY_FILE"); ok {
 		contents, _, err := pathOrContents(val)
 		if err != nil {
@@ -168,11 +175,12 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(log hclog.Logger, folders []string, services *Services, cloudId string) *Client {
+func NewYandexClient(log hclog.Logger, folders []string, services *Services, s3Client *s3.S3, cloudId string) *Client {
 	return &Client{
 		logger:   log,
 		folders:  folders,
 		Services: services,
+		S3Client: s3Client,
 		CloudId:  cloudId,
 	}
 }
@@ -186,6 +194,7 @@ func (c Client) withFolder(folder string) *Client {
 	return &Client{
 		folders:  c.folders,
 		Services: c.Services,
+		S3Client: c.S3Client,
 		logger:   c.logger.With("folder_id", folder),
 		FolderId: folder,
 		CloudId:  c.CloudId,

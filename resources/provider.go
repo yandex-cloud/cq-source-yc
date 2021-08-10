@@ -25,9 +25,10 @@ func Provider() *provider.Provider {
 			"access_bindings_by_cloud":        AccessBindingsByCloud(),
 			"resourcemanager.clouds":          ResourceManagerClouds(),
 			"resourcemanager.folders":         ResourceManagerFolders(),
-			"storage_objects":                 StorageObjects(),
+			"objects_storage":                 ObjectsStorages(),
 			"k8s.clusters":                    K8SClusters(),
 			"certificatemanager.certificates": CertificateManagerCertificates(),
+			"serverless.apigateways":          ServerlessApiGateways(),
 		},
 		Config: func() provider.Config {
 			return &client.Config{}

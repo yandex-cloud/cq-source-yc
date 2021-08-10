@@ -168,4 +168,16 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	//err = gen.Generate(
+	//	"Serverless",
+	//	"ApiGateway",
+	//	"yandex/cloud/serverless/apigateway/v1/apigateway.proto",
+	//	"resources",
+	//	gen.WithProtoPaths("cloudapi"),
+	//)
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }

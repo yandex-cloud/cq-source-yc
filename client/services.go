@@ -4,6 +4,7 @@ import (
 	"context"
 
 	ycsdk "github.com/yandex-cloud/go-sdk"
+	"github.com/yandex-cloud/go-sdk/gen/apigateway"
 	"github.com/yandex-cloud/go-sdk/gen/certificatemanager"
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"github.com/yandex-cloud/go-sdk/gen/iam"
@@ -21,6 +22,7 @@ type Services struct {
 	ResourceManager    *resourcemanager.ResourceManager
 	K8S                *k8s.Kubernetes
 	CertificateManager *certificatemanager.CertificateManager
+	ApiGateway         *apigateway.Apigateway
 }
 
 func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
@@ -32,5 +34,6 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		ResourceManager:    sdk.ResourceManager(),
 		K8S:                sdk.Kubernetes(),
 		CertificateManager: sdk.Certificates(),
+		ApiGateway:         sdk.Serverless().APIGateway(),
 	}, nil
 }

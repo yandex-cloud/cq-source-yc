@@ -36,7 +36,7 @@ func TestIAMServiceAccounts(t *testing.T) {
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
 				IAM: iamSvc,
-			})
+			}, nil, "")
 			return c, nil
 		},
 	}

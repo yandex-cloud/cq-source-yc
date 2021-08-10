@@ -36,7 +36,7 @@ func TestVPCNetworks(t *testing.T) {
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
 				VPC: vpcSvc,
-			})
+			}, nil, "")
 			return c, nil
 		},
 	}

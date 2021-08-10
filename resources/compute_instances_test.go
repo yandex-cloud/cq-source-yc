@@ -36,7 +36,7 @@ func TestComputeInstances(t *testing.T) {
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
 				Compute: computeSvc,
-			})
+			}, nil, "")
 			return c, nil
 		},
 	}

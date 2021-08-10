@@ -36,7 +36,7 @@ func TestComputeDisks(t *testing.T) {
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
 				Compute: computeSvc,
-			})
+			}, nil, "")
 			return c, nil
 		},
 		Verifiers: []ptest.Verifier{

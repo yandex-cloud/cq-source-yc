@@ -20,6 +20,7 @@ require (
 	github.com/yandex-cloud/go-genproto v0.0.0-20210809082946-a97da516c588 //v0.0.0-20210517152439-84c9ad4d8b5f
 	github.com/yandex-cloud/go-sdk v0.0.0-20210517154707-ca282b96279e
 	google.golang.org/grpc v1.32.0
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
 replace (
