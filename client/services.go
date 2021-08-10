@@ -7,6 +7,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"github.com/yandex-cloud/go-sdk/gen/iam"
 	"github.com/yandex-cloud/go-sdk/gen/kms"
+	k8s "github.com/yandex-cloud/go-sdk/gen/kubernetes"
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
 	"github.com/yandex-cloud/go-sdk/gen/vpc"
 )
@@ -17,6 +18,7 @@ type Services struct {
 	VPC             *vpc.VPC
 	IAM             *iam.IAM
 	ResourceManager *resourcemanager.ResourceManager
+	K8S             *k8s.Kubernetes
 }
 
 func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
@@ -26,5 +28,6 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		VPC:             sdk.VPC(),
 		IAM:             sdk.IAM(),
 		ResourceManager: sdk.ResourceManager(),
+		K8S:             sdk.Kubernetes(),
 	}, nil
 }

@@ -17,8 +17,8 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
-	{{.Service | snake}}1 "github.com/yandex-cloud/go-genproto/yandex/cloud/{{.Service | snake}}/v1"
-	"github.com/yandex-cloud/go-sdk/gen/{{.Service | snake}}"
+	{{.Service | together}}1 "github.com/yandex-cloud/go-genproto/yandex/cloud/{{.Service | together}}/v1"
+	"github.com/yandex-cloud/go-sdk/gen/{{.Service | together}}"
 )
 
 func Test{{.Service}}{{.Resource | plural}}(t *testing.T) {
@@ -29,7 +29,7 @@ func Test{{.Service}}{{.Resource | plural}}(t *testing.T) {
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			{{.Service | snake}}Svc, serv1, err := create{{.Resource}}Server()
+			{{.Service | together}}Svc, serv1, err := create{{.Resource}}Server()
 			serv = serv1
 			if err != nil {
 				return nil, err
@@ -37,7 +37,7 @@ func Test{{.Service}}{{.Resource | plural}}(t *testing.T) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, &client.Services{
-				{{.Service}}: {{.Service | snake}}Svc,
+				{{.Service}}: {{.Service | together}}Svc,
 			})
 			return c, nil
 		},
@@ -47,12 +47,12 @@ func Test{{.Service}}{{.Resource | plural}}(t *testing.T) {
 }
 
 type Fake{{.Resource}}ServiceServer struct {
-	{{.Service | snake}}1.Unimplemented{{.Resource}}ServiceServer
-	{{.Resource}} *{{.Service | snake}}1.{{.Resource}}
+	{{.Service | together}}1.Unimplemented{{.Resource}}ServiceServer
+	{{.Resource}} *{{.Service | together}}1.{{.Resource}}
 }
 
 func NewFake{{.Resource}}ServiceServer() (*Fake{{.Resource}}ServiceServer, error) {
-	var {{.Resource | snake}} {{.Service | snake}}1.{{.Resource}}
+	var {{.Resource | snake}} {{.Service | together}}1.{{.Resource}}
 	faker.SetIgnoreInterface(true)
 	err := faker.FakeData(&{{.Resource | snake}})
 	if err != nil {
@@ -61,11 +61,11 @@ func NewFake{{.Resource}}ServiceServer() (*Fake{{.Resource}}ServiceServer, error
 	return &Fake{{.Resource}}ServiceServer{ {{- .Resource}}: &{{.Resource | snake}}}, nil
 }
 
-func (s *Fake{{.Resource}}ServiceServer) List(context.Context, *{{.Service | snake}}1.List{{.Resource | plural}}Request) (*{{.Service | snake}}1.List{{.Resource | plural}}Response, error) {
-	return &{{.Service | snake}}1.List{{.Resource | plural}}Response{ {{- .Resource | replaceSymmetricKey | plural}}: []*{{.Service | snake}}1.{{.Resource}}{s.{{.Resource}}}}, nil
+func (s *Fake{{.Resource}}ServiceServer) List(context.Context, *{{.Service | together}}1.List{{.Resource | plural}}Request) (*{{.Service | together}}1.List{{.Resource | plural}}Response, error) {
+	return &{{.Service | together}}1.List{{.Resource | plural}}Response{ {{- .Resource | replaceSymmetricKey | plural}}: []*{{.Service | together}}1.{{.Resource}}{s.{{.Resource}}}}, nil
 }
 
-func create{{.Resource}}Server() (*{{.Service | snake}}.{{.Service}}, *grpc.Server,error) {
+func create{{.Resource}}Server() (*{{.Service | together}}.{{.Service}}, *grpc.Server,error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -79,7 +79,7 @@ func create{{.Resource}}Server() (*{{.Service | snake}}.{{.Service}}, *grpc.Serv
 		return nil, nil, err
 	}
 
-	{{.Service | snake}}1.Register{{.Resource}}ServiceServer(serv, fake{{.Resource}}ServiceServer)
+	{{.Service | together}}1.Register{{.Resource}}ServiceServer(serv, fake{{.Resource}}ServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
@@ -94,7 +94,7 @@ func create{{.Resource}}Server() (*{{.Service | snake}}.{{.Service}}, *grpc.Serv
 		return nil, nil, err
 	}
 
-	return {{.Service | snake}}.New{{.Service}}(
+	return {{.Service | together}}.New{{.Service}}(
 		func(ctx context.Context) (*grpc.ClientConn, error) {
 			return conn, nil
 		},

@@ -4,7 +4,7 @@ func fetch{{.Service}}{{.Resource | plural}}(ctx context.Context, meta schema.Cl
 	locations := []string{c.FolderId}
 
 	for _, f := range locations {
-		req := &{{.Service | snake}}.List{{.Resource | plural}}Request{FolderId: f}
+		req := &{{.Service | together}}.List{{.Resource | plural}}Request{FolderId: f}
 		it := c.Services.{{.Service}}.{{.Resource}}().{{.Resource}}Iterator(ctx, req)
 		for it.Next() {
 			res <- it.Value()

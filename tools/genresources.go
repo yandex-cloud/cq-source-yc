@@ -24,12 +24,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//err = gen.GenerateTests("KMS", "SymmetricKey", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
 	err = gen.Generate(
 		"Compute",
 		"Image",
@@ -41,12 +35,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	//err = gen.GenerateTests("Compute", "Image", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 
 	err = gen.Generate(
 		"Compute",
@@ -76,12 +64,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//err = gen.GenerateTests("Compute", "Instance", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
 	err = gen.Generate(
 		"Compute",
 		"Disk",
@@ -93,12 +75,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	//err = gen.GenerateTests("Compute", "Disk", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 
 	err = gen.Generate(
 		"VPC",
@@ -112,12 +88,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//err = gen.GenerateTests("VPC", "Network", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
 	err = gen.Generate(
 		"VPC",
 		"Subnet",
@@ -129,12 +99,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	//err = gen.GenerateTests("VPC", "Subnet", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 
 	err = gen.Generate(
 		"VPC",
@@ -156,12 +120,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//err = gen.GenerateTests("VPC", "Address", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
 	err = gen.Generate(
 		"IAM",
 		"ServiceAccount",
@@ -174,9 +132,16 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//err = gen.GenerateTests("IAM", "ServiceAccount", "resources")
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	err = gen.Generate(
+		"K8S",
+		"Cluster",
+		"yandex/cloud/k8s/v1/cluster.proto",
+		"resources",
+		gen.WithProtoPaths("cloudapi", "api-common-protos"),
+		gen.WithIgnoredColumns("Master"),
+	)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }

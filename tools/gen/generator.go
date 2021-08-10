@@ -37,7 +37,7 @@ func Generate(service, resource, pathToProto, outDir string, opts ...Option) err
 	}
 
 	file, err := os.Create(fmt.Sprintf("%v/%v_%v.go",
-		outDir, strcase.ToSnake(tableModel.Service),
+		outDir, togetherCase(tableModel.Service),
 		strcase.ToSnake(inflection.Plural(tableModel.Resource))))
 
 	if err != nil {

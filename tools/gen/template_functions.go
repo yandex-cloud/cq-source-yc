@@ -9,10 +9,15 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
+func togetherCase(s string) string {
+	return strings.ToLower(strcase.ToCamel(s))
+}
+
 var generatorTemplateFunctions = template.FuncMap{
-	"snake":  strcase.ToSnake,
-	"camel":  strcase.ToCamel,
-	"plural": inflection.Plural,
+	"together": togetherCase,
+	"snake":    strcase.ToSnake,
+	"camel":    strcase.ToCamel,
+	"plural":   inflection.Plural,
 
 	"join": func(sep string, elems []string) string { return strings.Join(elems, sep) },
 	"asFullFieldName": func(names []string) []string {
