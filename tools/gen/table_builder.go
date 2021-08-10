@@ -121,7 +121,7 @@ func (tb *tableBuilder) generateColumns(fields []expandedField) (columns []*Colu
 			Name:        field.getColumnName(),
 			Type:        field.getType(),
 			Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
-			Resolver:    fmt.Sprintf("%s(\"%s\")", field.getResolver(), field.getPath()),
+			Resolver:    field.getResolver(),
 		}
 
 		if alias, ok := tb.aliases[join(tb.absolutePath, field.getPath())]; ok {

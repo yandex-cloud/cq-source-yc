@@ -1,6 +1,7 @@
 package gen
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
@@ -21,7 +22,10 @@ func getCamelName(d desc.Descriptor) string {
 }
 
 func isExpandable(f *desc.FieldDescriptor) bool {
-	return !f.IsRepeated() && !f.IsMap() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE
+	return !f.IsRepeated() &&
+		!f.IsMap() &&
+		f.GetType() == descriptor.FieldDescriptorProto_TYPE_MESSAGE &&
+		f.GetMessageType().GetFullyQualifiedName() != "google.protobuf.Timestamp"
 }
 
 type expandedField struct {
@@ -74,16 +78,26 @@ func (f expandedField) getType() string {
 		return "schema.TypeBool"
 	case f.IsMap():
 		return "schema.TypeJSON"
+	case f.GetMessageType() != nil && f.GetMessageType().GetFullyQualifiedName() == "google.protobuf.Timestamp":
+		return "schema.TypeTimestamp"
 	default:
 		return "schema.TypeString"
 	}
 }
 
 func (f expandedField) getResolver() string {
-	if f.GetType() != descriptor.FieldDescriptorProto_TYPE_ENUM {
-		return "schema.PathResolver"
-	} else {
-		return "client.EnumPathResolver"
+	//if f.GetType() != descriptor.FieldDescriptorProto_TYPE_ENUM {
+	//	return fmt.Sprintf("schema.PathResolver(\"%s\")", f.getPath())
+	//} else {
+	//	return fmt.Sprintf("client.EnumPathResolver(\"%s\")", f.getPath())
+	//}
+	switch {
+	case f.GetMessageType() != nil && f.GetMessageType().GetFullyQualifiedName() == "google.protobuf.Timestamp":
+		return "client.ResolveAsTime"
+	case f.GetType() == descriptor.FieldDescriptorProto_TYPE_ENUM:
+		return fmt.Sprintf("client.EnumPathResolver(\"%s\")", f.getPath())
+	default:
+		return fmt.Sprintf("schema.PathResolver(\"%s\")", f.getPath())
 	}
 }
 

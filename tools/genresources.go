@@ -144,4 +144,28 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	err = gen.Generate(
+		"VPC",
+		"SecurityGroup",
+		"yandex/cloud/vpc/v1/security_group.proto",
+		"resources",
+		gen.WithProtoPaths("cloudapi"),
+	)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = gen.Generate(
+		"CertificateManager",
+		"Certificate",
+		"yandex/cloud/certificatemanager/v1/certificate.proto",
+		"resources",
+		gen.WithProtoPaths("cloudapi"),
+	)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }

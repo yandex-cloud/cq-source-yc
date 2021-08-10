@@ -85,16 +85,10 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    client.EnumPathResolver("PrimaryVersion.Algorithm"),
 			},
 			{
-				Name:        "primary_version_created_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.CreatedAt.Seconds"),
-			},
-			{
-				Name:        "primary_version_created_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.CreatedAt.Nanos"),
+				Name:        "primary_version_created_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time when the key version was created.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
 				Name:        "primary_version_primary",
@@ -103,16 +97,10 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    schema.PathResolver("PrimaryVersion.Primary"),
 			},
 			{
-				Name:        "primary_version_destroy_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.DestroyAt.Seconds"),
-			},
-			{
-				Name:        "primary_version_destroy_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.DestroyAt.Nanos"),
+				Name:        "primary_version_destroy_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time when the key version is going to be destroyed. Empty unless the status\n is `SCHEDULED_FOR_DESTRUCTION`.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
 				Name:        "default_algorithm",
@@ -121,16 +109,10 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    client.EnumPathResolver("DefaultAlgorithm"),
 			},
 			{
-				Name:        "rotated_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("RotatedAt.Seconds"),
-			},
-			{
-				Name:        "rotated_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("RotatedAt.Nanos"),
+				Name:        "rotated_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time of the last key rotation (time when the last version was created).\n Empty if the key does not have versions yet.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
 				Name:        "rotation_period_seconds",
