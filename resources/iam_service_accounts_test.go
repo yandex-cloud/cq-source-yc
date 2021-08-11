@@ -34,9 +34,9 @@ func TestIAMServiceAccounts(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, &client.Services{
+			}), []string{"testFolder"}, nil, &client.Services{
 				IAM: iamSvc,
-			}, nil, "")
+			}, nil)
 			return c, nil
 		},
 	}

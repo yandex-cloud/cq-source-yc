@@ -34,9 +34,9 @@ func TestKMSSymmetricKeys(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, &client.Services{
+			}), []string{"testFolder"}, nil, &client.Services{
 				KMS: kmsSvc,
-			}, nil, "")
+			}, nil)
 			return c, nil
 		},
 	}

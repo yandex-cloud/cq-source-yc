@@ -10,57 +10,64 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/mitchellh/go-homedir"
-	"github.com/yandex-cloud/go-sdk/iamkey"
-
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
+	"github.com/mitchellh/go-homedir"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
+	"github.com/yandex-cloud/go-sdk/iamkey"
+	"golang.org/x/sync/errgroup"
 )
 
 const defaultFolderIdName = "<CHANGE_THIS_TO_YOUR_FOLDER_ID>"
 
 type Client struct {
 	folders []string
-	logger  hclog.Logger
+	clouds  []string
+
+	logger hclog.Logger
+
 	// All yandex services initialized by client
 	Services *Services
 	// S3 client to manage objects storages
 	S3Client *s3.S3
+
 	// this is set by table client multiplexer
 	FolderId string
-
-	CloudId string
+	CloudId  string
 }
 
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
 	providerConfig := config.(*Config)
 	folders := providerConfig.FolderIDs
+
 	var err error
 	sdk, err := buildSDK()
 	if err != nil {
 		return nil, err
 	}
-	if len(providerConfig.FolderIDs) == 0 {
-		folders, err = getFolders(logger, sdk, providerConfig.FolderFilter, providerConfig.CloudID)
-		if err != nil {
-			return nil, err
-		}
-		logger.Info("No folder_ids specified in config.yml assuming all active folders", "count", len(folders))
-	}
-	if err := validateFolders(folders); err != nil {
+
+	extractedFolders, err := getFolders(logger, sdk, providerConfig.FolderFilter, providerConfig.CloudIDs)
+	if err != nil {
 		return nil, err
 	}
+	folders = unionStrings(folders, extractedFolders)
+
+	if err = validateFolders(folders); err != nil {
+		return nil, err
+	}
+
 	services, err := initServices(context.Background(), sdk)
 	if err != nil {
 		return nil, err
 	}
+
 	s3Client, err := initS3Clint()
 	if err != nil {
 		return nil, err
 	}
-	client := NewYandexClient(logger, folders, services, s3Client, providerConfig.CloudID)
+
+	client := NewYandexClient(logger, folders, providerConfig.CloudIDs, services, s3Client)
 	return client, nil
 }
 
@@ -135,34 +142,71 @@ func iamKeyFromJSONContent(content string) (*iamkey.Key, error) {
 	return key, nil
 }
 
-func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudID string) ([]string, error) {
+func unionStrings(strs1, strs2 []string) (res []string) {
+	m := map[string]struct{}{}
+	for _, s := range strs1 {
+		m[s] = struct{}{}
+	}
+	for _, s := range strs2 {
+		m[s] = struct{}{}
+	}
+	for k := range m {
+		res = append(res, k)
+	}
+	return
+}
+
+func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIDs []string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
-	req := &resourcemanager.ListFoldersRequest{
-		CloudId: cloudID,
-		Filter:  filter,
+	g, ctx := errgroup.WithContext(ctx)
+	ch := make(chan string)
+
+	for _, cloudId := range cloudIDs {
+		cloudId := cloudId
+		g.Go(func() error {
+			req := &resourcemanager.ListFoldersRequest{
+				CloudId: cloudId,
+				Filter:  filter,
+			}
+			for {
+				resp, err := sdk.ResourceManager().Folder().List(ctx, req)
+				if err != nil {
+					return err
+				}
+
+				for _, folder := range resp.Folders {
+					if folder.GetStatus() == resourcemanager.Folder_ACTIVE {
+						ch <- folder.Id
+					} else {
+						logger.Info("Folder state is not active. Folder will be ignored", "folder_id", folder.Id)
+					}
+				}
+
+				if resp.NextPageToken == "" {
+					break
+				}
+
+				req.PageToken = resp.NextPageToken
+			}
+			return nil
+		})
 	}
 
 	folders := make([]string, 0)
-	for {
-		resp, err := sdk.ResourceManager().Folder().List(ctx, req)
+	go func() {
+		for folder := range ch {
+			folders = append(folders, folder)
+		}
+	}()
 
-		if err != nil {
-			return nil, err
-		}
-		for _, folder := range resp.Folders {
-			if folder.GetStatus() == resourcemanager.Folder_ACTIVE {
-				folders = append(folders, folder.Id)
-			} else {
-				logger.Info("Folder state is not active. Folder will be ignored", "folder_id", folder.Id)
-			}
-		}
-		if resp.NextPageToken == "" {
-			break
-		}
-		req.PageToken = resp.NextPageToken
+	err := g.Wait()
+	close(ch)
+	if err != nil {
+		return nil, err
 	}
+
 	return folders, nil
 }
 
@@ -175,13 +219,13 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(log hclog.Logger, folders []string, services *Services, s3Client *s3.S3, cloudId string) *Client {
+func NewYandexClient(log hclog.Logger, folders, clouds []string, services *Services, s3Client *s3.S3) *Client {
 	return &Client{
 		logger:   log,
 		folders:  folders,
+		clouds:   clouds,
 		Services: services,
 		S3Client: s3Client,
-		CloudId:  cloudId,
 	}
 }
 
@@ -193,10 +237,22 @@ func (c Client) Logger() hclog.Logger {
 func (c Client) withFolder(folder string) *Client {
 	return &Client{
 		folders:  c.folders,
+		clouds:   c.clouds,
 		Services: c.Services,
 		S3Client: c.S3Client,
 		logger:   c.logger.With("folder_id", folder),
 		FolderId: folder,
-		CloudId:  c.CloudId,
+	}
+}
+
+// withCloud allows multiplexer to create a new client with given subscriptionId
+func (c Client) withCloud(cloud string) *Client {
+	return &Client{
+		folders:  c.folders,
+		clouds:   c.clouds,
+		Services: c.Services,
+		S3Client: c.S3Client,
+		logger:   c.logger.With("cloud_id", cloud),
+		CloudId:  cloud,
 	}
 }

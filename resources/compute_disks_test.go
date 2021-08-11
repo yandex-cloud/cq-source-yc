@@ -34,9 +34,9 @@ func TestComputeDisks(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, &client.Services{
+			}), []string{"testFolder"}, nil, &client.Services{
 				Compute: computeSvc,
-			}, nil, "")
+			}, nil)
 			return c, nil
 		},
 		Verifiers: []ptest.Verifier{

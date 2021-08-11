@@ -34,9 +34,9 @@ func TestVPCNetworks(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, &client.Services{
+			}), []string{"testFolder"}, nil, &client.Services{
 				VPC: vpcSvc,
-			}, nil, "")
+			}, nil)
 			return c, nil
 		},
 	}

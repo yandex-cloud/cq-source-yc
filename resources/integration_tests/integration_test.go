@@ -23,7 +23,7 @@ var suffix = acctest.RandString(10)
 
 func testIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification, tfTmpl string) {
 	cfg := client.Config{
-		CloudID:   os.Getenv("YC_CLOUD_ID"),
+		CloudIDs:  []string{os.Getenv("YC_CLOUD_ID")},
 		FolderIDs: []string{os.Getenv("YC_FOLDER_ID")},
 	}
 

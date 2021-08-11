@@ -137,8 +137,8 @@ func main() {
 		"Cluster",
 		"yandex/cloud/k8s/v1/cluster.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi", "api-common-protos"),
-		gen.WithIgnoredColumns("Master"),
+		gen.WithProtoPaths("cloudapi", "cloudapi/third_party/googleapis"),
+		gen.WithIgnoredColumns("Master.MaintenancePolicy"),
 	)
 
 	if err != nil {
@@ -168,16 +168,4 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	//err = gen.Generate(
-	//	"Serverless",
-	//	"ApiGateway",
-	//	"yandex/cloud/serverless/apigateway/v1/apigateway.proto",
-	//	"resources",
-	//	gen.WithProtoPaths("cloudapi"),
-	//)
-	//
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 }

@@ -19,6 +19,7 @@ require (
 	github.com/thoas/go-funk v0.8.1-0.20210502090430-efae847b30ab
 	github.com/yandex-cloud/go-genproto v0.0.0-20210809082946-a97da516c588 //v0.0.0-20210517152439-84c9ad4d8b5f
 	github.com/yandex-cloud/go-sdk v0.0.0-20210517154707-ca282b96279e
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	google.golang.org/grpc v1.32.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

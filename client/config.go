@@ -2,7 +2,7 @@ package client
 
 // Config defines Provider Configuration
 type Config struct {
-	CloudID      string   `hcl:"cloud_id,optional"`
+	CloudIDs     []string `hcl:"cloud_id,optional"`
 	FolderFilter string   `hcl:"folder_filter,optional"`
 	FolderIDs    []string `hcl:"folder_ids,optional"`
 }
