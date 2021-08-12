@@ -1,9 +1,9 @@
-package gen
+package ycmodelbuilder
 
 type CollapsedOptions struct {
-	paths         []string
-	ignoredFields map[string]struct{}
-	aliases       map[string]Alias
+	Paths         []string
+	IgnoredFields map[string]struct{}
+	Aliases       map[string]Alias
 }
 
 type Option interface {
@@ -12,9 +12,9 @@ type Option interface {
 
 func NewCollapsedOptions(opts []Option) CollapsedOptions {
 	co := CollapsedOptions{
-		paths:         []string{"."},
-		ignoredFields: map[string]struct{}{},
-		aliases:       map[string]Alias{},
+		Paths:         []string{"."},
+		IgnoredFields: map[string]struct{}{},
+		Aliases:       map[string]Alias{},
 	}
 	for _, opt := range opts {
 		opt.Apply(&co)
@@ -27,7 +27,7 @@ type withProtoPaths struct {
 }
 
 func (w withProtoPaths) Apply(co *CollapsedOptions) {
-	co.paths = w.paths
+	co.Paths = w.paths
 }
 
 func WithProtoPaths(paths ...string) Option {
@@ -40,7 +40,7 @@ type withIgnoredColumns struct {
 
 func (w withIgnoredColumns) Apply(co *CollapsedOptions) {
 	for _, ignoredColumn := range w.ignoredFields {
-		co.ignoredFields[ignoredColumn] = struct{}{}
+		co.IgnoredFields[ignoredColumn] = struct{}{}
 	}
 }
 
@@ -54,7 +54,7 @@ type withAlias struct {
 }
 
 func (w withAlias) Apply(co *CollapsedOptions) {
-	co.aliases[w.path] = w.alias
+	co.Aliases[w.path] = w.alias
 }
 
 func WithAlias(path string, alias Alias) Option {

@@ -3,60 +3,62 @@ package main
 import (
 	"fmt"
 
-	"github.com/yandex-cloud/cq-provider-yandex/tools/gen"
+	"github.com/yandex-cloud/cq-provider-yandex/tools/gen/base"
+	"github.com/yandex-cloud/cq-provider-yandex/tools/gen/serverless"
+	ycmb "github.com/yandex-cloud/cq-provider-yandex/tools/gen/ycmodelbuilder"
 )
 
 func main() {
 	var err error
 
-	err = gen.Generate(
+	err = base.Generate(
 		"KMS",
 		"SymmetricKey",
 		"yandex/cloud/kms/v1/symmetric_key.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 
 		// Field doesn't exist in used version of sdk
-		gen.WithIgnoredColumns("PrimaryVersion.HostedByHsm"),
+		ycmb.WithIgnoredColumns("PrimaryVersion.HostedByHsm"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"Compute",
 		"Image",
 		"yandex/cloud/compute/v1/image.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"Compute",
 		"Instance",
 		"yandex/cloud/compute/v1/instance.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
-		gen.WithAlias(
+		ycmb.WithProtoPaths("cloudapi"),
+		ycmb.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.DnsRecords",
-			gen.ChangeName("yandex_compute_instance_net_interface_ipv4_dns_records"),
+			ycmb.ChangeName("yandex_compute_instance_net_interface_ipv4_dns_records"),
 		),
-		gen.WithAlias(
+		ycmb.WithAlias(
 			"NetworkInterfaces.PrimaryV4Address.OneToOneNat.DnsRecords",
-			gen.ChangeName("yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records"),
+			ycmb.ChangeName("yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records"),
 		),
-		gen.WithAlias(
+		ycmb.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.DnsRecords",
-			gen.ChangeName("yandex_compute_instance_net_interface_ipv6_dns_records"),
+			ycmb.ChangeName("yandex_compute_instance_net_interface_ipv6_dns_records"),
 		),
-		gen.WithAlias(
+		ycmb.WithAlias(
 			"NetworkInterfaces.PrimaryV6Address.OneToOneNat.DnsRecords",
-			gen.ChangeName("yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records"),
+			ycmb.ChangeName("yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records"),
 		),
 	)
 
@@ -64,55 +66,55 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"Compute",
 		"Disk",
 		"yandex/cloud/compute/v1/disk.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"VPC",
 		"Network",
 		"yandex/cloud/vpc/v1/network.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"VPC",
 		"Subnet",
 		"yandex/cloud/vpc/v1/subnet.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"VPC",
 		"Address",
 		"yandex/cloud/vpc/v1/address.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
-		gen.WithAlias(
+		ycmb.WithProtoPaths("cloudapi"),
+		ycmb.WithAlias(
 			"Address.ExternalIpv4Address.Requirements.DdosProtectionProvider",
-			gen.ChangeName("addr_ext_ipv_4_addr_requirements_ddos_protect_prov"),
+			ycmb.ChangeName("addr_ext_ipv_4_addr_requirements_ddos_protect_prov"),
 		),
-		gen.WithAlias(
+		ycmb.WithAlias(
 			"Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability",
-			gen.ChangeName("addr_ext_ipv_4_addr_requirements_out_smtp_cap"),
+			ycmb.ChangeName("addr_ext_ipv_4_addr_requirements_out_smtp_cap"),
 		),
 	)
 
@@ -120,52 +122,87 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"IAM",
 		"ServiceAccount",
 		"yandex/cloud/iam/v1/service_account.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"K8S",
 		"Cluster",
 		"yandex/cloud/k8s/v1/cluster.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi", "cloudapi/third_party/googleapis"),
-		gen.WithIgnoredColumns("Master.MaintenancePolicy"),
+		ycmb.WithProtoPaths("cloudapi", "cloudapi/third_party/googleapis"),
+		ycmb.WithIgnoredColumns("Master.MaintenancePolicy"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"VPC",
 		"SecurityGroup",
 		"yandex/cloud/vpc/v1/security_group.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = gen.Generate(
+	err = base.Generate(
 		"CertificateManager",
 		"Certificate",
 		"yandex/cloud/certificatemanager/v1/certificate.proto",
 		"resources",
-		gen.WithProtoPaths("cloudapi"),
+		ycmb.WithProtoPaths("cloudapi"),
 	)
 
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	err = serverless.Generate(
+		"ApiGateway",
+		"yandex/cloud/serverless/apigateway/v1/apigateway.proto",
+		"resources",
+		ycmb.WithProtoPaths("cloudapi"),
+	)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//err = base.Generate(
+	//	"OrganizationManager",
+	//	"Organization",
+	//	"yandex/cloud/organizationmanager/v1/organization.proto",
+	//	"resources",
+	//	ycmb.WithProtoPaths("cloudapi"),
+	//)
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+
+	//err = base.Generate(
+	//	"OrganizationManager",
+	//	"Federation",
+	//	"yandex/cloud/organizationmanager/v1/saml/federation.proto",
+	//	"resources",
+	//	ycmb.WithProtoPaths("cloudapi"),
+	//)
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }

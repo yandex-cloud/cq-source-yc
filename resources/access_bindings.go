@@ -76,7 +76,6 @@ func fetchAccessBindings(ctx context.Context, meta schema.ClientMeta, _ *schema.
 	resp, err := lister.ListAccessBindings(ctx, &access.ListAccessBindingsRequest{
 		ResourceId: resourceId,
 	})
-
 	if err != nil {
 		return err
 	}
@@ -98,7 +97,6 @@ func fetchAccessBindings(ctx context.Context, meta schema.ClientMeta, _ *schema.
 			ResourceId: resourceId,
 			PageToken:  resp.GetNextPageToken(),
 		})
-
 		if err != nil {
 			return err
 		}

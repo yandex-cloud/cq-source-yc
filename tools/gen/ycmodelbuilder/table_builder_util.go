@@ -1,4 +1,4 @@
-package gen
+package ycmodelbuilder
 
 import (
 	"fmt"

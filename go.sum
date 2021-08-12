@@ -428,6 +428,7 @@ github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8/go.mod h1:Nht
 github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jmespath/go-jmespath v0.4.0 h1:BEgLn5cpjn8UN1mAw4NjwDrS35OdebyEtFe+9YPoQUg=
 github.com/jmespath/go-jmespath v0.4.0/go.mod h1:T8mJZnbsbmF+m6zOOFylbeCJqk5+pHWvzYPziyZiYoo=
+github.com/jmespath/go-jmespath/internal/testify v1.5.1 h1:shLQSRRSCCPj3f2gpwzGwWFoC7ycTf1rcQZHOlsJ6N8=
 github.com/jmespath/go-jmespath/internal/testify v1.5.1/go.mod h1:L3OGu8Wl2/fWfCI6z80xFu9LTZmf1ZRjMHUOPmWr69U=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
 github.com/jmoiron/sqlx v1.3.1/go.mod h1:2BljVx/86SuTyjE+aPYlHCTNvZrnJXghYGpNiXLBMCQ=
@@ -659,11 +660,10 @@ github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV
 github.com/xanzy/ssh-agent v0.3.0 h1:wUMzuKtKilRgBAD1sUb8gOwwRr2FGoBVumcjoOACClI=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
-github.com/yandex-cloud/go-genproto v0.0.0-20210517152439-84c9ad4d8b5f/go.mod h1:HEUYX/p8966tMUHHT+TsS0hF/Ca/NYwqprC5WXSDMfE=
-github.com/yandex-cloud/go-genproto v0.0.0-20210809082946-a97da516c588 h1:Lbz8X5Nre0Lg5QgCblmo0AhScWxeN3CVnX+mZ5Hxksk=
-github.com/yandex-cloud/go-genproto v0.0.0-20210809082946-a97da516c588/go.mod h1:HEUYX/p8966tMUHHT+TsS0hF/Ca/NYwqprC5WXSDMfE=
-github.com/yandex-cloud/go-sdk v0.0.0-20210517154707-ca282b96279e h1:Hg7VjYH4dekgjkuoYehD7gHRcSyQlPhHquECFHBjhG4=
-github.com/yandex-cloud/go-sdk v0.0.0-20210517154707-ca282b96279e/go.mod h1:SfHY/w/sP/zY/51XVAa6fEqi+eIvfIN9RbsL+6jJF/8=
+github.com/yandex-cloud/go-genproto v0.0.0-20210811160424-06c241452aa5 h1:gQg8H9bKNU3+vczhQD8tAaDii5PoRA3UhCXUa7q41zY=
+github.com/yandex-cloud/go-genproto v0.0.0-20210811160424-06c241452aa5/go.mod h1:HEUYX/p8966tMUHHT+TsS0hF/Ca/NYwqprC5WXSDMfE=
+github.com/yandex-cloud/go-sdk v0.0.0-20210811160850-f28151fc0a62 h1:7Dnd6NGyKkmUFLJLqj4QPSVdbS+FTe6yyn63jOBkqZI=
+github.com/yandex-cloud/go-sdk v0.0.0-20210811160850-f28151fc0a62/go.mod h1:APNdEybiEHc/aOCZktxU5XJIOHIoAfg6ibWVMdf9cZY=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

@@ -10,6 +10,8 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/iam"
 	"github.com/yandex-cloud/go-sdk/gen/kms"
 	k8s "github.com/yandex-cloud/go-sdk/gen/kubernetes"
+	"github.com/yandex-cloud/go-sdk/gen/organizationmanager"
+	"github.com/yandex-cloud/go-sdk/gen/organizationmanager/saml"
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
 	"github.com/yandex-cloud/go-sdk/gen/vpc"
 )
@@ -23,17 +25,22 @@ type Services struct {
 	K8S                *k8s.Kubernetes
 	CertificateManager *certificatemanager.CertificateManager
 	ApiGateway         *apigateway.Apigateway
+
+	OrganizationManager     *organizationmanager.OrganizationManager
+	OrganizationManagerSAML *saml.OrganizationManagerSAML
 }
 
 func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 	return &Services{
-		KMS:                sdk.KMS(),
-		Compute:            sdk.Compute(),
-		VPC:                sdk.VPC(),
-		IAM:                sdk.IAM(),
-		ResourceManager:    sdk.ResourceManager(),
-		K8S:                sdk.Kubernetes(),
-		CertificateManager: sdk.Certificates(),
-		ApiGateway:         sdk.Serverless().APIGateway(),
+		KMS:                     sdk.KMS(),
+		Compute:                 sdk.Compute(),
+		VPC:                     sdk.VPC(),
+		IAM:                     sdk.IAM(),
+		ResourceManager:         sdk.ResourceManager(),
+		K8S:                     sdk.Kubernetes(),
+		CertificateManager:      sdk.Certificates(),
+		ApiGateway:              sdk.Serverless().APIGateway(),
+		OrganizationManager:     sdk.OrganizationManager(),
+		OrganizationManagerSAML: sdk.OrganizationManagerSAML(),
 	}, nil
 }

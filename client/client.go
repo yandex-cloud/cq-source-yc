@@ -160,14 +160,14 @@ func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIDs []s
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
-	g, ctx := errgroup.WithContext(ctx)
+	g := errgroup.Group{}
 	ch := make(chan string)
 
 	for _, cloudId := range cloudIDs {
-		cloudId := cloudId
+		finalCloudId := cloudId
 		g.Go(func() error {
 			req := &resourcemanager.ListFoldersRequest{
-				CloudId: cloudId,
+				CloudId: finalCloudId,
 				Filter:  filter,
 			}
 			for {

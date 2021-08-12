@@ -21,13 +21,13 @@ func IAMServiceAccounts() *schema.Table {
 			{
 				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "ID of the service_account.",
+				Description: "ID of the resource.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the service_account belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{

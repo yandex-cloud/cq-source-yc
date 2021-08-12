@@ -21,13 +21,13 @@ func KMSSymmetricKeys() *schema.Table {
 			{
 				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "ID of the symmetric_key.",
+				Description: "ID of the resource.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the symmetric_key belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{

@@ -23,13 +23,13 @@ func CertificateManagerCertificates() *schema.Table {
 			{
 				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "ID of the certificate.",
+				Description: "ID of the resource.",
 				Resolver:    client.ResolveResourceId,
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the certificate belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{

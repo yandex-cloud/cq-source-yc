@@ -1,0 +1,15 @@
+{
+		Name:         {{if .Alias}}{{.Alias | printf "%q"}}{{else}}{{print "yandex_serverless_" (.Resource | snake | plural) | printf "%q"}}{{end}},
+		Resolver:     fetchServerless{{.Resource | plural}},
+		Multiplex:    {{.Multiplex}},
+		IgnoreError:  client.IgnoreErrorHandler,
+		DeleteFilter: client.DeleteFolderFilter,
+		Columns: []schema.Column{
+{{range .Columns}}{{template "column.go.tmpl" .}}{{end}}
+		},
+{{with .Relations}}
+		Relations: []*schema.Table{
+{{range .}}{{template "relation.go.tmpl" .}}{{end}}
+		},
+{{end}}
+}
