@@ -34,7 +34,7 @@ func TestServerlessApiGateways(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, &client.Services{
+			}), []string{"testFolder"}, nil, nil, &client.Services{
 				ApiGateway: serverlessSvc,
 			}, nil)
 			return c, nil

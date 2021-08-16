@@ -35,7 +35,7 @@ func TestResourceManagerFolders(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, &client.Services{
+			}), []string{"testFolder"}, nil, nil, &client.Services{
 				ResourceManager: resourcemanagerSvc,
 			}, nil)
 			return c, nil

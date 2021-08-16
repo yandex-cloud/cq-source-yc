@@ -18,10 +18,11 @@ func ResourceManagerClouds() *schema.Table {
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the cloud.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the cloud.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "created_at",

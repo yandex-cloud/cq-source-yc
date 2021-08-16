@@ -16,9 +16,10 @@ func StorageBuckets() *schema.Table {
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
-				Name:     "id",
-				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Name"),
+				Name:            "id",
+				Type:            schema.TypeString,
+				Resolver:        schema.PathResolver("Name"),
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 		},
 		Relations: []*schema.Table{

@@ -13,11 +13,11 @@ import (
 )
 
 func {{.Table.Service}}{{.Table.Resource | plural}}() *schema.Table {
-    return &schema.Table{{template "table.go.tmpl" .Table}}
+    return &schema.Table{{template "base_table.go.tmpl" .Table}}
 }
 
-{{template "resource_resolver.go.tmpl" .Table}}
+{{template "base_resource_resolver.go.tmpl" .Table}}
 
 {{range .Relations}}
-{{template "relation_resolver.go.tmpl" .}}
+{{template "base_relation_resolver.go.tmpl" .}}
 {{end}}

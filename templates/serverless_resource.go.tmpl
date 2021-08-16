@@ -19,5 +19,5 @@ func Serverless{{.Table.Resource | plural}}() *schema.Table {
 {{template "serverless_resource_resolver.go.tmpl" .Table}}
 
 {{range .Relations}}
-{{template "relation_resolver.go.tmpl" .}}
+{{template "base_relation_resolver.go.tmpl" .}}
 {{end}}

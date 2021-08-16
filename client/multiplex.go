@@ -6,8 +6,8 @@ func MultiplexBy(resourcesGetter func(client *Client) []string) func(meta schema
 	return func(meta schema.ClientMeta) []schema.ClientMeta {
 		var l = make([]schema.ClientMeta, 0)
 		client := meta.(*Client)
-		for _, folderId := range resourcesGetter(client) {
-			l = append(l, client.withResource(folderId, "folder"))
+		for _, id := range resourcesGetter(client) {
+			l = append(l, client.withResource(id))
 		}
 		return l
 	}

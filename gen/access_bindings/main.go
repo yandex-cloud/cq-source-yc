@@ -14,7 +14,7 @@ func generate(resource, manager string) {
 	}, map[string]string{
 		"resource": resource,
 		"manager":  manager,
-	}, fmt.Sprintf("resources1/access_bindings_by_%s.go", strcase.ToSnake(resource)))
+	}, fmt.Sprintf("%s/access_bindings_by_%s.go", util.ResourcesDir, strcase.ToSnake(resource)))
 
 	util.SilentExecute(util.TemplatesDir{
 		MainFile: "iam_user_accounts_by_resource.go.tmpl",
@@ -22,7 +22,7 @@ func generate(resource, manager string) {
 	}, map[string]string{
 		"resource": resource,
 		"manager":  manager,
-	}, fmt.Sprintf("resources1/iam_user_accounts_by_%s.go", strcase.ToSnake(resource)))
+	}, fmt.Sprintf("%s/iam_user_accounts_by_%s.go", util.ResourcesDir, strcase.ToSnake(resource)))
 }
 
 func main() {

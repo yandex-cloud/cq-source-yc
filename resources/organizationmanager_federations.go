@@ -10,17 +10,17 @@ import (
 
 func OrganizationManagerFederations() *schema.Table {
 	return &schema.Table{
-		Name:         "yandex_organizationmanager_federations",
-		Resolver:     fetchOrganizationManagerFederations,
-		Multiplex:    client.MultiplexBy(client.Organizations),
-		IgnoreError:  client.IgnoreErrorHandler,
-		DeleteFilter: client.DeleteFolderFilter,
+		Name:        "yandex_organizationmanager_federations",
+		Resolver:    fetchOrganizationManagerFederations,
+		Multiplex:   client.MultiplexBy(client.Organizations),
+		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the resource.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "organization_id",

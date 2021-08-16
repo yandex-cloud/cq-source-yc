@@ -23,7 +23,7 @@ func generate(service, resource, pathToProto string, opts ...ycmb.Option) {
 	out := filepath.Join(util.ResourcesDir, util.ToTogether(service)+"_"+strcase.ToSnake(inflection.Plural(resource))+".go")
 
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "resource.go.tmpl",
+		MainFile: "base_resource.go.tmpl",
 		Path:     "templates",
 	}, resourceFileModel, out)
 }

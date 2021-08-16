@@ -40,30 +40,29 @@ type Client struct {
 	S3Client *s3.S3
 
 	// this is set by table client multiplexer
-	MultiplexedResourceId   string
-	MultiplexedResourceType string
-	AccessBindingLister     AccessBindingsLister
+	MultiplexedResourceId string
+	AccessBindingLister   AccessBindingsLister
 }
 
 func (c Client) Logger() hclog.Logger {
 	return c.logger
 }
 
-func (c Client) withResource(id string, name string) *Client {
+func (c Client) withResource(id string) *Client {
 	return &Client{
-		organizations:           c.organizations,
-		folders:                 c.folders,
-		clouds:                  c.clouds,
-		Services:                c.Services,
-		S3Client:                c.S3Client,
-		logger:                  c.logger.With(name+"_id", id),
-		MultiplexedResourceId:   id,
-		MultiplexedResourceType: name,
+		organizations:         c.organizations,
+		folders:               c.folders,
+		clouds:                c.clouds,
+		Services:              c.Services,
+		S3Client:              c.S3Client,
+		logger:                c.logger.With("id", id),
+		MultiplexedResourceId: id,
 	}
 }
 
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
 	providerConfig := config.(*Config)
+	clouds := providerConfig.CloudIDs
 	folders := providerConfig.FolderIDs
 
 	var err error
@@ -71,8 +70,13 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	if err != nil {
 		return nil, err
 	}
+	extractedClouds, err := getClouds(sdk, providerConfig.OrganizationIDs)
+	if err != nil {
+		return nil, err
+	}
+	clouds = unionStrings(clouds, extractedClouds)
 
-	extractedFolders, err := getFolders(logger, sdk, providerConfig.FolderFilter, providerConfig.CloudIDs)
+	extractedFolders, err := getFolders(logger, sdk, providerConfig.FolderFilter, clouds)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +96,7 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 		return nil, err
 	}
 
-	client := NewYandexClient(logger, folders, providerConfig.CloudIDs, services, s3Client)
+	client := NewYandexClient(logger, folders, clouds, providerConfig.OrganizationIDs, services, s3Client)
 	return client, nil
 }
 
@@ -167,14 +171,63 @@ func iamKeyFromJSONContent(content string) (*iamkey.Key, error) {
 	return key, nil
 }
 
-func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIDs []string) ([]string, error) {
+func getClouds(sdk *ycsdk.SDK, organizationsIds []string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
 	g := errgroup.Group{}
 	ch := make(chan string)
 
-	for _, cloudId := range cloudIDs {
+	for _, organizationsId := range organizationsIds {
+		finalOrganizationId := organizationsId
+		g.Go(func() error {
+			req := &resourcemanager.ListCloudsRequest{}
+			for {
+				resp, err := sdk.ResourceManager().Cloud().List(ctx, req)
+				if err != nil {
+					return err
+				}
+
+				for _, cloud := range resp.Clouds {
+					if cloud.OrganizationId == finalOrganizationId {
+						ch <- cloud.Id
+					}
+				}
+
+				if resp.NextPageToken == "" {
+					break
+				}
+
+				req.PageToken = resp.NextPageToken
+			}
+			return nil
+		})
+	}
+
+	folders := make([]string, 0)
+	go func() {
+		for folder := range ch {
+			folders = append(folders, folder)
+		}
+	}()
+
+	err := g.Wait()
+	close(ch)
+	if err != nil {
+		return nil, err
+	}
+
+	return folders, nil
+}
+
+func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIds []string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
+	defer cancel()
+
+	g := errgroup.Group{}
+	ch := make(chan string)
+
+	for _, cloudId := range cloudIds {
 		finalCloudId := cloudId
 		g.Go(func() error {
 			req := &resourcemanager.ListFoldersRequest{
@@ -244,12 +297,13 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(log hclog.Logger, folders, clouds []string, services *Services, s3Client *s3.S3) *Client {
+func NewYandexClient(log hclog.Logger, folders, clouds, organizations []string, services *Services, s3Client *s3.S3) *Client {
 	return &Client{
-		logger:   log,
-		folders:  folders,
-		clouds:   clouds,
-		Services: services,
-		S3Client: s3Client,
+		logger:        log,
+		organizations: organizations,
+		folders:       folders,
+		clouds:        clouds,
+		Services:      services,
+		S3Client:      s3Client,
 	}
 }

@@ -8,7 +8,7 @@
 		},
 {{with .Relations}}
 		Relations: []*schema.Table{
-{{range .}}{{template "relation.go.tmpl" .}}{{end}}
+{{range .}}{{template "base_relation.go.tmpl" .}}{{end}}
 		},
 {{end}}
 },

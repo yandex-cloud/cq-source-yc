@@ -1,6 +1,8 @@
 package ycmodelbuilder
 
-import "github.com/yandex-cloud/cq-provider-yandex/gen/util/ycmodel"
+import (
+	"github.com/yandex-cloud/cq-provider-yandex/gen/util/ycmodel"
+)
 
 var defaultYCOptions = []Option{
 	WithAlias("Id", ChangeColumn(

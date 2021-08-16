@@ -17,10 +17,11 @@ func IAMUserAccountsByOrganizations() *schema.Table {
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the user_account.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the user_account.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "user_account_yandex_passport_user_account_login",
@@ -64,7 +65,7 @@ func fetchIAMUserAccountsByOrganization(ctx context.Context, meta schema.ClientM
 
 	g.Go(func() error {
 		defer close(ch)
-		return fetchIAMUserAccountsByOrganization(ctx, meta, parent, ch)
+		return fetchAccessBindingsByOrganization(ctx, meta, parent, ch)
 	})
 
 	g.Go(func() error {

@@ -9,8 +9,11 @@ cloudapi:
 
 .PHONY: generate-resources
 generate-resources: cloudapi
-	@go run tools/genresources.go
-	@$(GOIMPORTS_RESOURCES)
+	@go run gen/base/main.go
+	@go run gen/serverless/main.go
+	@go run gen/access_bindings/main.go
+	@go run gen/resource_manager/main.go
+	@go run gen/provider/main.go
 
 # Debug
 

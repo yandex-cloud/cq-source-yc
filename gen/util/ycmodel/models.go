@@ -20,6 +20,8 @@ type Column struct {
 	Description string
 	Type        string
 	Resolver    string
+	Nullable    string
+	Unique      string
 }
 
 type File struct {

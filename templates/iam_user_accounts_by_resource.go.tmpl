@@ -24,6 +24,7 @@ func IAMUserAccountsBy{{.resource | plural | camel}}() *schema.Table {
 				Type:        schema.TypeString,
 				Description: "ID of the user_account.",
 				Resolver:    client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "user_account_yandex_passport_user_account_login",
@@ -67,7 +68,7 @@ func {{$fetcher}}(ctx context.Context, meta schema.ClientMeta, parent *schema.Re
 
 	g.Go(func() error {
 		defer close(ch)
-		return {{$fetcher}}(ctx, meta, parent, ch)
+		return fetchAccessBindingsBy{{.resource}}(ctx, meta, parent, ch)
 	})
 
 	g.Go(func() error {

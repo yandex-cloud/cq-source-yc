@@ -32,7 +32,7 @@ func TestCertificateManagerCertificates(t *testing.T) {
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, &client.Services{
+			}), []string{"testFolder"}, nil, nil, &client.Services{
 				CertificateManager: certificatemanagerSvc,
 			}, nil)
 			return c, nil

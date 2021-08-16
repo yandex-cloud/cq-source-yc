@@ -129,6 +129,14 @@ func (tb *TableBuilder) generateColumns(fields []expandedField) (columns []*ycmo
 			alias.ApplyToColumn(column)
 		}
 
+		if column.Name == "id" {
+			column.Nullable = "false"
+			column.Unique = "true"
+		} else {
+			column.Nullable = "false"
+			column.Unique = "false"
+		}
+
 		columns = append(columns, column)
 	}
 	return
@@ -154,6 +162,8 @@ func (tb *TableBuilder) appendIfRelation(columns []*ycmodel.Column) []*ycmodel.C
 			Type:        "schema.TypeUUID",
 			Description: fmt.Sprintf("cq_id of parent %s", parentName),
 			Resolver:    "schema.ParentIdResolver",
+			Nullable:    "false",
+			Unique:      "false",
 		})
 
 		if parentMsgDesc.FindFieldByName("id") != nil {
@@ -162,6 +172,8 @@ func (tb *TableBuilder) appendIfRelation(columns []*ycmodel.Column) []*ycmodel.C
 				Type:        "schema.TypeString",
 				Description: fmt.Sprintf("id of parent %s", parentName),
 				Resolver:    "schema.ParentResourceFieldResolver(\"id\")",
+				Nullable:    "false",
+				Unique:      "false",
 			})
 		}
 	}

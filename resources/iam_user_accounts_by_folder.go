@@ -17,10 +17,11 @@ func IAMUserAccountsByFolders() *schema.Table {
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the user_account.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the user_account.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "user_account_yandex_passport_user_account_login",
@@ -64,7 +65,7 @@ func fetchIAMUserAccountsByFolder(ctx context.Context, meta schema.ClientMeta, p
 
 	g.Go(func() error {
 		defer close(ch)
-		return fetchIAMUserAccountsByFolder(ctx, meta, parent, ch)
+		return fetchAccessBindingsByFolder(ctx, meta, parent, ch)
 	})
 
 	g.Go(func() error {
