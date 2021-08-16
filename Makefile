@@ -1,5 +1,5 @@
 GOIMPORTS_RESOURCES = find resources -name "*.go" -exec goimports -w {} \;
-RED=\033[0;32m
+GREEN=\033[0;32m
 NC=\033[0m
 
 # Provider generation
@@ -22,17 +22,17 @@ debug:
 
 .PHONY: docker-build
 docker-build:
-	@echo "$(RED)Building test image...$(NC)"
+	@echo "$(GREEN)Building test image...$(NC)"
 	@test -n "$$(docker image ls -a -q -f reference=cq_provider_yandex_image)" || docker build -t cq_provider_yandex_image .
 
 .PHONY: docker-create-net
 docker-create-net:
-	@echo "$(RED)Creating network...$(NC)"
+	@echo "$(GREEN)Creating network...$(NC)"
 	@test -n "$$(docker network ls -q -f name=cq_provider_yandex_net)" || docker network create cq_provider_yandex_net
 
 .PHONY: docker-postgresql
 docker-postgresql: docker-create-net
-	@echo "$(RED)Staring PostgreSQL server...$(NC)"
+	@echo "$(GREEN)Staring PostgreSQL server...$(NC)"
 	@test -n "$$(docker ps -a -q -f name=cq_provider_yandex_postgresql)" || \
 	docker run -d --rm \
     --name=cq_provider_yandex_postgresql \
@@ -40,7 +40,7 @@ docker-postgresql: docker-create-net
     -e POSTGRES_PASSWORD=pass \
     -p 5432:5432 \
     postgres
-    @echo "$(RED)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432; do echo -n .;sleep 1;done;echo ""
+	@echo "$(GREEN)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432; do echo -n .;sleep 1;done;echo ""
 
 .PHONY: test
 test: docker-postgresql docker-build

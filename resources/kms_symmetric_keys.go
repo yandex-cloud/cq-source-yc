@@ -14,7 +14,7 @@ func KMSSymmetricKeys() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_kms_symmetric_keys",
 		Resolver:     fetchKMSSymmetricKeys,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -103,6 +103,12 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    client.ResolveAsTime,
 			},
 			{
+				Name:        "primary_version_hosted_by_hsm",
+				Type:        schema.TypeBool,
+				Description: "Indication of the version that is hosted by HSM.",
+				Resolver:    schema.PathResolver("PrimaryVersion.HostedByHsm"),
+			},
+			{
 				Name:        "default_algorithm",
 				Type:        schema.TypeString,
 				Description: "Default encryption algorithm to be used with new versions of the key.",
@@ -140,7 +146,7 @@ func KMSSymmetricKeys() *schema.Table {
 func fetchKMSSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &kms.ListSymmetricKeysRequest{FolderId: f}

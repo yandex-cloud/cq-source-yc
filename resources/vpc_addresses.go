@@ -14,7 +14,7 @@ func VPCAddresses() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_addresses",
 		Resolver:     fetchVPCAddresses,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -110,7 +110,7 @@ func VPCAddresses() *schema.Table {
 func fetchVPCAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &vpc.ListAddressesRequest{FolderId: f}

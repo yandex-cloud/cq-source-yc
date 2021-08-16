@@ -16,7 +16,7 @@ func ServerlessApiGateways() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_serverless_api_gateways",
 		Resolver:     fetchServerlessApiGateways,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -78,9 +78,9 @@ func ServerlessApiGateways() *schema.Table {
 
 		Relations: []*schema.Table{
 			{
-				Name:        "yandex_serverless_api_gateway_attached_domains",
-				Resolver:    fetchServerlessApiGatewayAttachedDomains,
-				Multiplex:   client.IdentityMultiplex,
+				Name:        "yandex_apigateway_api_gateway_attached_domains",
+				Resolver:    fetchApiGatewayApiGatewayAttachedDomains,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -129,7 +129,7 @@ func ServerlessApiGateways() *schema.Table {
 func fetchServerlessApiGateways(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &apigateway.ListApiGatewayRequest{FolderId: f}
@@ -142,7 +142,7 @@ func fetchServerlessApiGateways(ctx context.Context, meta schema.ClientMeta, _ *
 	return nil
 }
 
-func fetchServerlessApiGatewayAttachedDomains(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+func fetchApiGatewayApiGatewayAttachedDomains(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
 	values := funk.Get(parent.Item, "AttachedDomains")
 
 	if funk.IsIteratee(values) {

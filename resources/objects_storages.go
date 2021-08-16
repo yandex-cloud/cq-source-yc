@@ -8,11 +8,11 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 )
 
-func ObjectsStorages() *schema.Table {
+func StorageBuckets() *schema.Table {
 	return &schema.Table{
-		Name:        "yandex_object_storages",
-		Resolver:    fetchObjectsStorages,
-		Multiplex:   client.IdentityMultiplex,
+		Name:        "yandex_object_buckets",
+		Resolver:    fetchStorageBuckets,
+		Multiplex:   client.EmptyMultiplex,
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
@@ -23,9 +23,9 @@ func ObjectsStorages() *schema.Table {
 		},
 		Relations: []*schema.Table{
 			{
-				Name:        "yandex_objects_storage_serv_side_encrypt_config_rules",
-				Resolver:    fetchObjectsStorageServerSideEncryptionRules,
-				Multiplex:   client.IdentityMultiplex,
+				Name:        "yandex_object_bucket_serv_side_encrypt_config_rules",
+				Resolver:    fetchStorageBucketServerSideEncryptionRules,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -59,7 +59,7 @@ type ObjectsStorage struct {
 	Rules []*s3.ServerSideEncryptionRule
 }
 
-func fetchObjectsStorages(_ context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchStorageBuckets(_ context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client).S3Client
 	listResp, err := c.ListBuckets(&s3.ListBucketsInput{})
 	if err != nil {
@@ -80,7 +80,7 @@ func fetchObjectsStorages(_ context.Context, meta schema.ClientMeta, _ *schema.R
 	return nil
 }
 
-func fetchObjectsStorageServerSideEncryptionRules(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+func fetchStorageBucketServerSideEncryptionRules(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
 	storageObject := parent.Item.(ObjectsStorage)
 	for _, rule := range storageObject.Rules {
 		res <- rule

@@ -14,7 +14,7 @@ func K8SClusters() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_k8s_clusters",
 		Resolver:     fetchK8SClusters,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -248,7 +248,7 @@ func K8SClusters() *schema.Table {
 func fetchK8SClusters(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &k8s.ListClustersRequest{FolderId: f}

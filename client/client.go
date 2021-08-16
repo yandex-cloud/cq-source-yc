@@ -13,17 +13,24 @@ import (
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
 	"github.com/mitchellh/go-homedir"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
 	"github.com/yandex-cloud/go-sdk/iamkey"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/grpc"
 )
 
 const defaultFolderIdName = "<CHANGE_THIS_TO_YOUR_FOLDER_ID>"
 
+type AccessBindingsLister interface {
+	ListAccessBindings(ctx context.Context, in *access.ListAccessBindingsRequest, opts ...grpc.CallOption) (*access.ListAccessBindingsResponse, error)
+}
+
 type Client struct {
-	folders []string
-	clouds  []string
+	organizations []string
+	clouds        []string
+	folders       []string
 
 	logger hclog.Logger
 
@@ -33,8 +40,26 @@ type Client struct {
 	S3Client *s3.S3
 
 	// this is set by table client multiplexer
-	FolderId string
-	CloudId  string
+	MultiplexedResourceId   string
+	MultiplexedResourceType string
+	AccessBindingLister     AccessBindingsLister
+}
+
+func (c Client) Logger() hclog.Logger {
+	return c.logger
+}
+
+func (c Client) withResource(id string, name string) *Client {
+	return &Client{
+		organizations:           c.organizations,
+		folders:                 c.folders,
+		clouds:                  c.clouds,
+		Services:                c.Services,
+		S3Client:                c.S3Client,
+		logger:                  c.logger.With(name+"_id", id),
+		MultiplexedResourceId:   id,
+		MultiplexedResourceType: name,
+	}
 }
 
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
@@ -83,7 +108,7 @@ func buildSDK() (*ycsdk.SDK, error) {
 	if err != nil {
 		return nil, err
 	}
-	return sdk, err
+	return sdk, nil
 }
 
 func getCredentials() (ycsdk.Credentials, error) {
@@ -142,20 +167,6 @@ func iamKeyFromJSONContent(content string) (*iamkey.Key, error) {
 	return key, nil
 }
 
-func unionStrings(strs1, strs2 []string) (res []string) {
-	m := map[string]struct{}{}
-	for _, s := range strs1 {
-		m[s] = struct{}{}
-	}
-	for _, s := range strs2 {
-		m[s] = struct{}{}
-	}
-	for k := range m {
-		res = append(res, k)
-	}
-	return
-}
-
 func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIDs []string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
@@ -210,6 +221,20 @@ func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIDs []s
 	return folders, nil
 }
 
+func unionStrings(strs1, strs2 []string) (res []string) {
+	m := map[string]struct{}{}
+	for _, s := range strs1 {
+		m[s] = struct{}{}
+	}
+	for _, s := range strs2 {
+		m[s] = struct{}{}
+	}
+	for k := range m {
+		res = append(res, k)
+	}
+	return
+}
+
 func validateFolders(folders []string) error {
 	for _, folder := range folders {
 		if folder == defaultFolderIdName {
@@ -226,33 +251,5 @@ func NewYandexClient(log hclog.Logger, folders, clouds []string, services *Servi
 		clouds:   clouds,
 		Services: services,
 		S3Client: s3Client,
-	}
-}
-
-func (c Client) Logger() hclog.Logger {
-	return c.logger
-}
-
-// withFolder allows multiplexer to create a new client with given subscriptionId
-func (c Client) withFolder(folder string) *Client {
-	return &Client{
-		folders:  c.folders,
-		clouds:   c.clouds,
-		Services: c.Services,
-		S3Client: c.S3Client,
-		logger:   c.logger.With("folder_id", folder),
-		FolderId: folder,
-	}
-}
-
-// withCloud allows multiplexer to create a new client with given subscriptionId
-func (c Client) withCloud(cloud string) *Client {
-	return &Client{
-		folders:  c.folders,
-		clouds:   c.clouds,
-		Services: c.Services,
-		S3Client: c.S3Client,
-		logger:   c.logger.With("cloud_id", cloud),
-		CloudId:  cloud,
 	}
 }

@@ -14,7 +14,7 @@ func ComputeDisks() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_compute_disks",
 		Resolver:     fetchComputeDisks,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -122,7 +122,7 @@ func ComputeDisks() *schema.Table {
 func fetchComputeDisks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &compute.ListDisksRequest{FolderId: f}

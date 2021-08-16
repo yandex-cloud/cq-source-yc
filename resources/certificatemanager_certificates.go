@@ -16,7 +16,7 @@ func CertificateManagerCertificates() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_certificatemanager_certificates",
 		Resolver:     fetchCertificateManagerCertificates,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -122,7 +122,7 @@ func CertificateManagerCertificates() *schema.Table {
 			{
 				Name:        "yandex_certificatemanager_certificate_challenges",
 				Resolver:    fetchCertificateManagerCertificateChallenges,
-				Multiplex:   client.IdentityMultiplex,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -219,7 +219,7 @@ func CertificateManagerCertificates() *schema.Table {
 func fetchCertificateManagerCertificates(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &certificatemanager.ListCertificatesRequest{FolderId: f}

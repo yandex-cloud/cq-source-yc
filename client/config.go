@@ -2,9 +2,11 @@ package client
 
 // Config defines Provider Configuration
 type Config struct {
-	CloudIDs     []string `hcl:"cloud_id,optional"`
-	FolderFilter string   `hcl:"folder_filter,optional"`
-	FolderIDs    []string `hcl:"folder_ids,optional"`
+	OrganizationIDs []string `hcl:"organization_ids,optional"`
+	CloudIDs        []string `hcl:"cloud_ids,optional"`
+	FolderIDs       []string `hcl:"folder_ids,optional"`
+
+	FolderFilter string `hcl:"folder_filter,optional"`
 }
 
 func (c Config) Example() string {

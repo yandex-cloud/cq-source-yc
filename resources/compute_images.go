@@ -14,7 +14,7 @@ func ComputeImages() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_compute_images",
 		Resolver:     fetchComputeImages,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -98,7 +98,7 @@ func ComputeImages() *schema.Table {
 func fetchComputeImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &compute.ListImagesRequest{FolderId: f}

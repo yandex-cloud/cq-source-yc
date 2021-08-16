@@ -2,32 +2,29 @@ package client
 
 import "github.com/cloudquery/cq-provider-sdk/provider/schema"
 
-// TODO: optimize code
-
-func FolderMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
-	var l = make([]schema.ClientMeta, 0)
-	client := meta.(*Client)
-	for _, folderId := range client.folders {
-		l = append(l, client.withFolder(folderId))
+func MultiplexBy(resourcesGetter func(client *Client) []string) func(meta schema.ClientMeta) []schema.ClientMeta {
+	return func(meta schema.ClientMeta) []schema.ClientMeta {
+		var l = make([]schema.ClientMeta, 0)
+		client := meta.(*Client)
+		for _, folderId := range resourcesGetter(client) {
+			l = append(l, client.withResource(folderId, "folder"))
+		}
+		return l
 	}
-	return l
 }
 
-func CloudMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
-	var l = make([]schema.ClientMeta, 0)
-	client := meta.(*Client)
-	for _, cloudId := range client.clouds {
-		l = append(l, client.withCloud(cloudId))
-	}
-	return l
+func Organizations(client *Client) []string {
+	return client.organizations
 }
 
-func FolderAndCloudMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
-	clients := FolderMultiplex(meta)
-	clients = append(clients, CloudMultiplex(meta)...)
-	return clients
+func Clouds(client *Client) []string {
+	return client.clouds
 }
 
-func IdentityMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
+func Folders(client *Client) []string {
+	return client.folders
+}
+
+func EmptyMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
 	return []schema.ClientMeta{meta}
 }

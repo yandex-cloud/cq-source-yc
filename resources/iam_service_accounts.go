@@ -14,7 +14,7 @@ func IAMServiceAccounts() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_iam_service_accounts",
 		Resolver:     fetchIAMServiceAccounts,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -56,7 +56,7 @@ func IAMServiceAccounts() *schema.Table {
 func fetchIAMServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &iam.ListServiceAccountsRequest{FolderId: f}

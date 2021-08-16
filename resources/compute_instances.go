@@ -16,7 +16,7 @@ func ComputeInstances() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_compute_instances",
 		Resolver:     fetchComputeInstances,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
@@ -164,7 +164,7 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "yandex_compute_instance_secondary_disks",
 				Resolver:    fetchComputeInstanceSecondaryDisks,
-				Multiplex:   client.IdentityMultiplex,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -208,7 +208,7 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "yandex_compute_instance_network_interfaces",
 				Resolver:    fetchComputeInstanceNetworkInterfaces,
-				Multiplex:   client.IdentityMultiplex,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -289,7 +289,7 @@ func ComputeInstances() *schema.Table {
 					{
 						Name:        "yandex_compute_instance_net_interface_ipv4_1_1_nat_dns_records",
 						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressOneToOneNatDnsRecords,
-						Multiplex:   client.IdentityMultiplex,
+						Multiplex:   client.EmptyMultiplex,
 						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
 							{
@@ -327,7 +327,7 @@ func ComputeInstances() *schema.Table {
 					{
 						Name:        "yandex_compute_instance_net_interface_ipv4_dns_records",
 						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV4AddressDnsRecords,
-						Multiplex:   client.IdentityMultiplex,
+						Multiplex:   client.EmptyMultiplex,
 						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
 							{
@@ -365,7 +365,7 @@ func ComputeInstances() *schema.Table {
 					{
 						Name:        "yandex_compute_instance_net_interface_ipv6_1_1_nat_dns_records",
 						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressOneToOneNatDnsRecords,
-						Multiplex:   client.IdentityMultiplex,
+						Multiplex:   client.EmptyMultiplex,
 						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
 							{
@@ -403,7 +403,7 @@ func ComputeInstances() *schema.Table {
 					{
 						Name:        "yandex_compute_instance_net_interface_ipv6_dns_records",
 						Resolver:    fetchComputeInstanceNetworkInterfacePrimaryV6AddressDnsRecords,
-						Multiplex:   client.IdentityMultiplex,
+						Multiplex:   client.EmptyMultiplex,
 						IgnoreError: client.IgnoreErrorHandler,
 						Columns: []schema.Column{
 							{
@@ -443,7 +443,7 @@ func ComputeInstances() *schema.Table {
 			{
 				Name:        "yandex_compute_instance_placement_policy_host_affinity_rules",
 				Resolver:    fetchComputeInstancePlacementPolicyHostAffinityRules,
-				Multiplex:   client.IdentityMultiplex,
+				Multiplex:   client.EmptyMultiplex,
 				IgnoreError: client.IgnoreErrorHandler,
 				Columns: []schema.Column{
 					{
@@ -486,7 +486,7 @@ func ComputeInstances() *schema.Table {
 func fetchComputeInstances(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
+	locations := []string{c.MultiplexedResourceId}
 
 	for _, f := range locations {
 		req := &compute.ListInstancesRequest{FolderId: f}
