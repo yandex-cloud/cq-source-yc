@@ -20,18 +20,16 @@ import (
 )
 
 func TestCertificateManagerCertificates(t *testing.T) {
-	var serv *grpc.Server
+	certificatemanagerSvc, serv, err := createCertificateServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.CertificateManagerCertificates(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			certificatemanagerSvc, serv1, err := createCertificateServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{

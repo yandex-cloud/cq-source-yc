@@ -20,18 +20,16 @@ import (
 )
 
 func TestIAMServiceAccounts(t *testing.T) {
-	var serv *grpc.Server
+	iamSvc, serv, err := createServiceAccountServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.IAMServiceAccounts(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			iamSvc, serv1, err := createServiceAccountServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{

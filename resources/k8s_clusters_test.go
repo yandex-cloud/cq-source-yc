@@ -20,18 +20,16 @@ import (
 )
 
 func TestK8SClusters(t *testing.T) {
-	var serv *grpc.Server
+	k8sSvc, serv, err := createClusterServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.K8SClusters(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			k8sSvc, serv1, err := createClusterServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{
@@ -56,7 +54,6 @@ func NewFakeClusterServiceServer() (*FakeClusterServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
-	// TODO: fill nonempty interface fields
 	return &FakeClusterServiceServer{Cluster: &cluster}, nil
 }
 

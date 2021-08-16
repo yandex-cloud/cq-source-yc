@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/cloudquery/cq-provider-sdk/logging"
-	ptest "github.com/cloudquery/cq-provider-sdk/provider/providertest"
+	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/cloudquery/faker/v3"
 	"github.com/hashicorp/go-hclog"
@@ -20,18 +20,16 @@ import (
 )
 
 func TestComputeDisks(t *testing.T) {
-	var serv *grpc.Server
-	resource := ptest.ResourceTestData{
+	computeSvc, serv, err := createDiskServer()
+	if err != nil {
+		t.Fatal(err)
+	}
+	resource := providertest.ResourceTestData{
 		Table: resources.ComputeDisks(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			computeSvc, serv1, err := createDiskServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{
@@ -39,12 +37,12 @@ func TestComputeDisks(t *testing.T) {
 			}, nil)
 			return c, nil
 		},
-		Verifiers: []ptest.Verifier{
-			ptest.VerifyNoEmptyColumnsExcept("yandex_compute_disks", "source_source_image_id", "source_source_snapshot_id"),
-			ptest.VerifyOneOf("yandex_compute_disks", "source_source_image_id", "source_source_snapshot_id"),
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyNoEmptyColumnsExcept("yandex_compute_disks", "source_source_image_id", "source_source_snapshot_id"),
+			providertest.VerifyOneOf("yandex_compute_disks", "source_source_image_id", "source_source_snapshot_id"),
 		},
 	}
-	ptest.TestResource(t, resources.Provider, resource)
+	providertest.TestResource(t, resources.Provider, resource)
 	serv.Stop()
 }
 
@@ -60,12 +58,6 @@ func NewFakeDiskServiceServer() (*FakeDiskServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
-	var source compute1.Disk_SourceImageId
-	err = faker.FakeData(&source)
-	if err != nil {
-		return nil, err
-	}
-	disk.Source = &source
 	return &FakeDiskServiceServer{Disk: &disk}, nil
 }
 

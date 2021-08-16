@@ -20,18 +20,16 @@ import (
 )
 
 func TestKMSSymmetricKeys(t *testing.T) {
-	var serv *grpc.Server
+	kmsSvc, serv, err := createSymmetricKeyServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.KMSSymmetricKeys(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			kmsSvc, serv1, err := createSymmetricKeyServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{

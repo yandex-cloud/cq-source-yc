@@ -20,18 +20,16 @@ import (
 )
 
 func TestVPCSecurityGroups(t *testing.T) {
-	var serv *grpc.Server
+	vpcSvc, serv, err := createSecurityGroupServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.VPCSecurityGroups(),
 		Config: client.Config{
 			FolderIDs: []string{"testFolder"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			vpcSvc, serv1, err := createSecurityGroupServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, &client.Services{
