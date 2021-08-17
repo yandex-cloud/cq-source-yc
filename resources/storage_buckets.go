@@ -55,7 +55,7 @@ func StorageBuckets() *schema.Table {
 	}
 }
 
-type ObjectsStorage struct {
+type storageBucket struct {
 	Name  string
 	Rules []*s3.ServerSideEncryptionRule
 }
@@ -75,14 +75,14 @@ func fetchStorageBuckets(_ context.Context, meta schema.ClientMeta, _ *schema.Re
 			continue
 		}
 		if encryptResp != nil && encryptResp.ServerSideEncryptionConfiguration != nil {
-			res <- ObjectsStorage{*value.Name, encryptResp.ServerSideEncryptionConfiguration.Rules}
+			res <- storageBucket{*value.Name, encryptResp.ServerSideEncryptionConfiguration.Rules}
 		}
 	}
 	return nil
 }
 
 func fetchStorageBucketServerSideEncryptionRules(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
-	storageObject := parent.Item.(ObjectsStorage)
+	storageObject := parent.Item.(storageBucket)
 	for _, rule := range storageObject.Rules {
 		res <- rule
 	}

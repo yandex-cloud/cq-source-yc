@@ -1,4 +1,4 @@
-package ycmodelbuilder
+package modelfromproto
 
 type CollapsedOptions struct {
 	Paths         []string

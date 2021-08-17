@@ -15,12 +15,12 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
-	{{.service | together}}1 "github.com/yandex-cloud/go-genproto/yandex/cloud/{{.service | together}}/v1"
+	{{.service | flat}}1 "github.com/yandex-cloud/go-genproto/yandex/cloud/{{.service | flat}}/v1"
 	"github.com/yandex-cloud/go-sdk/gen/{{.service | snake}}"
 )
 
 func Test{{.service}}{{.resource | plural}}(t *testing.T) {
-	{{.service | together}}Svc, serv, err := create{{.resource}}Server()
+	{{.service | flat}}Svc, serv, err := create{{.resource}}Server()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func Test{{.service}}{{.resource | plural}}(t *testing.T) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
 			}), []string{"testFolder"}, nil, nil, &client.Services{
-				{{.service}}: {{.service | together}}Svc,
+				{{.service}}: {{.service | flat}}Svc,
 			}, nil)
 			return c, nil
 		},
@@ -43,12 +43,12 @@ func Test{{.service}}{{.resource | plural}}(t *testing.T) {
 }
 
 type Fake{{.resource}}ServiceServer struct {
-	{{.service | together}}1.Unimplemented{{.resource}}ServiceServer
-	{{.resource}} *{{.service | together}}1.{{.resource}}
+	{{.service | flat}}1.Unimplemented{{.resource}}ServiceServer
+	{{.resource}} *{{.service | flat}}1.{{.resource}}
 }
 
 func NewFake{{.resource}}ServiceServer() (*Fake{{.resource}}ServiceServer, error) {
-	var {{.resource | snake}} {{.service | together}}1.{{.resource}}
+	var {{.resource | snake}} {{.service | flat}}1.{{.resource}}
 	faker.SetIgnoreInterface(true)
 	err := faker.FakeData(&{{.resource | snake}})
 	if err != nil {
@@ -57,11 +57,11 @@ func NewFake{{.resource}}ServiceServer() (*Fake{{.resource}}ServiceServer, error
 	return &Fake{{.resource}}ServiceServer{ {{- .resource}}: &{{.resource | snake}}}, nil
 }
 
-func (s *Fake{{.resource}}ServiceServer) List(context.Context, *{{.service | together}}1.List{{.resource | plural}}Request) (*{{.service | together}}1.List{{.resource | plural}}Response, error) {
-	return &{{.service | together}}1.List{{.resource | plural}}Response{ {{- .resource | plural}}: []*{{.service | together}}1.{{.resource}}{s.{{.resource}}}}, nil
+func (s *Fake{{.resource}}ServiceServer) List(context.Context, *{{.service | flat}}1.List{{.resource | plural}}Request) (*{{.service | flat}}1.List{{.resource | plural}}Response, error) {
+	return &{{.service | flat}}1.List{{.resource | plural}}Response{ {{- .resource | plural}}: []*{{.service | flat}}1.{{.resource}}{s.{{.resource}}}}, nil
 }
 
-func create{{.resource}}Server() (*{{.service | together}}.{{.service}}, *grpc.Server,error) {
+func create{{.resource}}Server() (*{{.service | flat}}.{{.service}}, *grpc.Server,error) {
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
@@ -75,7 +75,7 @@ func create{{.resource}}Server() (*{{.service | together}}.{{.service}}, *grpc.S
 		return nil, nil, err
 	}
 
-	{{.service | together}}1.Register{{.resource}}ServiceServer(serv, fake{{.resource}}ServiceServer)
+	{{.service | flat}}1.Register{{.resource}}ServiceServer(serv, fake{{.resource}}ServiceServer)
 
 	go func() {
 		err := serv.Serve(lis)
@@ -90,7 +90,7 @@ func create{{.resource}}Server() (*{{.service | together}}.{{.service}}, *grpc.S
 		return nil, nil, err
 	}
 
-	return {{.service | together}}.New{{.service}}(
+	return {{.service | flat}}.New{{.service}}(
 		func(ctx context.Context) (*grpc.ClientConn, error) {
 			return conn, nil
 		},

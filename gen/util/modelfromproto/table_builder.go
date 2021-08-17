@@ -1,4 +1,4 @@
-package ycmodelbuilder
+package modelfromproto
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
-	"github.com/yandex-cloud/cq-provider-yandex/gen/util/ycmodel"
 )
 
 type TableBuilder struct {
@@ -45,7 +44,7 @@ func (tb *TableBuilder) WithMessageFromProto(messageName, pathToProto string, pa
 	return nil
 }
 
-func (tb *TableBuilder) Build() (*ycmodel.Table, error) {
+func (tb *TableBuilder) Build() (*Table, error) {
 	if tb.MessageDesc == nil {
 		return nil, fmt.Errorf("source of MessageDesc wasn't specified")
 	}
@@ -58,7 +57,7 @@ func (tb *TableBuilder) Build() (*ycmodel.Table, error) {
 		return nil, err
 	}
 
-	table := &ycmodel.Table{
+	table := &Table{
 		Service:      tb.Service,
 		Resource:     tb.Resource,
 		AbsolutePath: split(tb.AbsolutePath),
@@ -115,10 +114,10 @@ func (tb *TableBuilder) containsAliases(field expandedField) bool {
 	return ok
 }
 
-func (tb *TableBuilder) generateColumns(fields []expandedField) (columns []*ycmodel.Column) {
+func (tb *TableBuilder) generateColumns(fields []expandedField) (columns []*Column) {
 	columns = tb.appendIfRelation(columns)
 	for _, field := range fields {
-		column := &ycmodel.Column{
+		column := &Column{
 			Name:        field.getColumnName(),
 			Type:        field.getType(),
 			Description: strings.TrimSpace(field.GetSourceInfo().GetLeadingComments()),
@@ -130,11 +129,7 @@ func (tb *TableBuilder) generateColumns(fields []expandedField) (columns []*ycmo
 		}
 
 		if column.Name == "id" {
-			column.Nullable = "false"
-			column.Unique = "true"
-		} else {
-			column.Nullable = "false"
-			column.Unique = "false"
+			column.CreationOptions = &CreationOptions{Nullable: "false", Unique: "true"}
 		}
 
 		columns = append(columns, column)
@@ -142,7 +137,7 @@ func (tb *TableBuilder) generateColumns(fields []expandedField) (columns []*ycmo
 	return
 }
 
-func (tb *TableBuilder) appendIfRelation(columns []*ycmodel.Column) []*ycmodel.Column {
+func (tb *TableBuilder) appendIfRelation(columns []*Column) []*Column {
 	if tb.Parent != nil {
 		var (
 			parentName    string
@@ -157,31 +152,27 @@ func (tb *TableBuilder) appendIfRelation(columns []*ycmodel.Column) []*ycmodel.C
 			parentMsgDesc = tb.Parent.Field.GetMessageType()
 		}
 
-		columns = append(columns, &ycmodel.Column{
+		columns = append(columns, &Column{
 			Name:        parentName + "_cq_id",
 			Type:        "schema.TypeUUID",
 			Description: fmt.Sprintf("cq_id of parent %s", parentName),
 			Resolver:    "schema.ParentIdResolver",
-			Nullable:    "false",
-			Unique:      "false",
 		})
 
 		if parentMsgDesc.FindFieldByName("id") != nil {
-			columns = append(columns, &ycmodel.Column{
+			columns = append(columns, &Column{
 				Name:        parentName + "_id",
 				Type:        "schema.TypeString",
 				Description: fmt.Sprintf("id of parent %s", parentName),
 				Resolver:    "schema.ParentResourceFieldResolver(\"id\")",
-				Nullable:    "false",
-				Unique:      "false",
 			})
 		}
 	}
 	return columns
 }
 
-func (tb *TableBuilder) generateRelations(fields []expandedField) ([]*ycmodel.Table, error) {
-	tables := make([]*ycmodel.Table, 0, len(fields))
+func (tb *TableBuilder) generateRelations(fields []expandedField) ([]*Table, error) {
+	tables := make([]*Table, 0, len(fields))
 
 	for _, field := range fields {
 		builder := TableBuilder{

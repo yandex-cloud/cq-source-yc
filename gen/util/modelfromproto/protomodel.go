@@ -1,12 +1,41 @@
-package ycmodelbuilder
+package modelfromproto
 
-import (
-	"github.com/yandex-cloud/cq-provider-yandex/gen/util/ycmodel"
-)
+type Table struct {
+	// Should be in camel case
+	Service      string
+	Resource     string
+	AbsolutePath []string
+	RelativePath []string
+
+	Multiplex string
+
+	Columns   []*Column
+	Relations []*Table
+
+	Alias string
+}
+
+type Column struct {
+	Name            string
+	Description     string
+	Type            string
+	Resolver        string
+	CreationOptions *CreationOptions
+}
+
+type CreationOptions struct {
+	Nullable string
+	Unique   string
+}
+
+type File struct {
+	Table     *Table
+	Relations []*Table
+}
 
 var defaultYCOptions = []Option{
 	WithAlias("Id", ChangeColumn(
-		&ycmodel.Column{
+		&Column{
 			Name:        "id",
 			Type:        "schema.TypeString",
 			Description: "ID of the resource.",
@@ -15,7 +44,7 @@ var defaultYCOptions = []Option{
 	),
 	),
 	WithAlias("FolderId", ChangeColumn(
-		&ycmodel.Column{
+		&Column{
 			Name:        "folder_id",
 			Type:        "schema.TypeString",
 			Description: "ID of the folder that the resource belongs to.",
@@ -24,7 +53,7 @@ var defaultYCOptions = []Option{
 	),
 	),
 	WithAlias("CreatedAt", ChangeColumn(
-		&ycmodel.Column{
+		&Column{
 			Name:     "created_at",
 			Type:     "schema.TypeTimestamp",
 			Resolver: "client.ResolveAsTime",
@@ -32,7 +61,7 @@ var defaultYCOptions = []Option{
 	),
 	),
 	WithAlias("Labels", ChangeColumn(
-		&ycmodel.Column{
+		&Column{
 			Name:        "labels",
 			Type:        "schema.TypeJSON",
 			Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
@@ -42,7 +71,7 @@ var defaultYCOptions = []Option{
 	),
 }
 
-func ResourceFileFromProto(service, resource, pathToProto string, opts ...Option) (*ycmodel.File, error) {
+func ResourceFileFromProto(service, resource, pathToProto string, opts ...Option) (*File, error) {
 	defaultOptions := defaultYCOptions
 	defaultOptions = append(defaultOptions, opts...)
 	co := NewCollapsedOptions(defaultOptions)
@@ -64,10 +93,10 @@ func ResourceFileFromProto(service, resource, pathToProto string, opts ...Option
 		return nil, err
 	}
 
-	return &ycmodel.File{Table: tableModel, Relations: expandRelations(tableModel)}, nil
+	return &File{Table: tableModel, Relations: expandRelations(tableModel)}, nil
 }
 
-func expandRelations(table *ycmodel.Table) (tables []*ycmodel.Table) {
+func expandRelations(table *Table) (tables []*Table) {
 	for _, relation := range table.Relations {
 		tables = append(tables, expandRelations(relation)...)
 		tables = append(tables, relation)

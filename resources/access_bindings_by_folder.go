@@ -25,25 +25,25 @@ func AccessBindingsByFolder() *schema.Table {
 			{
 				Name:     "role_id",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("RoleId"),
+				Resolver: schema.PathResolver("AccessBinding.RoleId"),
 			},
 			{
 				Name:     "subject_id",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Subject.Id"),
+				Resolver: schema.PathResolver("AccessBinding.Subject.Id"),
 			},
 			{
 				Name:     "subject_type",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Subject.Type"),
+				Resolver: schema.PathResolver("AccessBinding.Subject.Type"),
 			},
 		},
 	}
 }
 
 type FolderAccessBinding struct {
-	*access.AccessBinding
-	ResourceId string
+	AccessBinding *access.AccessBinding
+	ResourceId    string
 }
 
 func fetchAccessBindingsByFolder(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {

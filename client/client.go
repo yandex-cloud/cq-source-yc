@@ -41,7 +41,6 @@ type Client struct {
 
 	// this is set by table client multiplexer
 	MultiplexedResourceId string
-	AccessBindingLister   AccessBindingsLister
 }
 
 func (c Client) Logger() hclog.Logger {
@@ -70,6 +69,7 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	if err != nil {
 		return nil, err
 	}
+
 	extractedClouds, err := getClouds(sdk, providerConfig.OrganizationIDs)
 	if err != nil {
 		return nil, err

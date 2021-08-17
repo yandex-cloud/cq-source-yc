@@ -8,15 +8,15 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
 	"github.com/yandex-cloud/cq-provider-yandex/gen/util"
-	ycmodel "github.com/yandex-cloud/cq-provider-yandex/gen/util/ycmodelbuilder"
+	"github.com/yandex-cloud/cq-provider-yandex/gen/util/modelfromproto"
 )
 
-func generate(resource, pathToProto string, opts ...ycmodel.Option) {
-	opts = append(opts, ycmodel.WithProtoPaths("cloudapi", "cloudapi/third_party/googleapis"))
+func generate(resource, pathToProto string, opts ...modelfromproto.Option) {
+	opts = append(opts, modelfromproto.WithProtoPaths("cloudapi", "cloudapi/third_party/googleapis"))
 
-	resourceFileModel, err := ycmodel.ResourceFileFromProto(resource, resource, pathToProto, opts...)
+	resourceFileModel, err := modelfromproto.ResourceFileFromProto(resource, resource, pathToProto, opts...)
 	if err != nil {
-		fmt.Fprint(os.Stderr)
+		fmt.Fprint(os.Stderr, err)
 		return
 	}
 

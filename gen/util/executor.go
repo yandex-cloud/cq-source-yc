@@ -17,16 +17,12 @@ type TemplatesDir struct {
 	Path     string
 }
 
-func ToTogether(s string) string {
-	return strings.ToLower(strcase.ToCamel(s))
-}
-
 var templateFunctions = template.FuncMap{
-	"together": ToTogether,
-	"snake":    strcase.ToSnake,
-	"camel":    strcase.ToCamel,
-	"plural":   inflection.Plural,
-	"join":     func(sep string, elems []string) string { return strings.Join(elems, sep) },
+	"flat":   ToFlat,
+	"snake":  strcase.ToSnake,
+	"camel":  strcase.ToCamel,
+	"plural": inflection.Plural,
+	"join":   func(sep string, elems []string) string { return strings.Join(elems, sep) },
 	"asFqn": func(names []string) []string {
 		if len(names) == 0 {
 			return names
@@ -73,7 +69,10 @@ func Execute(dir TemplatesDir, data interface{}, out string) error {
 	}
 
 	err = exec.Command("goimports", "-w", out).Run()
-	return err
+	if err != nil {
+		return fmt.Errorf("goimports -w finished with error: %s", err)
+	}
+	return nil
 }
 
 func FilesInDir(dir string) ([]string, error) {

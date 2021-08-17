@@ -1,14 +1,10 @@
 func fetch{{.Service}}{{.Resource | plural}}(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.MultiplexedResourceId}
-
-	for _, f := range locations {
-		req := &{{.Service | together}}.List{{.Resource | plural}}Request{FolderId: f}
-		it := c.Services.{{.Service}}.{{.Resource}}().{{.Resource}}Iterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &{{.Service | flat}}.List{{.Resource | plural}}Request{FolderId: c.MultiplexedResourceId}
+	it := c.Services.{{.Service}}.{{.Resource}}().{{.Resource}}Iterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

@@ -9,11 +9,12 @@ cloudapi:
 
 .PHONY: generate-resources
 generate-resources: cloudapi
-	@go run gen/base/main.go
-	@go run gen/serverless/main.go
-	@go run gen/access_bindings/main.go
-	@go run gen/resource_manager/main.go
-	@go run gen/provider/main.go
+	@go run gen/full/base/main.go
+	@go run gen/full/serverless/main.go
+	@go run gen/full/access_bindings/main.go
+	@go run gen/full/resource_manager/main.go
+	@go run gen/full/resource_manager_tests/main.go
+	@go run gen/full/provider/main.go
 
 # Debug
 

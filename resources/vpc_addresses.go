@@ -26,95 +26,82 @@ func VPCAddresses() *schema.Table {
 				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
-				Name:            "folder_id",
-				Type:            schema.TypeString,
-				Description:     "ID of the folder that the resource belongs to.",
-				Resolver:        client.ResolveFolderID,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "folder_id",
+				Type:        schema.TypeString,
+				Description: "ID of the folder that the resource belongs to.",
+				Resolver:    client.ResolveFolderID,
 			},
 			{
-				Name:            "created_at",
-				Type:            schema.TypeTimestamp,
-				Description:     "",
-				Resolver:        client.ResolveAsTime,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "created_at",
+				Type:        schema.TypeTimestamp,
+				Description: "",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
-				Name:            "name",
-				Type:            schema.TypeString,
-				Description:     "Name of the address.\n The name is unique within the folder.",
-				Resolver:        schema.PathResolver("Name"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "name",
+				Type:        schema.TypeString,
+				Description: "Name of the address.\n The name is unique within the folder.",
+				Resolver:    schema.PathResolver("Name"),
 			},
 			{
-				Name:            "description",
-				Type:            schema.TypeString,
-				Description:     "Description of the address.",
-				Resolver:        schema.PathResolver("Description"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "description",
+				Type:        schema.TypeString,
+				Description: "Description of the address.",
+				Resolver:    schema.PathResolver("Description"),
 			},
 			{
-				Name:            "labels",
-				Type:            schema.TypeJSON,
-				Description:     "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
-				Resolver:        client.ResolveLabels,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "labels",
+				Type:        schema.TypeJSON,
+				Description: "Resource labels as `key:value` pairs. Maximum of 64 per resource.",
+				Resolver:    client.ResolveLabels,
 			},
 			{
-				Name:            "address_external_ipv_4_address_address",
-				Type:            schema.TypeString,
-				Description:     "Value of address.",
-				Resolver:        schema.PathResolver("Address.ExternalIpv4Address.Address"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "address_external_ipv_4_address_address",
+				Type:        schema.TypeString,
+				Description: "Value of address.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Address"),
 			},
 			{
-				Name:            "address_external_ipv_4_address_zone_id",
-				Type:            schema.TypeString,
-				Description:     "Availability zone from which the address will be allocated.",
-				Resolver:        schema.PathResolver("Address.ExternalIpv4Address.ZoneId"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "address_external_ipv_4_address_zone_id",
+				Type:        schema.TypeString,
+				Description: "Availability zone from which the address will be allocated.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.ZoneId"),
 			},
 			{
-				Name:            "addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
-				Type:            schema.TypeString,
-				Description:     "DDoS protection provider ID.",
-				Resolver:        schema.PathResolver("Address.ExternalIpv4Address.Requirements.DdosProtectionProvider"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "addr_ext_ipv_4_addr_requirements_ddos_protect_prov",
+				Type:        schema.TypeString,
+				Description: "DDoS protection provider ID.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.DdosProtectionProvider"),
 			},
 			{
-				Name:            "addr_ext_ipv_4_addr_requirements_out_smtp_cap",
-				Type:            schema.TypeString,
-				Description:     "Capability to send SMTP traffic.",
-				Resolver:        schema.PathResolver("Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "addr_ext_ipv_4_addr_requirements_out_smtp_cap",
+				Type:        schema.TypeString,
+				Description: "Capability to send SMTP traffic.",
+				Resolver:    schema.PathResolver("Address.ExternalIpv4Address.Requirements.OutgoingSmtpCapability"),
 			},
 			{
-				Name:            "reserved",
-				Type:            schema.TypeBool,
-				Description:     "Specifies if address is reserved or not.",
-				Resolver:        schema.PathResolver("Reserved"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "reserved",
+				Type:        schema.TypeBool,
+				Description: "Specifies if address is reserved or not.",
+				Resolver:    schema.PathResolver("Reserved"),
 			},
 			{
-				Name:            "used",
-				Type:            schema.TypeBool,
-				Description:     "Specifies if address is used or not.",
-				Resolver:        schema.PathResolver("Used"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "used",
+				Type:        schema.TypeBool,
+				Description: "Specifies if address is used or not.",
+				Resolver:    schema.PathResolver("Used"),
 			},
 			{
-				Name:            "type",
-				Type:            schema.TypeString,
-				Description:     "Type of the IP address.",
-				Resolver:        client.EnumPathResolver("Type"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "type",
+				Type:        schema.TypeString,
+				Description: "Type of the IP address.",
+				Resolver:    client.EnumPathResolver("Type"),
 			},
 			{
-				Name:            "ip_version",
-				Type:            schema.TypeString,
-				Description:     "Vervion of the IP address.",
-				Resolver:        client.EnumPathResolver("IpVersion"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "ip_version",
+				Type:        schema.TypeString,
+				Description: "Vervion of the IP address.",
+				Resolver:    client.EnumPathResolver("IpVersion"),
 			},
 		},
 	}
@@ -124,14 +111,10 @@ func VPCAddresses() *schema.Table {
 func fetchVPCAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.MultiplexedResourceId}
-
-	for _, f := range locations {
-		req := &vpc.ListAddressesRequest{FolderId: f}
-		it := c.Services.VPC.Address().AddressIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &vpc.ListAddressesRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.VPC.Address().AddressIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

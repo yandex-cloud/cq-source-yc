@@ -1,4 +1,4 @@
-package ycmodelbuilder
+package modelfromproto
 
 import (
 	"fmt"
@@ -86,11 +86,6 @@ func (f expandedField) getType() string {
 }
 
 func (f expandedField) getResolver() string {
-	//if f.GetType() != descriptor.FieldDescriptorProto_TYPE_ENUM {
-	//	return fmt.Sprintf("schema.PathResolver(\"%s\")", f.getPath())
-	//} else {
-	//	return fmt.Sprintf("client.EnumPathResolver(\"%s\")", f.getPath())
-	//}
 	switch {
 	case f.GetMessageType() != nil && f.GetMessageType().GetFullyQualifiedName() == "google.protobuf.Timestamp":
 		return "client.ResolveAsTime"

@@ -20,41 +20,52 @@ func IAMUserAccountsByClouds() *schema.Table {
 				Name:            "id",
 				Type:            schema.TypeString,
 				Description:     "ID of the user_account.",
-				Resolver:        client.ResolveResourceId,
+				Resolver:        schema.PathResolver("UserAccount.Id"),
 				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
+			},
+			{
+				Name:        "cloud_id",
+				Type:        schema.TypeString,
+				Description: "ID of cloud.",
+				Resolver:    schema.PathResolver("CloudId"),
 			},
 			{
 				Name:        "user_account_yandex_passport_user_account_login",
 				Type:        schema.TypeString,
 				Description: "Login of the Yandex.Passport user account.",
-				Resolver:    schema.PathResolver("UserAccount.YandexPassportUserAccount.Login"),
+				Resolver:    schema.PathResolver("UserAccount.UserAccount.YandexPassportUserAccount.Login"),
 			},
 			{
 				Name:        "user_account_yandex_passport_user_account_default_email",
 				Type:        schema.TypeString,
 				Description: "Default email of the Yandex.Passport user account.",
-				Resolver:    schema.PathResolver("UserAccount.YandexPassportUserAccount.DefaultEmail"),
+				Resolver:    schema.PathResolver("UserAccount.UserAccount.YandexPassportUserAccount.DefaultEmail"),
 			},
 			{
 				Name:        "user_account_saml_user_account_federation_id",
 				Type:        schema.TypeString,
 				Description: "ID of the federation that the federation belongs to.",
-				Resolver:    schema.PathResolver("UserAccount.SamlUserAccount.FederationId"),
+				Resolver:    schema.PathResolver("UserAccount.UserAccount.SamlUserAccount.FederationId"),
 			},
 			{
 				Name:        "user_account_saml_user_account_name_id",
 				Type:        schema.TypeString,
 				Description: "Name Id of the SAML federated user.\n The name is unique within the federation. 1-256 characters long.",
-				Resolver:    schema.PathResolver("UserAccount.SamlUserAccount.NameId"),
+				Resolver:    schema.PathResolver("UserAccount.UserAccount.SamlUserAccount.NameId"),
 			},
 			{
 				Name:        "user_account_saml_user_account_attributes",
 				Type:        schema.TypeJSON,
 				Description: "Additional attributes of the SAML federated user.",
-				Resolver:    schema.PathResolver("UserAccount.SamlUserAccount.Attributes"),
+				Resolver:    schema.PathResolver("UserAccount.UserAccount.SamlUserAccount.Attributes"),
 			},
 		},
 	}
+}
+
+type accountByCloud struct {
+	UserAccount *iam.UserAccount
+	CloudId     string
 }
 
 func fetchIAMUserAccountsByCloud(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
@@ -78,7 +89,7 @@ func fetchIAMUserAccountsByCloud(ctx context.Context, meta schema.ClientMeta, pa
 				if err != nil {
 					return err
 				}
-				res <- userAccount
+				res <- accountByCloud{UserAccount: userAccount, CloudId: c.MultiplexedResourceId}
 			}
 		}
 		return nil

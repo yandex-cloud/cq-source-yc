@@ -25,24 +25,24 @@ func AccessBindingsBy{{.resource}}() *schema.Table {
 			{
 				Name:     "role_id",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("RoleId"),
+				Resolver: schema.PathResolver("AccessBinding.RoleId"),
 			},
 			{
 				Name:     "subject_id",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Subject.Id"),
+				Resolver: schema.PathResolver("AccessBinding.Subject.Id"),
 			},
 			{
 				Name:     "subject_type",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Subject.Type"),
+				Resolver: schema.PathResolver("AccessBinding.Subject.Type"),
 			},
 		},
 	}
 }
 
 type {{.resource}}AccessBinding struct {
-	*access.AccessBinding
+	AccessBinding *access.AccessBinding
 	ResourceId   string
 }
 

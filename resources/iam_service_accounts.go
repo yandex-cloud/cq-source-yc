@@ -26,32 +26,28 @@ func IAMServiceAccounts() *schema.Table {
 				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
-				Name:            "folder_id",
-				Type:            schema.TypeString,
-				Description:     "ID of the folder that the resource belongs to.",
-				Resolver:        client.ResolveFolderID,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "folder_id",
+				Type:        schema.TypeString,
+				Description: "ID of the folder that the resource belongs to.",
+				Resolver:    client.ResolveFolderID,
 			},
 			{
-				Name:            "created_at",
-				Type:            schema.TypeTimestamp,
-				Description:     "",
-				Resolver:        client.ResolveAsTime,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "created_at",
+				Type:        schema.TypeTimestamp,
+				Description: "",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
-				Name:            "name",
-				Type:            schema.TypeString,
-				Description:     "Name of the service account.\n The name is unique within the cloud. 3-63 characters long.",
-				Resolver:        schema.PathResolver("Name"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "name",
+				Type:        schema.TypeString,
+				Description: "Name of the service account.\n The name is unique within the cloud. 3-63 characters long.",
+				Resolver:    schema.PathResolver("Name"),
 			},
 			{
-				Name:            "description",
-				Type:            schema.TypeString,
-				Description:     "Description of the service account. 0-256 characters long.",
-				Resolver:        schema.PathResolver("Description"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: false},
+				Name:        "description",
+				Type:        schema.TypeString,
+				Description: "Description of the service account. 0-256 characters long.",
+				Resolver:    schema.PathResolver("Description"),
 			},
 		},
 	}
@@ -61,14 +57,10 @@ func IAMServiceAccounts() *schema.Table {
 func fetchIAMServiceAccounts(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.MultiplexedResourceId}
-
-	for _, f := range locations {
-		req := &iam.ListServiceAccountsRequest{FolderId: f}
-		it := c.Services.IAM.ServiceAccount().ServiceAccountIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &iam.ListServiceAccountsRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.IAM.ServiceAccount().ServiceAccountIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

@@ -11,16 +11,16 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/gen/util"
 )
 
-func filterSchemas(decls []ast.Decl) (filtered []*ast.FuncDecl) {
+func filterDecls(decls []ast.Decl) (filtered []*ast.FuncDecl) {
 	for _, decl := range decls {
-		if isSchemaTable(decl) {
+		if isFuncSchemaTable(decl) {
 			filtered = append(filtered, decl.(*ast.FuncDecl))
 		}
 	}
 	return
 }
 
-func isSchemaTable(decl ast.Decl) bool {
+func isFuncSchemaTable(decl ast.Decl) bool {
 	funcDecl, ok := decl.(*ast.FuncDecl)
 	if !ok {
 		return false
@@ -68,7 +68,7 @@ func main() {
 			continue
 		}
 
-		funcDecls := filterSchemas(parsedFile.Decls)
+		funcDecls := filterDecls(parsedFile.Decls)
 
 		for _, decl := range funcDecls {
 			resourceMap[decl.Name.Name] = struct{}{}
