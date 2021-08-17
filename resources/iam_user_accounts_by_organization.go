@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func IAMUserAccountsByOrganizations() *schema.Table {
+func IAMUserAccountsByOrganization() *schema.Table {
 	return &schema.Table{
 		Name:        "yandex_iam_user_accounts_by_organization",
 		Resolver:    fetchIAMUserAccountsByOrganization,

@@ -25,6 +25,6 @@ require (
 )
 
 replace (
-	github.com/cloudquery/cq-provider-sdk v0.3.1 => github.com/daniil-ushkov/cq-provider-sdk v0.3.1-0.20210805130044-aef60fa55baa
+	github.com/cloudquery/cq-provider-sdk v0.3.1 => github.com/daniil-ushkov/cq-provider-sdk v0.3.1-0.20210817100343-43126bbee7d2
 	github.com/cloudquery/faker/v3 v3.7.4 => github.com/daniil-ushkov/faker v1.5.1-0.20210727155430-974b577181cb
 )

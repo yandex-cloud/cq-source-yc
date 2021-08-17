@@ -30,16 +30,19 @@ func TestResourceManager{{.resource | plural}}(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.ResourceManager{{.resource | plural}}(),
 		Config: client.Config{
-			{{.resource}}IDs: []string{"test{{.resource}}"},
+			{{.resource}}IDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"test{{.resource}}"}, nil, nil, &client.Services{
+			}), []string{"test"}, nil, nil, &client.Services{
 				ResourceManager: resourcemanagerSvc,
 			}, nil)
 			return c, nil
 		},
+		Verifiers: []providertest.Verifier{
+      		providertest.VerifyAtLeastOneRow("yandex_resourcemanager_{{.resource | plural | snake}}"),
+        },
 	}
 	providertest.TestResource(t, resources.Provider, resource)
 	serv.Stop()
@@ -51,25 +54,25 @@ type Fake{{.resource}}ServiceServer struct {
 }
 
 func NewFake{{.resource}}ServiceServer() (*Fake{{.resource}}ServiceServer, error) {
-	var {{.resource}} resourcemanager1.{{.resource}}
+	var {{.resource | flat}} resourcemanager1.{{.resource}}
 	faker.SetIgnoreInterface(true)
-	err := faker.FakeData(&{{.resource}})
+	err := faker.FakeData(&{{.resource | flat}})
 	if err != nil {
 		return nil, err
 	}
-	{{.resource}}.Name = "test{{.resource}}"
-	return &Fake{{.resource}}ServiceServer{ {{- .resource}}: &{{.resource}}}, nil
+	{{.resource | flat}}.Name = "test"
+	return &Fake{{.resource}}ServiceServer{ {{- .resource}}: &{{.resource | flat}}}, nil
 }
 
 func (s *Fake{{.resource}}ServiceServer) Get(_ context.Context, req *resourcemanager1.Get{{.resource}}Request) (*resourcemanager1.{{.resource}}, error) {
-	if req.{{.resource}}Id == "test{{.resource}}" {
+	if req.{{.resource}}Id == "test" {
 		return s.{{.resource}}, nil
 	}
 	return nil, errors.New("no such {{.resource}}")
 }
 
 func create{{.resource}}Server() (*resourcemanager.ResourceManager, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -91,7 +94,7 @@ func create{{.resource}}Server() (*resourcemanager.ResourceManager, *grpc.Server
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

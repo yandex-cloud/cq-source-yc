@@ -9,7 +9,7 @@ import (
 
 func generate(resource, manager string) {
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "access_bindings_by_resource.go.tmpl",
+		MainFile: "access_bindings_by.go.tmpl",
 		Path:     "templates",
 	}, map[string]string{
 		"resource": resource,
@@ -17,7 +17,7 @@ func generate(resource, manager string) {
 	}, fmt.Sprintf("%s/access_bindings_by_%s.go", util.ResourcesDir, strcase.ToSnake(resource)))
 
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "iam_user_accounts_by_resource.go.tmpl",
+		MainFile: "iam_user_accounts_by.go.tmpl",
 		Path:     "templates",
 	}, map[string]string{
 		"resource": resource,

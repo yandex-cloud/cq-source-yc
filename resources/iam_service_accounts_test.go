@@ -27,15 +27,18 @@ func TestIAMServiceAccounts(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.IAMServiceAccounts(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			FolderIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, nil, &client.Services{
+			}), []string{"test"}, nil, nil, &client.Services{
 				IAM: iamSvc,
 			}, nil)
 			return c, nil
+		},
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyAtLeastOneRow("yandex_iam_service_accounts"),
 		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
@@ -62,7 +65,7 @@ func (s *FakeServiceAccountServiceServer) List(context.Context, *iam1.ListServic
 }
 
 func createServiceAccountServer() (*iam.IAM, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -84,7 +87,7 @@ func createServiceAccountServer() (*iam.IAM, *grpc.Server, error) {
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

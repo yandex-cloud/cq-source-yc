@@ -9,10 +9,10 @@ import (
 )
 
 func generate(resource string) {
-	out := filepath.Join(util.ResourcesDir, "resourcemanager_"+strcase.ToSnake(inflection.Plural(resource))+".go")
+	out := filepath.Join(util.ResourcesDir, "resourcemanager_"+strcase.ToSnake(inflection.Plural(resource))+"_test.go")
 
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "resource_manager.go.tmpl",
+		MainFile: "resource_manager_test.go.tmpl",
 		Path:     "templates",
 	}, map[string]string{
 		"resource": resource,

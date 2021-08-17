@@ -27,15 +27,18 @@ func TestOrganizationManagerFederations(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.OrganizationManagerFederations(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			CloudIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, nil, &client.Services{
+			}), nil, nil, []string{"test"}, &client.Services{
 				OrganizationManagerSAML: samlSvc,
 			}, nil)
 			return c, nil
+		},
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyAtLeastOneRow("yandex_organizationmanager_federations"),
 		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
@@ -62,7 +65,7 @@ func (s *FakeFederationsServiceServer) List(context.Context, *saml1.ListFederati
 }
 
 func createFederationsServer() (*saml.OrganizationManagerSAML, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -84,7 +87,7 @@ func createFederationsServer() (*saml.OrganizationManagerSAML, *grpc.Server, err
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

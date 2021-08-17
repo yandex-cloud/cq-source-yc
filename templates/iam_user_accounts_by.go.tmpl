@@ -12,7 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func IAMUserAccountsBy{{.resource | plural}}() *schema.Table {
+func IAMUserAccountsBy{{.resource}}() *schema.Table {
 	return &schema.Table{
 		Name:        "yandex_iam_user_accounts_by_{{.resource | snake}}",
 		Resolver:    {{$fetcher}},

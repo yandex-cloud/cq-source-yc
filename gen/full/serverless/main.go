@@ -23,7 +23,7 @@ func generate(resource, pathToProto string, opts ...modelfromproto.Option) {
 	out := filepath.Join(util.ResourcesDir, "serverless_"+strcase.ToSnake(inflection.Plural(resource))+".go")
 
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "serverless_resource.go.tmpl",
+		MainFile: "serverless.go.tmpl",
 		Path:     "templates",
 	}, resourceFileModel, out)
 }

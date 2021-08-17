@@ -23,7 +23,7 @@ func generate(service, resource, pathToProto string, opts ...modelfromproto.Opti
 	out := filepath.Join(util.ResourcesDir, util.ToFlat(service)+"_"+strcase.ToSnake(inflection.Plural(resource))+".go")
 
 	util.SilentExecute(util.TemplatesDir{
-		MainFile: "base_resource.go.tmpl",
+		MainFile: "base.go.tmpl",
 		Path:     "templates",
 	}, resourceFileModel, out)
 }

@@ -24,7 +24,7 @@ func TestServerlessApiGateways(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.ServerlessApiGateways(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			FolderIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			serverlessSvc, serv1, err := createApiGatewayServer()
@@ -34,10 +34,13 @@ func TestServerlessApiGateways(t *testing.T) {
 			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, nil, &client.Services{
+			}), []string{"test"}, nil, nil, &client.Services{
 				ApiGateway: serverlessSvc,
 			}, nil)
 			return c, nil
+		},
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyAtLeastOneRow("yandex_serverless_api_gateways"),
 		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
@@ -64,7 +67,7 @@ func (s *FakeApiGatewayServiceServer) List(context.Context, *apigateway1.ListApi
 }
 
 func createApiGatewayServer() (*apigateway.Apigateway, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -86,7 +89,7 @@ func createApiGatewayServer() (*apigateway.Apigateway, *grpc.Server, error) {
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

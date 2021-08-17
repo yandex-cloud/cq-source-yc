@@ -27,15 +27,18 @@ func TestOrganizationManagerOrganizations(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.OrganizationManagerOrganizations(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			CloudIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, nil, &client.Services{
+			}), nil, []string{"test"}, nil, &client.Services{
 				OrganizationManager: organizationmanagerSvc,
 			}, nil)
 			return c, nil
+		},
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyAtLeastOneRow("yandex_organizationmanager_organizations"),
 		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
@@ -62,7 +65,7 @@ func (s *FakeOrganizationServiceServer) List(context.Context, *organizationmanag
 }
 
 func createOrganizationServer() (*organizationmanager.OrganizationManager, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -84,7 +87,7 @@ func createOrganizationServer() (*organizationmanager.OrganizationManager, *grpc
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

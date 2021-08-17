@@ -27,12 +27,12 @@ func Test{{.service}}{{.resource | plural}}(t *testing.T) {
 	resource := providertest.ResourceTestData{
 		Table: resources.{{.service}}{{.resource | plural}}(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			FolderIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, nil, nil, &client.Services{
+			}), []string{"test"}, nil, nil, &client.Services{
 				{{.service}}: {{.service | flat}}Svc,
 			}, nil)
 			return c, nil
@@ -62,7 +62,7 @@ func (s *Fake{{.resource}}ServiceServer) List(context.Context, *{{.service | fla
 }
 
 func create{{.resource}}Server() (*{{.service | flat}}.{{.service}}, *grpc.Server,error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -84,7 +84,7 @@ func create{{.resource}}Server() (*{{.service | flat}}.{{.service}}, *grpc.Serve
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

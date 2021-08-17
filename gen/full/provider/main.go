@@ -20,6 +20,7 @@ func filterDecls(decls []ast.Decl) (filtered []*ast.FuncDecl) {
 	return
 }
 
+// isFuncSchemaTable checks if decl has type func() *schemat.Table
 func isFuncSchemaTable(decl ast.Decl) bool {
 	funcDecl, ok := decl.(*ast.FuncDecl)
 	if !ok {
