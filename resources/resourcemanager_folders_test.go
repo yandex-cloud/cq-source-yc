@@ -33,11 +33,16 @@ func TestResourceManagerFolders(t *testing.T) {
 			FolderIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
-				Level: hclog.Warn,
-			}), []string{"test"}, nil, nil, &client.Services{
-				ResourceManager: resourcemanagerSvc,
-			}, nil)
+			c := client.NewYandexClient(
+				logging.New(&hclog.LoggerOptions{
+					Level: hclog.Warn,
+				}),
+				[]string{"test"},
+				nil,
+				nil,
+				&client.Services{
+					ResourceManager: resourcemanagerSvc,
+				}, nil)
 			return c, nil
 		},
 		Verifiers: []providertest.Verifier{

@@ -33,9 +33,14 @@ func TestResourceManager{{.resource | plural}}(t *testing.T) {
 			{{.resource}}IDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
+			c := client.NewYandexClient(
+			logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"test"}, nil, nil, &client.Services{
+			}),
+			{{if eq .resource "Folder"}}[]string{"test"}{{else}}nil{{end}},
+			{{if eq .resource "Cloud"}}[]string{"test"}{{else}}nil{{end}},
+			nil,
+			&client.Services{
 				ResourceManager: resourcemanagerSvc,
 			}, nil)
 			return c, nil
