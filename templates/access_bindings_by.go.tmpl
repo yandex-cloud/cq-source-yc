@@ -14,7 +14,7 @@ func AccessBindingsBy{{.resource}}() *schema.Table {
 	return &schema.Table{
 		Name:        "yandex_access_bindings_by_{{.resource | snake}}",
 		Resolver:    fetchAccessBindingsBy{{.resource}},
-		Multiplex:   client.MultiplexBy(client.{{.resource}}s),
+		Multiplex:   client.MultiplexBy(client.{{.resource | plural}}),
 		IgnoreError: client.IgnoreErrorHandler,
 		Columns: []schema.Column{
 			{
