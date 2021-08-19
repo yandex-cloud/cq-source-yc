@@ -48,7 +48,7 @@ docker-postgresql: docker-create-net
 
 .PHONY: test
 test: docker-postgresql docker-build
-	@docker run -it --rm \
+	@docker run -it --rm --privileged \
 	--name=cq_provider_yandex_test \
 	--network=cq_provider_yandex_net \
 	cq_provider_yandex_image

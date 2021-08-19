@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationServerlessApiGateways(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_api_gateway" "cq-apigateway-test-%[1]s" {
+resource "yandex_api_gateway" "foo" {
   name = "cq-apigateway-test-%[1]s"
   description = "any description"
   labels = {

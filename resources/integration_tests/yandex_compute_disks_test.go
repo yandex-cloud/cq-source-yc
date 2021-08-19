@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationComputeDisks(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_compute_disk" "cq-disk-test-disk-%[1]s" {
+resource "yandex_compute_disk" "foo" {
   name = "cq-disk-test-disk-%[1]s"
 }
 `, suffix)

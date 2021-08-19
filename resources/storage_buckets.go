@@ -68,16 +68,16 @@ func fetchStorageBuckets(_ context.Context, meta schema.ClientMeta, _ *schema.Re
 	}
 
 	for _, value := range listResp.Buckets {
-		encryptResp, err := c.GetBucketEncryption(&s3.GetBucketEncryptionInput{
+		encryptResp, _ := c.GetBucketEncryption(&s3.GetBucketEncryptionInput{
 			Bucket: value.Name,
 		})
-		if err != nil {
-			continue
-		}
 		if encryptResp != nil && encryptResp.ServerSideEncryptionConfiguration != nil {
 			res <- storageBucket{*value.Name, encryptResp.ServerSideEncryptionConfiguration.Rules}
+		} else {
+			res <- storageBucket{*value.Name, nil}
 		}
 	}
+
 	return nil
 }
 

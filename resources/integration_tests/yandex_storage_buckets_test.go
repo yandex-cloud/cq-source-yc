@@ -10,21 +10,15 @@ import (
 	"github.com/cloudquery/cq-provider-sdk/provider/providertest"
 )
 
-func TestIntegrationVPCSubnets(t *testing.T) {
+func TestStorageBuckets(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_vpc_network" "foo" {
-  name = "cq-subnet-test-net-%[1]s"
-}
-
-resource "yandex_vpc_subnet" "foo" {
-  network_id     = yandex_vpc_network.foo.id
-  v4_cidr_blocks = ["10.2.0.0/16"]
-  name           = "cq-subnet-test-subnet-%[1]s"
+resource "yandex_storage_bucket" "foo" {
+ bucket = "cq-s3-test-s3-%[1]s"
 }
 `, suffix)
-	testIntegrationHelper(t, resources.VPCSubnets(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
+	testIntegrationHelper(t, resources.StorageBuckets(), func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification {
 		return providertest.ResourceIntegrationVerification{
-			Name: "yandex_vpc_subnets",
+			Name: "yandex_storage_buckets",
 			Filter: func(sq squirrel.SelectBuilder, _ *providertest.ResourceIntegrationTestData) squirrel.SelectBuilder {
 				return sq
 			},
@@ -32,7 +26,7 @@ resource "yandex_vpc_subnet" "foo" {
 				{
 					Count: 1,
 					Data: map[string]interface{}{
-						"name": fmt.Sprintf("cq-subnet-test-subnet-%s", suffix),
+						"id": fmt.Sprintf("cq-s3-test-s3-%s", suffix),
 					},
 				},
 			},

@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationVPCNetworks(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_vpc_network" "cq-net-test-net-%[1]s" {
+resource "yandex_vpc_network" "foo" {
   name = "cq-net-test-net-%[1]s"
 }
 `, suffix)

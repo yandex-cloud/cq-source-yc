@@ -11,17 +11,17 @@ import (
 
 func TestIntegrationComputeInstances(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_vpc_network" "cq-instance-test-net-%[1]s" {
+resource "yandex_vpc_network" "foo" {
   name = "cq-instance-test-net-%[1]s"
 }
 
-resource "yandex_vpc_subnet" "cq-instance-test-subnet-%[1]s" {
+resource "yandex_vpc_subnet" "foo" {
   name           = "cq-instance-test-subnet-%[1]s"
-  network_id     = yandex_vpc_network.cq-instance-test-net-%[1]s.id
+  network_id     = yandex_vpc_network.foo.id
   v4_cidr_blocks = ["10.2.0.0/16"]
 }
 
-resource "yandex_compute_instance" "cq-instance-test-instance-%[1]s" {
+resource "yandex_compute_instance" "foo" {
   name = "cq-instance-test-instance-%[1]s"
   boot_disk {
     initialize_params {
@@ -29,7 +29,7 @@ resource "yandex_compute_instance" "cq-instance-test-instance-%[1]s" {
     }
   }
   network_interface {
-    subnet_id = yandex_vpc_subnet.cq-instance-test-subnet-%[1]s.id
+    subnet_id = yandex_vpc_subnet.foo.id
   }
   resources {
     cores = 2

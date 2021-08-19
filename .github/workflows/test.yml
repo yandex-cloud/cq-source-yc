@@ -48,8 +48,10 @@ jobs:
 
     - name: Test
       env:
-        YC_SERVICE_ACCOUNT_KEY_FILE: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
         YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
         YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
+        YC_SERVICE_ACCOUNT_KEY_FILE: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
+        YC_STORAGE_ACCESS_KEY: ${{ secrets.YC_SA_STATIC_KEY_ID }}
+        YC_STORAGE_SECRET_KEY: ${{ secrets.YC_SA_STATIC_SECRET }}
       run: go test -v ./... --tags=integration
     

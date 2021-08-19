@@ -31,8 +31,8 @@ func initS3Clint() (*s3.S3, error) {
 }
 
 func getS3StaticCredentials() (*credentials.Credentials, error) {
-	id, idOk := os.LookupEnv("YC_SA_STATIC_KEY_ID")
-	secret, secretOk := os.LookupEnv("YC_SA_STATIC_SECRET")
+	id, idOk := os.LookupEnv("YC_STORAGE_ACCESS_KEY")
+	secret, secretOk := os.LookupEnv("YC_STORAGE_SECRET_KEY")
 	filename, filenameOk := os.LookupEnv("YC_SA_STATIC_KEY_FILE")
 
 	switch {
