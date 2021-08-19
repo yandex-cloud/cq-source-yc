@@ -10,7 +10,7 @@ import (
 
 func StorageBuckets() *schema.Table {
 	return &schema.Table{
-		Name:        "yandex_object_buckets",
+		Name:        "yandex_storage_buckets",
 		Resolver:    fetchStorageBuckets,
 		Multiplex:   client.EmptyMultiplex,
 		IgnoreError: client.IgnoreErrorHandler,
