@@ -38,6 +38,7 @@ docker-create-net:
 docker-postgresql: docker-create-net
 	@echo "$(GREEN)Staring PostgreSQL server...$(NC)"
 	@test -n "$$(docker ps -a -q -f name=cq_provider_yandex_postgresql)" || \
+	pg_isready -q -h localhost -p 5432 || \
 	docker run -d --rm \
     --name=cq_provider_yandex_postgresql \
     --network=cq_provider_yandex_net \
