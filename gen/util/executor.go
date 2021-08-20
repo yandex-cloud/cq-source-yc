@@ -33,13 +33,6 @@ var templateFunctions = template.FuncMap{
 		names[len(names)-1] = inflection.Plural(names[len(names)-1])
 		return names
 	},
-	"replaceSymmetricKey": func(resource string) string {
-		if resource == "SymmetricKey" {
-			return "Key"
-		} else {
-			return resource
-		}
-	},
 }
 
 func Execute(dir TemplatesDir, data interface{}, out string) error {
