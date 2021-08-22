@@ -64,7 +64,7 @@ docker-minio: docker-create-net
 
 .PHONY: test
 test: docker-postgresql docker-build docker-minio
-	@docker run -it --rm \
+	@docker run --rm \
 	--name=cq_provider_yandex_test \
 	--network=cq_provider_yandex_net \
 	cq_provider_yandex_image
