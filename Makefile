@@ -38,7 +38,6 @@ docker-create-net:
 docker-postgresql: docker-create-net
 	@echo "$(GREEN)Staring PostgreSQL server...$(NC)"
 	@test -n "$$(docker ps -a -q -f name=cq_provider_yandex_postgresql)" || \
-	pg_isready -q -h localhost -p 5432 || \
 	docker run -d --rm \
     --name=cq_provider_yandex_postgresql \
     --network=cq_provider_yandex_net \
@@ -51,15 +50,15 @@ docker-postgresql: docker-create-net
 docker-minio: docker-create-net
 	@echo "$(GREEN)Starting MINIO...$(NC)"
 	@test -n "$$(docker ps -a -q -f name=cq_provider_yandex_s3)" || \
-	(docker run --rm -d \
+	docker run --rm -d \
     	--name cq_provider_yandex_s3 \
     	--network=cq_provider_yandex_net \
     	-e MINIO_ROOT_USER=user \
     	-e MINIO_ROOT_PASSWORD=12345678 \
     	-p 9000:9000 \
-    	minio/minio server /mnt/data && \
-	until nc -vz localhost 9000;do echo -n .; sleep 1;done;echo "" && \
-	env AWS_ACCESS_KEY_ID=user AWS_SECRET_ACCESS_KEY=12345678 aws --endpoint=http://localhost:9000 s3 mb s3://cq-test-bucket)
+    	minio/minio server /mnt/data
+	@until nc -vz localhost 9000;do echo -n .; sleep 1;done;echo ""
+	@env AWS_ACCESS_KEY_ID=user AWS_SECRET_ACCESS_KEY=12345678 aws --endpoint=http://localhost:9000 s3 mb s3://cq-test-bucket
 
 
 .PHONY: test
