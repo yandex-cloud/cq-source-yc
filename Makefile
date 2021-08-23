@@ -83,7 +83,7 @@ integration-tests: docker-postgresql docker-build-integration-tests
 	-e DATABASE_URL="host=cq_provider_yandex_postgresql user=postgres password=pass DB.name=postgres port=5432" \
 	-e YC_CLOUD_ID=$(YC_CLOUD_ID) \
 	-e YC_FOLDER_ID=$(YC_FOLDER_ID) \
-	-e YC_SERVICE_ACCOUNT_KEY_FILE=$(YC_SERVICE_ACCOUNT_KEY_FILE) \
+	-e YC_SERVICE_ACCOUNT_KEY_FILE='$(YC_SERVICE_ACCOUNT_KEY_FILE)' \
 	-e YC_STORAGE_ACCESS_KEY=$(YC_STORAGE_ACCESS_KEY) \
 	-e YC_STORAGE_SECRET_KEY=$(YC_STORAGE_SECRET_KEY) \
 	cq_provider_yandex_integration_tests
