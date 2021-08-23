@@ -78,7 +78,15 @@ func createTable(t *testing.T, table *schema.Table) {
 }
 
 func setupDatabase() (*pgxpool.Pool, error) {
-	dbCfg, err := pgxpool.ParseConfig("host=localhost user=postgres password=pass DB.name=postgres port=5432")
+	var (
+		dbCfg *pgxpool.Config
+		err   error
+	)
+	if config, ok := os.LookupEnv("DATABASE_URL"); ok {
+		dbCfg, err = pgxpool.ParseConfig(config)
+	} else {
+		dbCfg, err = pgxpool.ParseConfig("host=localhost user=postgres password=pass DB.name=postgres port=5432")
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse config. %w", err)
 	}
