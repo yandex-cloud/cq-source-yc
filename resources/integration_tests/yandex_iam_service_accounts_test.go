@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationIAMServiceAccount(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_iam_service_account" "cq-sa-test-sa-%[1]s" {
+resource "yandex_iam_service_account" "foo" {
   name = "cq-sa-test-sa-%[1]s"
 }
 `, suffix)

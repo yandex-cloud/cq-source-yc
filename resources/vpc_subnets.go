@@ -14,20 +14,21 @@ func VPCSubnets() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_subnets",
 		Resolver:     fetchVPCSubnets,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the subnet.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the subnet belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -110,14 +111,10 @@ func VPCSubnets() *schema.Table {
 func fetchVPCSubnets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
-
-	for _, f := range locations {
-		req := &vpc.ListSubnetsRequest{FolderId: f}
-		it := c.Services.VPC.Subnet().SubnetIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &vpc.ListSubnetsRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.VPC.Subnet().SubnetIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

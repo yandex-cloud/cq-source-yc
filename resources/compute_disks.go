@@ -14,20 +14,21 @@ func ComputeDisks() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_compute_disks",
 		Resolver:     fetchComputeDisks,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the disk.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the disk belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -122,14 +123,10 @@ func ComputeDisks() *schema.Table {
 func fetchComputeDisks(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
-
-	for _, f := range locations {
-		req := &compute.ListDisksRequest{FolderId: f}
-		it := c.Services.Compute.Disk().DiskIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &compute.ListDisksRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.Compute.Disk().DiskIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

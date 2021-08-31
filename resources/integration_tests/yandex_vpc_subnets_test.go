@@ -12,12 +12,12 @@ import (
 
 func TestIntegrationVPCSubnets(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_vpc_network" "cq-subnet-test-net-%[1]s" {
+resource "yandex_vpc_network" "foo" {
   name = "cq-subnet-test-net-%[1]s"
 }
 
-resource "yandex_vpc_subnet" "cq-subnet-test-subnet-%[1]s" {
-  network_id     = yandex_vpc_network.cq-subnet-test-net-%[1]s.id
+resource "yandex_vpc_subnet" "foo" {
+  network_id     = yandex_vpc_network.foo.id
   v4_cidr_blocks = ["10.2.0.0/16"]
   name           = "cq-subnet-test-subnet-%[1]s"
 }

@@ -14,20 +14,21 @@ func ComputeImages() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_compute_images",
 		Resolver:     fetchComputeImages,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the image.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the image belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -98,14 +99,10 @@ func ComputeImages() *schema.Table {
 func fetchComputeImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
-
-	for _, f := range locations {
-		req := &compute.ListImagesRequest{FolderId: f}
-		it := c.Services.Compute.Image().ImageIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &compute.ListImagesRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.Compute.Image().ImageIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

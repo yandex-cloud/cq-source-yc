@@ -23,7 +23,7 @@ var suffix = acctest.RandString(10)
 
 func testIntegrationHelper(t *testing.T, table *schema.Table, verificationBuilder func(res *providertest.ResourceIntegrationTestData) providertest.ResourceIntegrationVerification, tfTmpl string) {
 	cfg := client.Config{
-		CloudID:   os.Getenv("YC_CLOUD_ID"),
+		CloudIDs:  []string{os.Getenv("YC_CLOUD_ID")},
 		FolderIDs: []string{os.Getenv("YC_FOLDER_ID")},
 	}
 
@@ -78,7 +78,15 @@ func createTable(t *testing.T, table *schema.Table) {
 }
 
 func setupDatabase() (*pgxpool.Pool, error) {
-	dbCfg, err := pgxpool.ParseConfig("host=localhost user=postgres password=pass DB.name=postgres port=5432")
+	var (
+		dbCfg *pgxpool.Config
+		err   error
+	)
+	if config, ok := os.LookupEnv("DATABASE_URL"); ok {
+		dbCfg, err = pgxpool.ParseConfig(config)
+	} else {
+		dbCfg, err = pgxpool.ParseConfig("host=localhost user=postgres password=pass DB.name=postgres port=5432")
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse config. %w", err)
 	}

@@ -1,0 +1,7 @@
+{
+    Name:        {{.Name | printf "%q"}},
+    Type:        {{.Type}},
+    Description: {{.Description | printf "%q"}},
+    Resolver:    {{.Resolver}},
+    {{with .CreationOptions}}CreationOptions: schema.ColumnCreationOptions{Nullable: {{.Nullable}}, Unique: {{.Unique}}},{{end}}
+},

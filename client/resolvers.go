@@ -14,7 +14,7 @@ import (
 
 func ResolveFolderID(_ context.Context, meta schema.ClientMeta, r *schema.Resource, _ schema.Column) error {
 	client := meta.(*Client)
-	return r.Set("folder_id", client.FolderId)
+	return r.Set("folder_id", client.MultiplexedResourceId)
 }
 
 type IdStruct interface {
@@ -122,6 +122,10 @@ func ResolvePathAsTime(path string) schema.ColumnResolver {
 
 func EnumPathResolver(path string) schema.ColumnResolver {
 	return func(_ context.Context, meta schema.ClientMeta, r *schema.Resource, c schema.Column) error {
-		return r.Set(c.Name, funk.Get(r.Item, path, funk.WithAllowZero()).(fmt.Stringer).String())
+		if stringer, ok := funk.Get(r.Item, path, funk.WithAllowZero()).(fmt.Stringer); ok {
+			return r.Set(c.Name, stringer.String())
+		} else {
+			return nil
+		}
 	}
 }

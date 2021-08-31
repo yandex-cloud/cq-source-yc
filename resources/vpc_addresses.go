@@ -14,20 +14,21 @@ func VPCAddresses() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_vpc_addresses",
 		Resolver:     fetchVPCAddresses,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the address.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the address belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -110,14 +111,10 @@ func VPCAddresses() *schema.Table {
 func fetchVPCAddresses(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
-
-	for _, f := range locations {
-		req := &vpc.ListAddressesRequest{FolderId: f}
-		it := c.Services.VPC.Address().AddressIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &vpc.ListAddressesRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.VPC.Address().AddressIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

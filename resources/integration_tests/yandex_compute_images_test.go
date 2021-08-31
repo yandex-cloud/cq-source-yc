@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationComputeImages(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_compute_image" "cq-image-test-image-%[1]s" {
+resource "yandex_compute_image" "foo" {
   name         = "cq-image-test-image-%[1]s"
   source_image = "fd8vmcue7aajpmeo39kk"
 }

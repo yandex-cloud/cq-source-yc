@@ -14,20 +14,21 @@ func KMSSymmetricKeys() *schema.Table {
 	return &schema.Table{
 		Name:         "yandex_kms_symmetric_keys",
 		Resolver:     fetchKMSSymmetricKeys,
-		Multiplex:    client.FolderMultiplex,
+		Multiplex:    client.MultiplexBy(client.Folders),
 		IgnoreError:  client.IgnoreErrorHandler,
 		DeleteFilter: client.DeleteFolderFilter,
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Description: "ID of the symmetric_key.",
-				Resolver:    client.ResolveResourceId,
+				Name:            "id",
+				Type:            schema.TypeString,
+				Description:     "ID of the resource.",
+				Resolver:        client.ResolveResourceId,
+				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
 			},
 			{
 				Name:        "folder_id",
 				Type:        schema.TypeString,
-				Description: "ID of the folder that the symmetric_key belongs to.",
+				Description: "ID of the folder that the resource belongs to.",
 				Resolver:    client.ResolveFolderID,
 			},
 			{
@@ -85,16 +86,10 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    client.EnumPathResolver("PrimaryVersion.Algorithm"),
 			},
 			{
-				Name:        "primary_version_created_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.CreatedAt.Seconds"),
-			},
-			{
-				Name:        "primary_version_created_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.CreatedAt.Nanos"),
+				Name:        "primary_version_created_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time when the key version was created.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
 				Name:        "primary_version_primary",
@@ -103,16 +98,16 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    schema.PathResolver("PrimaryVersion.Primary"),
 			},
 			{
-				Name:        "primary_version_destroy_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.DestroyAt.Seconds"),
+				Name:        "primary_version_destroy_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time when the key version is going to be destroyed. Empty unless the status\n is `SCHEDULED_FOR_DESTRUCTION`.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
-				Name:        "primary_version_destroy_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("PrimaryVersion.DestroyAt.Nanos"),
+				Name:        "primary_version_hosted_by_hsm",
+				Type:        schema.TypeBool,
+				Description: "Indication of the version that is hosted by HSM.",
+				Resolver:    schema.PathResolver("PrimaryVersion.HostedByHsm"),
 			},
 			{
 				Name:        "default_algorithm",
@@ -121,16 +116,10 @@ func KMSSymmetricKeys() *schema.Table {
 				Resolver:    client.EnumPathResolver("DefaultAlgorithm"),
 			},
 			{
-				Name:        "rotated_at_seconds",
-				Type:        schema.TypeBigInt,
-				Description: "",
-				Resolver:    schema.PathResolver("RotatedAt.Seconds"),
-			},
-			{
-				Name:        "rotated_at_nanos",
-				Type:        schema.TypeInt,
-				Description: "",
-				Resolver:    schema.PathResolver("RotatedAt.Nanos"),
+				Name:        "rotated_at",
+				Type:        schema.TypeTimestamp,
+				Description: "Time of the last key rotation (time when the last version was created).\n Empty if the key does not have versions yet.",
+				Resolver:    client.ResolveAsTime,
 			},
 			{
 				Name:        "rotation_period_seconds",
@@ -158,14 +147,10 @@ func KMSSymmetricKeys() *schema.Table {
 func fetchKMSSymmetricKeys(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
 	c := meta.(*client.Client)
 
-	locations := []string{c.FolderId}
-
-	for _, f := range locations {
-		req := &kms.ListSymmetricKeysRequest{FolderId: f}
-		it := c.Services.KMS.SymmetricKey().SymmetricKeyIterator(ctx, req)
-		for it.Next() {
-			res <- it.Value()
-		}
+	req := &kms.ListSymmetricKeysRequest{FolderId: c.MultiplexedResourceId}
+	it := c.Services.KMS.SymmetricKey().SymmetricKeyIterator(ctx, req)
+	for it.Next() {
+		res <- it.Value()
 	}
 
 	return nil

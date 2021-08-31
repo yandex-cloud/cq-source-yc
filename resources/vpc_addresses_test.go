@@ -20,24 +20,25 @@ import (
 )
 
 func TestVPCAddresses(t *testing.T) {
-	var serv *grpc.Server
+	vpcSvc, serv, err := createAddressServer()
+	if err != nil {
+		t.Fatal(err)
+	}
 	resource := providertest.ResourceTestData{
 		Table: resources.VPCAddresses(),
 		Config: client.Config{
-			FolderIDs: []string{"testFolder"},
+			FolderIDs: []string{"test"},
 		},
 		Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
-			vpcSvc, serv1, err := createAddressServer()
-			serv = serv1
-			if err != nil {
-				return nil, err
-			}
 			c := client.NewYandexClient(logging.New(&hclog.LoggerOptions{
 				Level: hclog.Warn,
-			}), []string{"testFolder"}, &client.Services{
+			}), []string{"test"}, nil, nil, &client.Services{
 				VPC: vpcSvc,
-			})
+			}, nil)
 			return c, nil
+		},
+		Verifiers: []providertest.Verifier{
+			providertest.VerifyAtLeastOneRow("yandex_vpc_addresses"),
 		},
 	}
 	providertest.TestResource(t, resources.Provider, resource)
@@ -56,12 +57,6 @@ func NewFakeAddressServiceServer() (*FakeAddressServiceServer, error) {
 	if err != nil {
 		return nil, err
 	}
-	var externalIpv4Address vpc1.ExternalIpv4Address
-	err = faker.FakeData(&externalIpv4Address)
-	if err != nil {
-		return nil, err
-	}
-	address.Address = &vpc1.Address_ExternalIpv4Address{ExternalIpv4Address: &externalIpv4Address}
 	return &FakeAddressServiceServer{Address: &address}, nil
 }
 
@@ -70,7 +65,7 @@ func (s *FakeAddressServiceServer) List(context.Context, *vpc1.ListAddressesRequ
 }
 
 func createAddressServer() (*vpc.VPC, *grpc.Server, error) {
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":0")
 
 	if err != nil {
 		return nil, nil, err
@@ -92,7 +87,7 @@ func createAddressServer() (*vpc.VPC, *grpc.Server, error) {
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 
 	if err != nil {
 		return nil, nil, err

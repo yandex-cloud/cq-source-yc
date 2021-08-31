@@ -12,7 +12,7 @@ import (
 
 func TestIntegrationKMSSymmetricKeys(t *testing.T) {
 	var tfTmpl = fmt.Sprintf(`
-resource "yandex_kms_symmetric_key" "cq-keys-test-keys-%[1]s" {
+resource "yandex_kms_symmetric_key" "foo" {
   name = "cq-keys-test-keys-%[1]s"
 }
 `, suffix)
