@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+/__debug_bin
 
 # Test binary, built with `go test -c`
 *.test
@@ -28,11 +29,18 @@ vendor/
 /config.hcl
 /cq-provider-yandex
 /.cq_reattach
+/cloudquery.log
+/.cq
 
 # Idea project files
 modules.xml
 .idea/misc.xml
 *.ipr
 
+/.vscode
+
 # Secrets
 /key.json
+
+
+/build

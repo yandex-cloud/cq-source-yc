@@ -37,7 +37,7 @@ type Client struct {
 	// All yandex services initialized by client
 	Services *Services
 	// S3 client to manage objects storages
-	S3Client *s3.S3
+	s3Client *s3.S3
 
 	// this is set by table client multiplexer
 	MultiplexedResourceId string
@@ -53,7 +53,7 @@ func (c Client) withResource(id string) *Client {
 		folders:               c.folders,
 		clouds:                c.clouds,
 		Services:              c.Services,
-		S3Client:              c.S3Client,
+		s3Client:              c.s3Client,
 		logger:                c.logger.With("id", id),
 		MultiplexedResourceId: id,
 	}
@@ -91,13 +91,20 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 		return nil, err
 	}
 
+	client := NewYandexClient(logger, folders, clouds, providerConfig.OrganizationIDs, services, nil)
+	return client, nil
+}
+
+func (c *Client) GetS3Client(ctx context.Context) (*s3.S3, error) {
+	if c.s3Client != nil {
+		return c.s3Client, nil
+	}
 	s3Client, err := initS3Clint()
 	if err != nil {
 		return nil, err
 	}
-
-	client := NewYandexClient(logger, folders, clouds, providerConfig.OrganizationIDs, services, s3Client)
-	return client, nil
+	c.s3Client = s3Client
+	return c.s3Client, nil
 }
 
 func buildSDK() (*ycsdk.SDK, error) {
@@ -119,7 +126,7 @@ func getCredentials() (ycsdk.Credentials, error) {
 	if val, ok := os.LookupEnv("YC_SERVICE_ACCOUNT_KEY_FILE"); ok {
 		contents, _, err := pathOrContents(val)
 		if err != nil {
-			return nil, fmt.Errorf("Error loading credentials: %s", err)
+			return nil, fmt.Errorf("error loading credentials: %s", err)
 		}
 
 		key, err := iamKeyFromJSONContent(contents)
@@ -304,6 +311,6 @@ func NewYandexClient(log hclog.Logger, folders, clouds, organizations []string, 
 		folders:       folders,
 		clouds:        clouds,
 		Services:      services,
-		S3Client:      s3Client,
+		s3Client:      s3Client,
 	}
 }

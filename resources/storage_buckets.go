@@ -60,15 +60,18 @@ type storageBucket struct {
 	Rules []*s3.ServerSideEncryptionRule
 }
 
-func fetchStorageBuckets(_ context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
-	c := meta.(*client.Client).S3Client
-	listResp, err := c.ListBuckets(&s3.ListBucketsInput{})
+func fetchStorageBuckets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+	c, err := meta.(*client.Client).GetS3Client(ctx)
+	if err != nil {
+		return err
+	}
+	listResp, err := c.ListBucketsWithContext(ctx, &s3.ListBucketsInput{})
 	if err != nil {
 		return err
 	}
 
 	for _, value := range listResp.Buckets {
-		encryptResp, _ := c.GetBucketEncryption(&s3.GetBucketEncryptionInput{
+		encryptResp, _ := c.GetBucketEncryptionWithContext(ctx, &s3.GetBucketEncryptionInput{
 			Bucket: value.Name,
 		})
 		if encryptResp != nil && encryptResp.ServerSideEncryptionConfiguration != nil {
