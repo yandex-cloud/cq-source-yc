@@ -20,7 +20,7 @@ func OrganizationManagerFederations() *schema.Table {
 				Type:            schema.TypeString,
 				Description:     "ID of the resource.",
 				Resolver:        client.ResolveResourceId,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
+				CreationOptions: schema.ColumnCreationOptions{NotNull: true, Unique: true},
 			},
 			{
 				Name:        "organization_id",
@@ -99,7 +99,7 @@ func OrganizationManagerFederations() *schema.Table {
 
 }
 
-func fetchOrganizationManagerFederations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchOrganizationManagerFederations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
 	req := &saml.ListFederationsRequest{OrganizationId: c.MultiplexedResourceId}

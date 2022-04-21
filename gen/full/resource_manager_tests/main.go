@@ -20,6 +20,6 @@ func generate(resource string) {
 }
 
 func main() {
-	generate("Cloud")
-	generate("Folder")
+	//generate("Cloud")
+	//generate("Folder")
 }

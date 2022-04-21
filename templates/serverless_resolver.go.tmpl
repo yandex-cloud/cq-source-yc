@@ -1,4 +1,4 @@
-func fetchServerless{{.Resource | plural}}(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchServerless{{.Resource | plural}}(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
 	req := &{{.Resource | flat}}.List{{.Resource}}Request{FolderId: c.MultiplexedResourceId}

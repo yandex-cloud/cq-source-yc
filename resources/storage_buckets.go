@@ -19,7 +19,7 @@ func StorageBuckets() *schema.Table {
 				Name:            "id",
 				Type:            schema.TypeString,
 				Resolver:        schema.PathResolver("Name"),
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
+				CreationOptions: schema.ColumnCreationOptions{NotNull: false, Unique: true},
 			},
 		},
 		Relations: []*schema.Table{
@@ -60,7 +60,7 @@ type storageBucket struct {
 	Rules []*s3.ServerSideEncryptionRule
 }
 
-func fetchStorageBuckets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchStorageBuckets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c, err := meta.(*client.Client).GetS3Client(ctx)
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ func fetchStorageBuckets(ctx context.Context, meta schema.ClientMeta, _ *schema.
 	return nil
 }
 
-func fetchStorageBucketServerSideEncryptionRules(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan interface{}) error {
+func fetchStorageBucketServerSideEncryptionRules(_ context.Context, _ schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
 	storageObject := parent.Item.(storageBucket)
 	for _, rule := range storageObject.Rules {
 		res <- rule
