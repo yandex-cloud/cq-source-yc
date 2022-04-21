@@ -23,10 +23,8 @@ func StartKmsServer(t *testing.T, ctx context.Context) (*kms.KMS, error) {
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerKmsMocks(t, serv)
@@ -34,7 +32,9 @@ func StartKmsServer(t *testing.T, ctx context.Context) (*kms.KMS, error) {
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {

@@ -23,10 +23,8 @@ func StartK8SServer(t *testing.T, ctx context.Context) (*k8s.Kubernetes, error) 
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerK8SMocks(t, serv)
@@ -34,7 +32,9 @@ func StartK8SServer(t *testing.T, ctx context.Context) (*k8s.Kubernetes, error) 
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {

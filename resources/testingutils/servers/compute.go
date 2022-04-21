@@ -23,10 +23,8 @@ func StartComputeServer(t *testing.T, ctx context.Context) (*compute.Compute, er
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerComputeMocks(t, serv)
@@ -34,7 +32,9 @@ func StartComputeServer(t *testing.T, ctx context.Context) (*compute.Compute, er
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {

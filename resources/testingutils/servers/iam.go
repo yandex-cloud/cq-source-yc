@@ -23,10 +23,8 @@ func StartIamServer(t *testing.T, ctx context.Context) (*iam.IAM, error) {
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerIamMocks(t, serv)
@@ -34,7 +32,9 @@ func StartIamServer(t *testing.T, ctx context.Context) (*iam.IAM, error) {
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {

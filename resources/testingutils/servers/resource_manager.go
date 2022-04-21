@@ -24,10 +24,8 @@ func StartResourceManagerServer(t *testing.T, ctx context.Context) (*resourceman
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerResourceManagerMocks(t, serv)
@@ -35,7 +33,9 @@ func StartResourceManagerServer(t *testing.T, ctx context.Context) (*resourceman
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {

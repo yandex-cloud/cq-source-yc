@@ -23,10 +23,8 @@ func StartOrganizationManagerSAMLServer(t *testing.T, ctx context.Context) (*org
 
 	serv := grpc.NewServer()
 	go func() {
-		select {
-		case <-ctx.Done():
-			serv.Stop()
-		}
+		<-ctx.Done()
+		serv.Stop()
 	}()
 
 	err = registerOrganizationManagerSAMLMocks(t, serv)
@@ -34,7 +32,9 @@ func StartOrganizationManagerSAMLServer(t *testing.T, ctx context.Context) (*org
 		return nil, err
 	}
 
-	go serv.Serve(lis)
+	go func() {
+		_ = serv.Serve(lis)
+	}()
 
 	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
 	if err != nil {
