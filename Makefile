@@ -32,9 +32,6 @@ postgres:
 
 # Tests
 
-.PHONY: gen-test-mocks
-	@mockgen github.com/yandex-cloud/go-sdk/gen/compute DiskServiceServer -destination=mock
-
 .PHONY: docker-build-local-tests
 docker-build-local-tests:
 	@echo "$(GREEN)Building local tests image...$(NC)"

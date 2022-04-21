@@ -3,17 +3,17 @@ module github.com/yandex-cloud/cq-provider-yandex
 go 1.17
 
 require (
-	github.com/Masterminds/squirrel v1.5.0
+	github.com/Masterminds/squirrel v1.5.0 // indirect
 	github.com/aws/aws-sdk-go v1.37.0
 	github.com/cloudquery/cq-provider-sdk v0.8.19
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v1.0.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/jackc/pgx/v4 v4.13.0
+	github.com/jackc/pgx/v4 v4.13.0 // indirect
 	github.com/jhump/protoreflect v1.9.0
 	github.com/jinzhu/inflection v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/thoas/go-funk v0.9.1
 	github.com/yandex-cloud/go-genproto v0.0.0-20220419100608-bb4f0fc6a2d8
 	github.com/yandex-cloud/go-sdk v0.0.0-20220419102148-7e6af5c545b6
@@ -25,12 +25,10 @@ require (
 require (
 	github.com/cloudquery/faker/v3 v3.7.5
 	github.com/golang/mock v1.6.0
-	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 )
 
 require (
 	github.com/agext/levenshtein v1.2.3 // indirect
-	github.com/apparentlymart/go-cidr v1.1.0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/creasty/defaults v1.5.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -59,6 +57,8 @@ require (
 	github.com/jackc/pgtype v1.8.1 // indirect
 	github.com/jackc/puddle v1.1.4 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/lib/pq v1.10.3 // indirect
@@ -72,6 +72,7 @@ require (
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
@@ -86,7 +87,8 @@ require (
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/genproto v0.0.0-20211129164237-f09f9a12af12 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/cloudquery/faker/v3 v3.7.5 => /Users/udav318/IdeaProjects/old-faker
+replace github.com/cloudquery/faker/v3 v3.7.5 => github.com/daniil-ushkov/faker/v3 v3.7.5-0.20210727153506-26b3d57a100b
