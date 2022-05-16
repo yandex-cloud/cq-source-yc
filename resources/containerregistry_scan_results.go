@@ -21,7 +21,7 @@ func ContainerRegistryScanResults() *schema.Table {
 				Type:            schema.TypeString,
 				Description:     "ID of the resource.",
 				Resolver:        client.ResolveResourceId,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
+				CreationOptions: schema.ColumnCreationOptions{NotNull: true, Unique: true},
 			},
 			{
 				Name:        "image_id",
@@ -82,7 +82,7 @@ func ContainerRegistryScanResults() *schema.Table {
 
 }
 
-func fetchContainerRegistryScanResults(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchContainerRegistryScanResults(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
 	g := errgroup.Group{}

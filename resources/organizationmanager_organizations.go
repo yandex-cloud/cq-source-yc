@@ -20,7 +20,7 @@ func OrganizationManagerOrganizations() *schema.Table {
 				Type:            schema.TypeString,
 				Description:     "ID of the resource.",
 				Resolver:        client.ResolveResourceId,
-				CreationOptions: schema.ColumnCreationOptions{Nullable: false, Unique: true},
+				CreationOptions: schema.ColumnCreationOptions{NotNull: true, Unique: true},
 			},
 			{
 				Name:        "created_at",
@@ -50,7 +50,7 @@ func OrganizationManagerOrganizations() *schema.Table {
 	}
 }
 
-func fetchOrganizationManagerOrganizations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan interface{}) error {
+func fetchOrganizationManagerOrganizations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
 	req := &organizationmanager.ListOrganizationsRequest{}

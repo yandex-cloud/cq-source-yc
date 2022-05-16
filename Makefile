@@ -22,6 +22,14 @@ generate-resources: cloudapi
 debug:
 	@env CQ_PROVIDER_DEBUG=1 YC_TOKEN=$(YC_TOKEN) go run main.go
 
+.PHONY: postgres
+postgres:
+	@docker run -d --rm \
+	 --name=cq-postgres \
+	 -e POSTGRES_PASSWORD=pass \
+	 -p 5432:5432 \
+	 postgres:latest
+
 # Tests
 
 .PHONY: docker-build-local-tests
