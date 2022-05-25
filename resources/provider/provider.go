@@ -9,9 +9,9 @@ import (
 
 func Provider() *provider.Provider {
 	return &provider.Provider{
-		Name:       "yandex",
-		Version:    "dev",
-		Configure:  client.Configure,
+		Name:      "yandex",
+		Version:   "dev",
+		Configure: client.Configure,
 		ResourceMap: map[string]*schema.Table{
 			"AccessBindingsByCloud":            resources.AccessBindingsByCloud(),
 			"AccessBindingsByFolder":           resources.AccessBindingsByFolder(),
