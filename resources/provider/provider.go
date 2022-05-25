@@ -9,17 +9,11 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-var (
-	//go:embed migrations/*/*.sql
-	migrationFiles embed.FS
-)
-
 func Provider() *provider.Provider {
 	return &provider.Provider{
 		Name:       "yandex",
 		Version:    "dev",
 		Configure:  client.Configure,
-		Migrations: migrationFiles,
 		ResourceMap: map[string]*schema.Table{
 			"AccessBindingsByCloud":            resources.AccessBindingsByCloud(),
 			"AccessBindingsByFolder":           resources.AccessBindingsByFolder(),

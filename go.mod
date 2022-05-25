@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/Masterminds/squirrel v1.5.0 // indirect
 	github.com/aws/aws-sdk-go v1.37.0
-	github.com/cloudquery/cq-provider-sdk v0.8.19
+	github.com/cloudquery/cq-provider-sdk v0.10.1
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v1.0.0
 	github.com/iancoleman/strcase v0.2.0
