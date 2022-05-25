@@ -1,8 +1,6 @@
 package provider
 
 import (
-	"embed"
-
 	"github.com/cloudquery/cq-provider-sdk/provider"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
