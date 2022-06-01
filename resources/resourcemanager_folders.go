@@ -14,7 +14,7 @@ func ResourceManagerFolders() *schema.Table {
 		Resolver:    fetchResourceManagerFolders,
 		Multiplex:   client.MultiplexBy(client.Folders),
 		IgnoreError: client.IgnoreErrorHandler,
-		Options:      schema.TableCreationOptions{PrimaryKeys: []string{"cloud_id", "id"}},
+		Options:     schema.TableCreationOptions{PrimaryKeys: []string{"cloud_id", "id"}},
 		Columns: []schema.Column{
 			{
 				Name:            "id",
