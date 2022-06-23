@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/cloudquery/cq-provider-sdk/provider/diag"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
 	"github.com/mitchellh/go-homedir"
@@ -59,7 +60,7 @@ func (c Client) withResource(id string) *Client {
 	}
 }
 
-func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
+func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, diag.Diagnostics) {
 	providerConfig := config.(*Config)
 	clouds := providerConfig.CloudIDs
 	folders := providerConfig.FolderIDs
@@ -67,28 +68,28 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	var err error
 	sdk, err := buildSDK()
 	if err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 
 	extractedClouds, err := getClouds(sdk, providerConfig.OrganizationIDs)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 	clouds = unionStrings(clouds, extractedClouds)
 
 	extractedFolders, err := getFolders(logger, sdk, providerConfig.FolderFilter, clouds)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 	folders = unionStrings(folders, extractedFolders)
 
 	if err = validateFolders(folders); err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 
 	services, err := initServices(context.Background(), sdk)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 
 	client := NewYandexClient(logger, folders, clouds, providerConfig.OrganizationIDs, services, nil)
@@ -101,7 +102,7 @@ func (c *Client) GetS3Client(ctx context.Context) (*s3.S3, error) {
 	}
 	s3Client, err := initS3Clint()
 	if err != nil {
-		return nil, err
+		return nil, diag.FromError(err, diag.INTERNAL)
 	}
 	c.s3Client = s3Client
 	return c.s3Client, nil

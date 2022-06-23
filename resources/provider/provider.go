@@ -1,25 +1,17 @@
 package provider
 
 import (
-	"embed"
-
 	"github.com/cloudquery/cq-provider-sdk/provider"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-var (
-	//go:embed migrations/*/*.sql
-	migrationFiles embed.FS
-)
-
 func Provider() *provider.Provider {
 	return &provider.Provider{
-		Name:       "yandex",
-		Version:    "dev",
-		Configure:  client.Configure,
-		Migrations: migrationFiles,
+		Name:      "yandex",
+		Version:   "dev",
+		Configure: client.Configure,
 		ResourceMap: map[string]*schema.Table{
 			"AccessBindingsByCloud":            resources.AccessBindingsByCloud(),
 			"AccessBindingsByFolder":           resources.AccessBindingsByFolder(),
