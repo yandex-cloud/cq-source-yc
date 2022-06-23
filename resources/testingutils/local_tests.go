@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudquery/cq-provider-sdk/logging"
 	"github.com/cloudquery/cq-provider-sdk/provider"
+	"github.com/cloudquery/cq-provider-sdk/provider/diag"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	providertest "github.com/cloudquery/cq-provider-sdk/provider/testing"
 	"github.com/hashicorp/go-hclog"
@@ -83,7 +84,7 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verif
 					FolderIDs: []string{"test-folder-id"},
 				}
 			},
-			Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, error) {
+			Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, diag.Diagnostics) {
 				log := logging.New(&hclog.LoggerOptions{Level: hclog.Warn})
 				folderIds := []string{"test-folder-id"}
 				cloudIds := []string{"test-cloud-id"}
