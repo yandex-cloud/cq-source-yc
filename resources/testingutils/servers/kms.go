@@ -12,6 +12,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/kms"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -36,7 +37,7 @@ func StartKmsServer(t *testing.T, ctx context.Context) (*kms.KMS, error) {
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), insecure.NewCredentials())
 	if err != nil {
 		return nil, err
 	}
