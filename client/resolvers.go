@@ -93,8 +93,8 @@ func resolvePathAsSmth(path string, converter Converter) schema.ColumnResolver {
 	return func(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		value := funk.Get(resource.Item, path, funk.WithAllowZero())
 		if value == nil {
-			meta.Logger().Trace("using column default value", "column", c.Name, "default", c.Default)
-			return resource.Set(c.Name, c.Default)
+			meta.Logger().Trace("no column value specified", "column", c.Name)
+			return resource.Set(c.Name, nil)
 		}
 
 		res, err := converter(value)
