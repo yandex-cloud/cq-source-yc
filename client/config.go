@@ -11,9 +11,15 @@ type Config struct {
 
 func (c Config) Example() string {
 	return `---
-# Optional. Filter as described https://cloud.yandex.com/docs/resource-manager/grpc/folder_service#List
-folder_filter: ""
-# Optional. If not specified either using all folders accessible.
-folder_ids: [<CHANGE_THIS_TO_YOUR_FOLDER_ID>]
+Optional. If not specified either using all clouds accessible.
+cloud_ids:
+
+Optional. If not specified either using all folders accessible. Might not work without folder specified
+folder_ids:
+
+Optional. Filter as described https://github.com/yandex-cloud/cloudapi/blob/master/yandex/cloud/resourcemanager/v1/folder_service.proto
+folder_filter: 
+
+list of resources to fetch
 `
 }
