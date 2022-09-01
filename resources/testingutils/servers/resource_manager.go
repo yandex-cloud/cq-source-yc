@@ -13,7 +13,6 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -38,7 +37,7 @@ func StartResourceManagerServer(t *testing.T, ctx context.Context) (*resourceman
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String(), insecure.NewCredentials())
+	conn, err := grpc.Dial(lis.Addr().String())
 	if err != nil {
 		return nil, err
 	}

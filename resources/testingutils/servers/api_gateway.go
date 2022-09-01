@@ -12,7 +12,6 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/apigateway"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -37,7 +36,7 @@ func StartApiGatewayServer(t *testing.T, ctx context.Context) (*apigateway.Apiga
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String(), insecure.NewCredentials())
+	conn, err := grpc.Dial(lis.Addr().String())
 	if err != nil {
 		return nil, err
 	}

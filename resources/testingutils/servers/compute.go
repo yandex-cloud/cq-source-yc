@@ -12,7 +12,6 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -37,7 +36,7 @@ func StartComputeServer(t *testing.T, ctx context.Context) (*compute.Compute, er
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String(), insecure.NewCredentials())
+	conn, err := grpc.Dial(lis.Addr().String())
 	if err != nil {
 		return nil, err
 	}

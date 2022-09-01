@@ -84,7 +84,7 @@ func create{{.resource}}Server() (*{{.service | flat}}.{{.service}}, *grpc.Serve
 		}
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String(), insecure.NewCredentials())
+	conn, err := grpc.Dial(lis.Addr().String())
 
 	if err != nil {
 		return nil, nil, err
