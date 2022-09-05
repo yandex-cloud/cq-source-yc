@@ -22,6 +22,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+const defaultEndpoint = "api.cloud.yandex.net:443"
 const defaultFolderIdName = "<CHANGE_THIS_TO_YOUR_FOLDER_ID>"
 
 type AccessBindingsLister interface {
@@ -62,11 +63,15 @@ func (c Client) withResource(id string) *Client {
 
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, diag.Diagnostics) {
 	providerConfig := config.(*Config)
+	if providerConfig.Endpoint == "" {
+		providerConfig.Endpoint = defaultEndpoint
+	}
+
 	clouds := providerConfig.CloudIDs
 	folders := providerConfig.FolderIDs
 
 	var err error
-	sdk, err := buildSDK()
+	sdk, err := buildSDK(providerConfig.Endpoint)
 	if err != nil {
 		return nil, diag.FromError(err, diag.INTERNAL)
 	}
@@ -108,7 +113,7 @@ func (c *Client) GetS3Client(ctx context.Context) (*s3.S3, error) {
 	return c.s3Client, nil
 }
 
-func buildSDK() (*ycsdk.SDK, error) {
+func buildSDK(endpoint string) (*ycsdk.SDK, error) {
 	ctx := context.Background()
 	cred, err := getCredentials()
 	if err != nil {
@@ -116,6 +121,7 @@ func buildSDK() (*ycsdk.SDK, error) {
 	}
 	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
 		Credentials: cred,
+		Endpoint:    endpoint,
 	})
 	if err != nil {
 		return nil, err
