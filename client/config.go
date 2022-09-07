@@ -2,11 +2,11 @@ package client
 
 // Config defines Provider Configuration
 type Config struct {
-	OrganizationIDs []string `yml:"organization_ids,optional"`
-	CloudIDs        []string `yml:"cloud_ids,optional"`
-	FolderIDs       []string `yml:"folder_ids,optional"`
+	OrganizationIDs []string `yaml:"organization_ids"`
+	CloudIDs        []string `yaml:"cloud_ids"`
+	FolderIDs       []string `yaml:"folder_ids"`
 
-	FolderFilter string `yml:"folder_filter,optional"`
+	FolderFilter string `yaml:"folder_filter"`
 }
 
 func (c Config) Example() string {
@@ -19,7 +19,5 @@ folder_ids:
 
 Optional. Filter as described https://github.com/yandex-cloud/cloudapi/blob/master/yandex/cloud/resourcemanager/v1/folder_service.proto
 folder_filter: 
-
-list of resources to fetch
 `
 }

@@ -85,9 +85,10 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verif
 				}
 			},
 			Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, diag.Diagnostics) {
-				log := logging.New(&hclog.LoggerOptions{Level: hclog.Warn})
+				log := logging.New(&hclog.LoggerOptions{Level: hclog.Debug})
 				folderIds := []string{"test-folder-id"}
 				cloudIds := []string{"test-cloud-id"}
+				organizationIds := []string{"test-organization-id"}
 				services := &client.Services{
 					Compute:                 computeServ,
 					K8S:                     k8sServ,
@@ -101,7 +102,7 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verif
 					ApiGateway:              apiGatewayServ,
 					ResourceManager:         resourceManagerServ,
 				}
-				c := client.NewYandexClient(log, folderIds, cloudIds, nil, services, nil)
+				c := client.NewYandexClient(log, folderIds, cloudIds, organizationIds, services, nil)
 				return c, nil
 			},
 		},

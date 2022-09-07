@@ -13,6 +13,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -37,7 +38,7 @@ func StartOrganizationManagerServer(t *testing.T, ctx context.Context) (*organiz
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
@@ -58,6 +59,8 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 
 	var organization organizationmanager1.Organization
 	err = faker.FakeData(&organization)
+	t.Log("======= Organization:")
+	t.Log(organization)
 	if err != nil {
 		return err
 	}
@@ -74,6 +77,8 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 		AnyTimes()
 	var accessBinding access.AccessBinding
 	err = faker.FakeData(&accessBinding)
+	t.Log("======= accesBinding:")
+	t.Log(accessBinding)
 	if err != nil {
 		return err
 	}

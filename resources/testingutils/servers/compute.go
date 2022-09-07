@@ -12,6 +12,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -36,7 +37,7 @@ func StartComputeServer(t *testing.T, ctx context.Context) (*compute.Compute, er
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
@@ -59,6 +60,8 @@ func registerComputeMocks(t *testing.T, serv *grpc.Server) error {
 
 	var disk compute1.Disk
 	err = faker.FakeData(&disk)
+	t.Log("===== DISK:")
+	t.Log(disk)
 	if err != nil {
 		return err
 	}

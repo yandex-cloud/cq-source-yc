@@ -12,6 +12,7 @@ import (
 	organizationmanager "github.com/yandex-cloud/go-sdk/gen/organizationmanager/saml"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -36,7 +37,7 @@ func StartOrganizationManagerSAMLServer(t *testing.T, ctx context.Context) (*org
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
@@ -57,6 +58,8 @@ func registerOrganizationManagerSAMLMocks(t *testing.T, serv *grpc.Server) error
 
 	var federation organizationmanager1.Federation
 	err = faker.FakeData(&federation)
+	t.Log("======= Federation:")
+	t.Log(federation)
 	if err != nil {
 		return err
 	}

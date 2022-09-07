@@ -115,6 +115,7 @@ func buildSDK() (*ycsdk.SDK, error) {
 	}
 	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
 		Credentials: cred,
+		Endpoint:    "api.cloud-preprod.yandex.net:443",
 	})
 	if err != nil {
 		return nil, err

@@ -59,7 +59,7 @@ docker-postgresql: docker-create-net
     -e POSTGRES_PASSWORD=pass \
     -p 5432:5432 \
     postgres
-	# @echo "$(GREEN)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432;do echo -n .;sleep 1;done;echo ""
+	@echo "$(GREEN)Waiting for connection to PostgreSQL server...$(NC)"; until pg_isready -q -h localhost -p 5432;do echo -n .;sleep 1;done;echo ""
 
 .PHONY: docker-minio
 docker-minio: docker-create-net

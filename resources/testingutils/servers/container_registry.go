@@ -12,6 +12,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/containerregistry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -36,7 +37,7 @@ func StartContainerRegistryServer(t *testing.T, ctx context.Context) (*container
 		_ = serv.Serve(lis)
 	}()
 
-	conn, err := grpc.Dial(lis.Addr().String())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}

@@ -25,6 +25,7 @@ require (
 require (
 	github.com/cloudquery/faker/v3 v3.7.7
 	github.com/golang/mock v1.6.0
+	github.com/ompluscator/dynamic-struct v1.3.0
 )
 
 require (
@@ -90,4 +91,4 @@ require (
 	honnef.co/go/tools v0.3.3 // indirect
 )
 
-replace github.com/cloudquery/faker/v3 v3.7.5 => github.com/daniil-ushkov/faker/v3 v3.7.5-0.20210727153506-26b3d57a100b
+replace github.com/cloudquery/faker/v3 v3.7.7 => github.com/daniil-ushkov/faker/v3 v3.7.5-0.20210727153506-26b3d57a100b
