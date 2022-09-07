@@ -59,8 +59,6 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 
 	var organization organizationmanager1.Organization
 	err = faker.FakeData(&organization)
-	t.Log("======= Organization:")
-	t.Log(organization)
 	if err != nil {
 		return err
 	}
@@ -77,8 +75,6 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 		AnyTimes()
 	var accessBinding access.AccessBinding
 	err = faker.FakeData(&accessBinding)
-	t.Log("======= accesBinding:")
-	t.Log(accessBinding)
 	if err != nil {
 		return err
 	}

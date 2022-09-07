@@ -58,8 +58,6 @@ func registerOrganizationManagerSAMLMocks(t *testing.T, serv *grpc.Server) error
 
 	var federation organizationmanager1.Federation
 	err = faker.FakeData(&federation)
-	t.Log("======= Federation:")
-	t.Log(federation)
 	if err != nil {
 		return err
 	}

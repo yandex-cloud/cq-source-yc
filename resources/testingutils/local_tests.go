@@ -85,7 +85,7 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verif
 				}
 			},
 			Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, diag.Diagnostics) {
-				log := logging.New(&hclog.LoggerOptions{Level: hclog.Debug})
+				log := logging.New(&hclog.LoggerOptions{Level: hclog.Warn})
 				folderIds := []string{"test-folder-id"}
 				cloudIds := []string{"test-cloud-id"}
 				organizationIds := []string{"test-organization-id"}

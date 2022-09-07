@@ -60,8 +60,6 @@ func registerComputeMocks(t *testing.T, serv *grpc.Server) error {
 
 	var disk compute1.Disk
 	err = faker.FakeData(&disk)
-	t.Log("===== DISK:")
-	t.Log(disk)
 	if err != nil {
 		return err
 	}
