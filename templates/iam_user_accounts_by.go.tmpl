@@ -77,7 +77,7 @@ func {{$fetcher}}(ctx context.Context, meta schema.ClientMeta, parent *schema.Re
 	c := meta.(*client.Client)
 
 	g := errgroup.Group{}
-	ch := make(chan<- interface{})
+	ch := make(chan interface{})
 
 	g.Go(func() error {
 		defer close(ch)
