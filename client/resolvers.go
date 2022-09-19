@@ -17,6 +17,11 @@ func ResolveFolderID(_ context.Context, meta schema.ClientMeta, r *schema.Resour
 	return r.Set("folder_id", client.MultiplexedResourceId)
 }
 
+func ResolveMultiplexedResourceID(ctx context.Context, meta schema.ClientMeta, r *schema.Resource, c schema.Column) error {
+	client := meta.(*Client)
+	return r.Set(c.Name, client.MultiplexedResourceId)
+}
+
 type IdStruct interface {
 	GetId() string
 }
