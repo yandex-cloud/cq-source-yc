@@ -1,6 +1,6 @@
 module github.com/yandex-cloud/cq-provider-yandex
 
-go 1.17
+go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.5.3 // indirect
@@ -25,7 +25,6 @@ require (
 require (
 	github.com/cloudquery/faker/v3 v3.7.7
 	github.com/golang/mock v1.6.0
-	github.com/ompluscator/dynamic-struct v1.3.0
 )
 
 require (
