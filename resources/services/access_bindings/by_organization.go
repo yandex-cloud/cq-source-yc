@@ -25,11 +25,17 @@ func ByOrganization() *schema.Table {
 				Name:     "role_id",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("RoleId"),
+				CreationOptions: schema.ColumnCreationOptions{
+					PrimaryKey: true,
+				},
 			},
 			{
 				Name:     "subject_id",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Subject.Id"),
+				CreationOptions: schema.ColumnCreationOptions{
+					PrimaryKey: true,
+				},
 			},
 			{
 				Name:     "subject_type",
