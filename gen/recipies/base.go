@@ -7,12 +7,15 @@ import (
 	"go/format"
 	"os"
 	"path"
+	"reflect"
 	"runtime"
 	"strings"
 	"text/template"
 
 	"github.com/cloudquery/plugin-sdk/codegen"
+	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/iancoleman/strcase"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Resource struct {
@@ -49,6 +52,16 @@ func (r *Resource) Generate() error {
 		codegen.WithSkipFields(r.SkipFields),
 		codegen.WithExtraColumns(r.ExtraColumns),
 		codegen.WithUnwrapFieldsStructs(r.FieldsToUnwrap),
+		codegen.WithTypeTransformer(func(field reflect.StructField) (schema.ValueType, error) {
+			switch reflect.New(field.Type).Interface().(type) {
+			case **timestamppb.Timestamp,
+				*timestamppb.Timestamp,
+				timestamppb.Timestamp:
+				return schema.TypeTimestamp, nil
+			default:
+				return schema.TypeInvalid, nil
+			}
+		}),
 	)
 	if err != nil {
 		return err

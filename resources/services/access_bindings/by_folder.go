@@ -14,7 +14,7 @@ func ByFolder() *schema.Table {
 		Multiplex: client.MultiplexBy(client.Folders),
 		Columns: []schema.Column{
 			{
-				Name:     "resource_id",
+				Name:     "folder_id",
 				Type:     schema.TypeString,
 				Resolver: client.ResolveMultiplexedResourceID,
 				CreationOptions: schema.ColumnCreationOptions{

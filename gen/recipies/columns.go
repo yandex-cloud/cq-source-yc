@@ -5,11 +5,16 @@ import (
 	"github.com/cloudquery/plugin-sdk/schema"
 )
 
-var resourceIDColumns = codegen.ColumnDefinitions{
-	{
-		Name:     "resource_id",
-		Type:     schema.TypeString,
-		Resolver: "client.ResolveMultiplexedResourceID",
-		Options:  schema.ColumnCreationOptions{PrimaryKey: true},
-	},
-}
+const (
+	id = "Id"
+)
+
+var (
+	idCol = codegen.ColumnDefinition{
+		Name:        "id",
+		Type:        schema.TypeString,
+		Resolver:    `schema.PathResolver("Id")`,
+		Description: `Resource ID`,
+		Options:     schema.ColumnCreationOptions{PrimaryKey: true},
+	}
+)

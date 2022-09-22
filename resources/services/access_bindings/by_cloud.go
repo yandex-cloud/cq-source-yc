@@ -14,7 +14,7 @@ func ByCloud() *schema.Table {
 		Multiplex: client.MultiplexBy(client.Clouds),
 		Columns: []schema.Column{
 			{
-				Name:     "resource_id",
+				Name:     "cloud_id",
 				Type:     schema.TypeString,
 				Resolver: client.ResolveMultiplexedResourceID,
 				CreationOptions: schema.ColumnCreationOptions{

@@ -1,6 +1,8 @@
 package recipies
 
 import (
+	"github.com/cloudquery/plugin-sdk/codegen"
+	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 )
 
@@ -9,28 +11,49 @@ func AccessBindings() []*Resource {
 
 	return []*Resource{
 		{
-			Service:        "access_bindings",
-			SubService:     "by_organization",
-			Struct:         new(access.AccessBinding),
-			ExtraColumns:   resourceIDColumns,
+			Service:    "access_bindings",
+			SubService: "by_organization",
+			Struct:     new(access.AccessBinding),
+			ExtraColumns: codegen.ColumnDefinitions{
+				{
+					Name:     "organization_id",
+					Type:     schema.TypeString,
+					Resolver: "client.ResolveMultiplexedResourceID",
+					Options:  schema.ColumnCreationOptions{PrimaryKey: true},
+				},
+			},
 			FieldsToUnwrap: unwrapSubject,
-			Multiplex:      "client.MultiplexBy(client.Organizations)",
+			Multiplex:      multiplexOrg,
 		},
 		{
-			Service:        "access_bindings",
-			SubService:     "by_cloud",
-			Struct:         new(access.AccessBinding),
-			ExtraColumns:   resourceIDColumns,
+			Service:    "access_bindings",
+			SubService: "by_cloud",
+			Struct:     new(access.AccessBinding),
+			ExtraColumns: codegen.ColumnDefinitions{
+				{
+					Name:     "cloud_id",
+					Type:     schema.TypeString,
+					Resolver: "client.ResolveMultiplexedResourceID",
+					Options:  schema.ColumnCreationOptions{PrimaryKey: true},
+				},
+			},
 			FieldsToUnwrap: unwrapSubject,
-			Multiplex:      "client.MultiplexBy(client.Clouds)",
+			Multiplex:      multiplexCloud,
 		},
 		{
-			Service:        "access_bindings",
-			SubService:     "by_folder",
-			Struct:         new(access.AccessBinding),
-			ExtraColumns:   resourceIDColumns,
+			Service:    "access_bindings",
+			SubService: "by_folder",
+			Struct:     new(access.AccessBinding),
+			ExtraColumns: codegen.ColumnDefinitions{
+				{
+					Name:     "folder_id",
+					Type:     schema.TypeString,
+					Resolver: "client.ResolveMultiplexedResourceID",
+					Options:  schema.ColumnCreationOptions{PrimaryKey: true},
+				},
+			},
 			FieldsToUnwrap: unwrapSubject,
-			Multiplex:      "client.MultiplexBy(client.Folders)",
+			Multiplex:      multiplexFolder,
 		},
 	}
 }

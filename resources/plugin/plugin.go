@@ -1,13 +1,12 @@
 package provider
 
 import (
-	"github.com/cloudquery/cq-provider-sdk/provider"
-	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-func Provider() *provider.Provider {
+func Provider() *plugins.SourcePlugin {
 	return &provider.Provider{
 		Name:      "yandex",
 		Version:   "dev",

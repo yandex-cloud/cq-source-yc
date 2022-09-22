@@ -1,13 +1,10 @@
 package main
 
 import (
-	"github.com/cloudquery/cq-provider-sdk/serve"
-	"github.com/yandex-cloud/cq-provider-yandex/resources/provider"
+	"github.com/cloudquery/plugin-sdk/serve"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/plugin"
 )
 
 func main() {
-	serve.Serve(&serve.Options{
-		Name:     "yandex",
-		Provider: provider.Provider(),
-	})
+	serve.Source(plugin.Plugin())
 }

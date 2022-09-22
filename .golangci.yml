@@ -1,49 +1,53 @@
 run:
-  tests: true
+  tests:   true
   skip-dirs:
-    - bin
-    - docs
-    - client/mocks
+  - bin
+  - docs
+  - client/mocks
   timeout: 3m
 
 linters-settings:
   errcheck:
     check-blank: false
-    ignore: fmt:.*,[rR]ead|[wW]rite|[cC]lose,io:Copy
+    ignore:      fmt:.*,[rR]ead|[wW]rite|[cC]lose,io:Copy
   gocritic:
     disabled-checks:
-      - commentFormatting
+    - commentFormatting
   dupl:
     # tokens count to trigger issue, 150 by default
     threshold: 500
 
 linters:
-  disable-all: true
   enable:
-    - bodyclose
-    - depguard
-    - dupl
-    - errcheck
-    - gocritic
-    - gofmt
-    - goimports
-    - gosimple
-    - govet
-    - ineffassign
-    - misspell
-    - nakedret
-    - prealloc
-    - staticcheck
-    - unconvert
+  - asciicheck
+  - bodyclose
+  - depguard
+  - dupl
+  - errcheck
+  - gci
+  - gocritic
+  - gofmt
+  - gosimple
+  - govet
+  - ineffassign
+  - importas
+  - misspell
+  - nakedret
+  - prealloc
+  - revive
+  - staticcheck
+  - unconvert
+  - unparam
+  - unused
 
 issues:
   exclude-rules:
-    # Exclude some linters from running on tests files.
-    - path: _test\.go
-      linters:
-        - dupl
-        - gocritic
-     # Exclude some linters from running on resource files.
-    - path: resources(\\|\/).*\.go
-      linters:
-        - dupl
+  # Exclude some linters from running on tests files.
+  - path: _test\.go
+    linters:
+    - dupl
+    - gocritic
+  # Exclude some linters from running on resource files.
+  - path: resources(\\|\/).*\.go
+    linters:
+    - dupl

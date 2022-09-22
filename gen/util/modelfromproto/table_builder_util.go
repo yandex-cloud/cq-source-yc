@@ -69,7 +69,7 @@ func (f expandedField) getType() string {
 	case !f.IsRepeated() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_STRING:
 		return "schema.TypeString"
 	case !f.IsRepeated() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_INT64:
-		return "schema.TypeBigInt"
+		return "schema.TypeInt"
 	case !f.IsRepeated() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_INT32:
 		return "schema.TypeInt"
 	case f.IsRepeated() && f.GetType() == descriptor.FieldDescriptorProto_TYPE_INT32:
