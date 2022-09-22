@@ -53,9 +53,8 @@ func (r *Resource) Generate() error {
 		codegen.WithExtraColumns(r.ExtraColumns),
 		codegen.WithUnwrapFieldsStructs(r.FieldsToUnwrap),
 		codegen.WithTypeTransformer(func(field reflect.StructField) (schema.ValueType, error) {
-			switch reflect.New(field.Type).Interface().(type) {
-			case **timestamppb.Timestamp,
-				*timestamppb.Timestamp,
+			switch reflect.New(field.Type).Elem().Interface().(type) {
+			case *timestamppb.Timestamp,
 				timestamppb.Timestamp:
 				return schema.TypeTimestamp, nil
 			default:
