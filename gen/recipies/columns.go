@@ -17,11 +17,4 @@ var (
 		Description: `Resource ID`,
 		Options:     schema.ColumnCreationOptions{PrimaryKey: true},
 	}
-
-	folderIDCol = codegen.ColumnDefinition{
-		Name:        "folder_id",
-		Type:        schema.TypeString,
-		Resolver:    `client.ResolveMultiplexedResourceID`,
-		Description: `Folder ID`,
-	}
 )
