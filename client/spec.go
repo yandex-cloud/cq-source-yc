@@ -13,10 +13,3 @@ type Spec struct {
 	Endpoint     string `yaml:"endpoint"`
 	FolderFilter string `yaml:"folder_filter"`
 }
-
-//go:embed spec.example.yaml
-var exampleSpec string
-
-func ExampleSpec() string {
-	return exampleSpec
-}
