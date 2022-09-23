@@ -9,7 +9,8 @@ import (
 func main() {
 	for _, f := range []func() []*recipies.Resource{
 		recipies.AccessBindings,
-		recipies.Certificates,
+		recipies.CertificateManager,
+		recipies.Compute,
 	} {
 		for _, resource := range f() {
 			if err := resource.Generate(); err != nil {

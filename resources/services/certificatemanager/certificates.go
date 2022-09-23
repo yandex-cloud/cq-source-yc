@@ -30,7 +30,7 @@ func Certificates() *schema.Table {
 			{
 				Name:     "created_at",
 				Type:     schema.TypeTimestamp,
-				Resolver: schema.PathResolver("CreatedAt"),
+				Resolver: client.ResolveProtoTimestamp("CreatedAt"),
 			},
 			{
 				Name:     "name",
@@ -80,22 +80,22 @@ func Certificates() *schema.Table {
 			{
 				Name:     "updated_at",
 				Type:     schema.TypeTimestamp,
-				Resolver: schema.PathResolver("UpdatedAt"),
+				Resolver: client.ResolveProtoTimestamp("UpdatedAt"),
 			},
 			{
 				Name:     "issued_at",
 				Type:     schema.TypeTimestamp,
-				Resolver: schema.PathResolver("IssuedAt"),
+				Resolver: client.ResolveProtoTimestamp("IssuedAt"),
 			},
 			{
 				Name:     "not_after",
 				Type:     schema.TypeTimestamp,
-				Resolver: schema.PathResolver("NotAfter"),
+				Resolver: client.ResolveProtoTimestamp("NotAfter"),
 			},
 			{
 				Name:     "not_before",
 				Type:     schema.TypeTimestamp,
-				Resolver: schema.PathResolver("NotBefore"),
+				Resolver: client.ResolveProtoTimestamp("NotBefore"),
 			},
 			{
 				Name:     "challenges",

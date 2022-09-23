@@ -17,6 +17,6 @@ type Spec struct {
 //go:embed spec.example.yaml
 var exampleSpec string
 
-func (s Spec) Example() string {
+func ExampleSpec() string {
 	return exampleSpec
 }

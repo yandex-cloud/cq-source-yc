@@ -5,8 +5,7 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/certificatemanager/v1"
 )
 
-func Certificates() []*Resource {
-
+func CertificateManager() []*Resource {
 	return []*Resource{
 		{
 			Service:      "certificatemanager",

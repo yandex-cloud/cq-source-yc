@@ -51,7 +51,7 @@ func (r *Resource) Generate() error {
 	r.Table, err = codegen.NewTableFromStruct(r.TableName, r.Struct,
 		codegen.WithSkipFields(r.SkipFields),
 		codegen.WithExtraColumns(r.ExtraColumns),
-		codegen.WithUnwrapFieldsStructs(r.FieldsToUnwrap),
+		codegen.WithUnwrapStructFields(r.FieldsToUnwrap),
 		codegen.WithTypeTransformer(func(field reflect.StructField) (schema.ValueType, error) {
 			switch reflect.New(field.Type).Elem().Interface().(type) {
 			case *timestamppb.Timestamp,
@@ -59,6 +59,15 @@ func (r *Resource) Generate() error {
 				return schema.TypeTimestamp, nil
 			default:
 				return schema.TypeInvalid, nil
+			}
+		}),
+		codegen.WithResolverTransformer(func(field reflect.StructField, path string) (string, error) {
+			switch reflect.New(field.Type).Elem().Interface().(type) {
+			case *timestamppb.Timestamp,
+				timestamppb.Timestamp:
+				return `client.ResolveProtoTimestamp("` + path + `")`, nil
+			default:
+				return "", nil
 			}
 		}),
 	)
