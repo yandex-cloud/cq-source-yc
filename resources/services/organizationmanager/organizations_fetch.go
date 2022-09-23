@@ -11,11 +11,13 @@ import (
 func fetchOrganizations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
-	req := &organizationmanager.ListOrganizationsRequest{}
-	it := c.Services.OrganizationManager.Organization().OrganizationIterator(ctx, req)
-	for it.Next() {
-		res <- it.Value()
+	org, err := c.Services.OrganizationManager.Organization().Get(ctx,
+		&organizationmanager.GetOrganizationRequest{OrganizationId: c.MultiplexedResourceId},
+	)
+	if err != nil {
+		return err
 	}
 
+	res <- org
 	return nil
 }

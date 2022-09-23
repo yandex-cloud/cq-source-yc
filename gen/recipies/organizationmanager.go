@@ -23,7 +23,7 @@ func OrganizationManager() []*Resource {
 			SkipFields:   []string{id},
 			ExtraColumns: codegen.ColumnDefinitions{idCol},
 			Relations:    []string{"Groups()"},
-			Multiplex:    "", // root object
+			Multiplex:    multiplexOrg,
 		},
 		{
 			Service:      "organizationmanager",

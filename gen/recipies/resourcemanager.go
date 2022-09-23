@@ -14,7 +14,6 @@ func ResourceManager() []*Resource {
 			SkipFields:   []string{id},
 			ExtraColumns: codegen.ColumnDefinitions{idCol},
 			Multiplex:    multiplexCloud,
-			Relations:    []string{"Folders()"},
 		},
 		{
 			Service:      "resourcemanager",

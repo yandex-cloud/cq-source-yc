@@ -48,9 +48,5 @@ func Clouds() *schema.Table {
 				Resolver: schema.PathResolver("Labels"),
 			},
 		},
-
-		Relations: []*schema.Table{
-			Folders(),
-		},
 	}
 }
