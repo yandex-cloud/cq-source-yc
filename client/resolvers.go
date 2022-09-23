@@ -18,21 +18,6 @@ func ResolveMultiplexedResourceID(_ context.Context, meta schema.ClientMeta, res
 	return resource.Set(c.Name, client.MultiplexedResourceId)
 }
 
-func ResolveFolderID(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, _ schema.Column) error {
-	client := meta.(*Client)
-	return resource.Set("folder_id", client.MultiplexedResourceId)
-}
-
-type IdStruct interface {
-	GetId() string
-}
-
-func ResolveResourceId(_ context.Context, _ schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-	r := resource.Item.(IdStruct)
-	id := r.GetId()
-	return resource.Set(c.Name, id)
-}
-
 func ResolveProtoTimestamp(path string) schema.ColumnResolver {
 	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		data := funk.Get(resource.Item, path)

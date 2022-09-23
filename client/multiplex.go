@@ -26,7 +26,3 @@ func Clouds(client *Client) []string {
 func Folders(client *Client) []string {
 	return client.folders
 }
-
-func EmptyMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
-	return []schema.ClientMeta{meta}
-}
