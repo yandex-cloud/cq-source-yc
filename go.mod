@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.5.3 // indirect
-	github.com/aws/aws-sdk-go v1.44.103
+	github.com/aws/aws-sdk-go v1.44.104
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v1.3.1 // indirect
 	github.com/iancoleman/strcase v0.2.0
@@ -24,7 +24,7 @@ require (
 require (
 	github.com/cloudquery/cq-provider-sdk v0.14.7
 	github.com/cloudquery/faker/v3 v3.7.7
-	github.com/cloudquery/plugin-sdk v0.7.13
+	github.com/cloudquery/plugin-sdk v0.8.1
 	github.com/golang/mock v1.6.0
 	github.com/rs/zerolog v1.28.0
 	google.golang.org/protobuf v1.28.1
