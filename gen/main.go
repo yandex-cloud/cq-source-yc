@@ -13,6 +13,13 @@ func main() {
 		recipies.Compute,
 		recipies.ContainerRegistry,
 		recipies.IAM,
+		recipies.K8s,
+		recipies.KMS,
+		recipies.OrganizationManager,
+		recipies.ResourceManager,
+		recipies.Serverless,
+		recipies.Storage,
+		recipies.VPC,
 	} {
 		for _, resource := range f() {
 			if err := resource.Generate(); err != nil {
