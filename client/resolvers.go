@@ -13,7 +13,7 @@ import (
 	"github.com/thoas/go-funk"
 )
 
-func ResolveMultiplexedResourceID(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+func ResolveMultiplexedResourceID(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 	client := meta.(*Client)
 	return resource.Set(c.Name, client.MultiplexedResourceId)
 }

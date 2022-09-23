@@ -11,6 +11,7 @@ func main() {
 		recipies.AccessBindings,
 		recipies.CertificateManager,
 		recipies.Compute,
+		recipies.ContainerRegistry,
 	} {
 		for _, resource := range f() {
 			if err := resource.Generate(); err != nil {
