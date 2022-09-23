@@ -7,6 +7,11 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/compute"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/containerregistry"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/iam"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/k8s"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/kms"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/organizationmanager"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/resourcemanager"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/serverless"
 )
 
 func Tables() []*schema.Table {
@@ -25,5 +30,16 @@ func Tables() []*schema.Table {
 		iam.UserAccountsByCloud(),
 		iam.UserAccountsByFolder(),
 		iam.UserAccountsByOrganization(),
+		k8s.Clusters(),
+		k8s.NodeGroups(),
+		kms.SymmetricKeys(),
+		organizationmanager.Federations(),
+		organizationmanager.Organizations(),
+		resourcemanager.Clouds(),
+		resourcemanager.Folders(),
+		serverless.ApiGateways(),
+		serverless.Containers(),
+		serverless.Functions(),
+		serverless.Triggers(),
 	}
 }
