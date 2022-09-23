@@ -12,6 +12,7 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/organizationmanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/resourcemanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/serverless"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/storage"
 )
 
 func Tables() []*schema.Table {
@@ -41,5 +42,6 @@ func Tables() []*schema.Table {
 		serverless.Containers(),
 		serverless.Functions(),
 		serverless.Triggers(),
+		storage.Buckets(),
 	}
 }

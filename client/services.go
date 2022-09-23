@@ -13,6 +13,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager"
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager/saml"
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
+	"github.com/yandex-cloud/go-sdk/gen/storage-api"
 	"github.com/yandex-cloud/go-sdk/gen/vpc"
 )
 
@@ -28,6 +29,7 @@ type (
 		OrganizationManagerSAML *saml.OrganizationManagerSAML
 		ResourceManager         *resourcemanager.ResourceManager
 		Serverless              *ycsdk.Serverless
+		Storage                 *storage.StorageAPI
 		VPC                     *vpc.VPC
 	}
 )
@@ -44,6 +46,7 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		OrganizationManagerSAML: sdk.OrganizationManagerSAML(),
 		ResourceManager:         sdk.ResourceManager(),
 		Serverless:              sdk.Serverless(),
+		Storage:                 sdk.StorageAPI(),
 		VPC:                     sdk.VPC(),
 	}, nil
 }
