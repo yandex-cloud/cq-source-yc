@@ -1,5 +1,5 @@
 run:
-  tests:   true
+  tests: true
   skip-dirs:
   - bin
   - docs
@@ -9,7 +9,7 @@ run:
 linters-settings:
   errcheck:
     check-blank: false
-    ignore:      fmt:.*,[rR]ead|[wW]rite|[cC]lose,io:Copy
+    ignore: fmt:.*,[rR]ead|[wW]rite|[cC]lose,io:Copy
   gocritic:
     disabled-checks:
     - commentFormatting
@@ -18,27 +18,23 @@ linters-settings:
     threshold: 500
 
 linters:
+  disable-all: true
   enable:
-  - asciicheck
   - bodyclose
   - depguard
   - dupl
   - errcheck
-  - gci
   - gocritic
   - gofmt
+  - goimports
   - gosimple
   - govet
   - ineffassign
-  - importas
   - misspell
   - nakedret
   - prealloc
-  - revive
   - staticcheck
   - unconvert
-  - unparam
-  - unused
 
 issues:
   exclude-rules:
