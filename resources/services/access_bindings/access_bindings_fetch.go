@@ -32,6 +32,5 @@ func fetchAccessBindings(provider func(*client.Client) accessBindingsClient) sch
 			}
 			req.PageToken = resp.NextPageToken
 		}
-
 	}
 }
