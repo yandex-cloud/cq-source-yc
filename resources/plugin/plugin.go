@@ -1,44 +1,22 @@
-package provider
+package plugin
 
 import (
-	"github.com/cloudquery/plugin-sdk/schema"
+	"github.com/cloudquery/plugin-sdk/plugins"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
-	"github.com/yandex-cloud/cq-provider-yandex/resources"
 )
 
-func Provider() *plugins.SourcePlugin {
-	return &provider.Provider{
-		Name:      "yandex",
-		Version:   "dev",
-		Configure: client.Configure,
-		ResourceMap: map[string]*schema.Table{
-			"AccessBindingsByCloud":            resources.AccessBindingsByCloud(),
-			"AccessBindingsByFolder":           resources.AccessBindingsByFolder(),
-			"AccessBindingsByOrganization":     resources.AccessBindingsByOrganization(),
-			"CertificateManagerCertificates":   resources.CertificateManagerCertificates(),
-			"ComputeDisks":                     resources.ComputeDisks(),
-			"ComputeImages":                    resources.ComputeImages(),
-			"ComputeInstances":                 resources.ComputeInstances(),
-			"ContainerRegistryScanResults":     resources.ContainerRegistryScanResults(),
-			"IAMServiceAccounts":               resources.IAMServiceAccounts(),
-			"IAMUserAccountsByCloud":           resources.IAMUserAccountsByCloud(),
-			"IAMUserAccountsByFolder":          resources.IAMUserAccountsByFolder(),
-			"IAMUserAccountsByOrganization":    resources.IAMUserAccountsByOrganization(),
-			"K8SClusters":                      resources.K8SClusters(),
-			"KMSSymmetricKeys":                 resources.KMSSymmetricKeys(),
-			"OrganizationManagerFederations":   resources.OrganizationManagerFederations(),
-			"OrganizationManagerOrganizations": resources.OrganizationManagerOrganizations(),
-			"ResourceManagerClouds":            resources.ResourceManagerClouds(),
-			"ResourceManagerFolders":           resources.ResourceManagerFolders(),
-			"ServerlessApiGateways":            resources.ServerlessApiGateways(),
-			"StorageBuckets":                   resources.StorageBuckets(),
-			"VPCAddresses":                     resources.VPCAddresses(),
-			"VPCNetworks":                      resources.VPCNetworks(),
-			"VPCSecurityGroups":                resources.VPCSecurityGroups(),
-			"VPCSubnets":                       resources.VPCSubnets(),
-		},
-		Config: func() provider.Config {
-			return &client.Config{}
-		},
-	}
+var (
+	Version = "Development"
+)
+
+func Plugin() *plugins.SourcePlugin {
+	allTables := Tables()
+	// here you can append custom non-generated tables
+	return plugins.NewSourcePlugin(
+		"yandex",
+		Version,
+		allTables,
+		client.Configure,
+		plugins.WithSourceExampleConfig(client.ExampleSpec()),
+	)
 }
