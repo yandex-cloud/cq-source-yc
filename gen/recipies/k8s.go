@@ -24,6 +24,7 @@ func K8s() []*Resource {
 			Struct:       new(k8s.NodeGroup),
 			SkipFields:   []string{id},
 			ExtraColumns: codegen.ColumnDefinitions{idCol},
+			Relations:    []string{"Nodes()"},
 			Multiplex:    multiplexFolder,
 		},
 		{

@@ -108,5 +108,9 @@ func NodeGroups() *schema.Table {
 				Resolver: schema.PathResolver("NodeLabels"),
 			},
 		},
+
+		Relations: []*schema.Table{
+			Nodes(),
+		},
 	}
 }
