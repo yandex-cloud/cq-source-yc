@@ -27,6 +27,7 @@ type Resource struct {
 	Table                *codegen.TableDefinition
 	TableName            string
 	Multiplex            string
+	AddClientImport      bool
 	PreResourceResolver  string
 	PostResourceResolver string
 	Relations            []string
@@ -43,6 +44,9 @@ func (r *Resource) Generate() error {
 	}
 	dir := path.Dir(filename)
 
+	if r.Multiplex != "" {
+		r.AddClientImport = true
+	}
 	var err error
 	if r.TableName == "" {
 		r.TableName = r.Service + "_" + r.SubService
@@ -65,6 +69,7 @@ func (r *Resource) Generate() error {
 			switch reflect.New(field.Type).Elem().Interface().(type) {
 			case *timestamppb.Timestamp,
 				timestamppb.Timestamp:
+				r.AddClientImport = true
 				return `client.ResolveProtoTimestamp("` + path + `")`, nil
 			default:
 				return "", nil

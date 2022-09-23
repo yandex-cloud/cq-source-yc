@@ -4,7 +4,7 @@ package {{.Service}}
 
 import (
 	"github.com/cloudquery/plugin-sdk/schema"
-{{with .Multiplex}}	"github.com/yandex-cloud/cq-provider-yandex/client"{{end}}
+{{if .AddClientImport}}	"github.com/yandex-cloud/cq-provider-yandex/client"{{end}}
 )
 
 func {{.SubService | ToCamel}}() *schema.Table {
