@@ -1,4 +1,4 @@
-package recipies
+package recipes
 
 const (
 	multiplexOrg    = "client.MultiplexBy(client.Organizations)"
