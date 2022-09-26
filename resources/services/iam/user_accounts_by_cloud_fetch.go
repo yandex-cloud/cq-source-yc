@@ -9,5 +9,4 @@ import (
 
 func fetchUserAccountsByCloud(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
 	return fetchUserAccounts(meta.(*client.Client).Services.ResourceManager.Cloud())(ctx, meta, parent, res)
-
 }
