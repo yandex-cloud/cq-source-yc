@@ -1,9 +1,5 @@
 package client
 
-import (
-	_ "embed"
-)
-
 // Spec defines plugin configuration
 type Spec struct {
 	OrganizationIDs []string `yaml:"organization_ids"`
