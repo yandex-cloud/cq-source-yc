@@ -2,10 +2,10 @@ package client
 
 // Spec defines plugin configuration
 type Spec struct {
-	OrganizationIDs []string `yaml:"organization_ids"`
-	CloudIDs        []string `yaml:"cloud_ids"`
-	FolderIDs       []string `yaml:"folder_ids"`
+	OrganizationIDs []string `json:"organization_ids"`
+	CloudIDs        []string `json:"cloud_ids"`
+	FolderIDs       []string `json:"folder_ids"`
 
-	Endpoint     string `yaml:"endpoint"`
-	FolderFilter string `yaml:"folder_filter"`
+	Endpoint     string `json:"endpoint"`
+	FolderFilter string `json:"folder_filter"`
 }
