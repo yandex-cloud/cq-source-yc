@@ -1,6 +1,8 @@
 package client
 
-import "github.com/cloudquery/cq-provider-sdk/provider/schema"
+import (
+	"github.com/cloudquery/plugin-sdk/schema"
+)
 
 func MultiplexBy(resourcesGetter func(client *Client) []string) func(meta schema.ClientMeta) []schema.ClientMeta {
 	return func(meta schema.ClientMeta) []schema.ClientMeta {
@@ -14,7 +16,7 @@ func MultiplexBy(resourcesGetter func(client *Client) []string) func(meta schema
 }
 
 func Organizations(client *Client) []string {
-	return client.organizations
+	return client.orgs
 }
 
 func Clouds(client *Client) []string {
@@ -23,8 +25,4 @@ func Clouds(client *Client) []string {
 
 func Folders(client *Client) []string {
 	return client.folders
-}
-
-func EmptyMultiplex(meta schema.ClientMeta) []schema.ClientMeta {
-	return []schema.ClientMeta{meta}
 }

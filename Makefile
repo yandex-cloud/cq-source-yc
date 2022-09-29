@@ -4,17 +4,9 @@ NC=\033[0m
 
 # Provider generation
 
-cloudapi:
-	@git clone https://github.com/yandex-cloud/cloudapi.git
-
 .PHONY: generate-resources
-generate-resources: cloudapi
-	@go run gen/full/base/main.go
-	@go run gen/full/serverless/main.go
-	@go run gen/full/access_bindings/main.go
-	@go run gen/full/resource_manager/main.go
-	@go run gen/full/resource_manager_tests/main.go
-	@go run gen/full/provider/main.go
+generate-resources:
+	@go run gen/main.go
 
 # Debug
 

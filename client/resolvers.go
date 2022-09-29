@@ -7,24 +7,29 @@ import (
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/iancoleman/strcase"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/cloudquery/cq-provider-sdk/provider/schema"
+	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/thoas/go-funk"
 )
 
-func ResolveFolderID(_ context.Context, meta schema.ClientMeta, r *schema.Resource, _ schema.Column) error {
+func ResolveMultiplexedResourceID(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 	client := meta.(*Client)
-	return r.Set("folder_id", client.MultiplexedResourceId)
+	return resource.Set(c.Name, client.MultiplexedResourceId)
 }
 
-type IdStruct interface {
-	GetId() string
-}
-
-func ResolveResourceId(_ context.Context, _ schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-	r := resource.Item.(IdStruct)
-	id := r.GetId()
-	return resource.Set(c.Name, id)
+func ResolveProtoTimestamp(path string) schema.ColumnResolver {
+	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+		data := funk.Get(resource.Item, path)
+		if data == nil {
+			return nil
+		}
+		ts, ok := data.(*timestamppb.Timestamp)
+		if !ok {
+			return fmt.Errorf("unextected type, wanted \"*timestamppb.Timestamp\", have \"%T\"", data)
+		}
+		return resource.Set(c.Name, ts.AsTime())
+	}
 }
 
 type LabeledStruct interface {
@@ -93,7 +98,7 @@ func resolvePathAsSmth(path string, converter Converter) schema.ColumnResolver {
 	return func(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		value := funk.Get(resource.Item, path, funk.WithAllowZero())
 		if value == nil {
-			meta.Logger().Trace("no column value specified", "column", c.Name)
+			meta.Logger().Trace().Str("column", c.Name).Msg("no column value specified")
 			return resource.Set(c.Name, nil)
 		}
 
@@ -102,7 +107,7 @@ func resolvePathAsSmth(path string, converter Converter) schema.ColumnResolver {
 			return fmt.Errorf("error converting path %s: %w", path, err)
 		}
 
-		meta.Logger().Trace("setting column value", "column", c.Name, "value", res)
+		meta.Logger().Trace().Str("column", c.Name).Interface("value", res).Msg("setting column value")
 		return resource.Set(c.Name, res)
 	}
 }
