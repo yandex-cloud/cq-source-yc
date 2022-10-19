@@ -26,7 +26,7 @@ func ResolveProtoTimestamp(path string) schema.ColumnResolver {
 		}
 		ts, ok := data.(*timestamppb.Timestamp)
 		if !ok {
-			return fmt.Errorf("unextected type, wanted \"*timestamppb.Timestamp\", have \"%T\"", data)
+			return fmt.Errorf("unexpected type, wanted \"*timestamppb.Timestamp\", have \"%T\"", data)
 		}
 		return resource.Set(c.Name, ts.AsTime())
 	}
