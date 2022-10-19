@@ -3,7 +3,7 @@ package plugin
 import (
 	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/access_bindings"
-	"github.com/yandex-cloud/cq-provider-yandex/resources/services/api_gateway"
+	apigateways "github.com/yandex-cloud/cq-provider-yandex/resources/services/api_gateways"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/certificatemanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/compute"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/containerregistry"
@@ -39,7 +39,7 @@ func Tables() []*schema.Table {
 		organizationmanager.Organizations(),
 		resourcemanager.Clouds(),
 		resourcemanager.Folders(),
-		api_gateway.ApiGateways(),
+		apigateways.ApiGateways(),
 		storage.Buckets(),
 		vpc.Addresses(),
 		vpc.Networks(),
