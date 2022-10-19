@@ -26,9 +26,9 @@ func MockTestHelper(t *testing.T, table *schema.Table, createService func() (*Se
 		if err != nil {
 			return nil, fmt.Errorf("failed to createService: %w", err)
 		}
-		var gcpSpec Spec
-		if err := spec.UnmarshalSpec(&gcpSpec); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal gcp spec: %w", err)
+		var ycSpec Spec
+		if err := spec.UnmarshalSpec(&ycSpec); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal yc spec: %w", err)
 		}
 		c := NewYandexClient(logger,
 			[]string{"test-folder-id"},
