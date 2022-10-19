@@ -31,9 +31,9 @@ func MockTestHelper(t *testing.T, table *schema.Table, createService func() (*Se
 			return nil, fmt.Errorf("failed to unmarshal gcp spec: %w", err)
 		}
 		c := NewYandexClient(logger,
-			[]string{"mock-folder"},
-			[]string{"mock-cloud"},
-			[]string{"mock-organization"},
+			[]string{"test-folder-id"},
+			[]string{"test-cloud-id"},
+			[]string{"test-organization-id"},
 			svc,
 			nil)
 
@@ -50,6 +50,6 @@ func MockTestHelper(t *testing.T, table *schema.Table, createService func() (*Se
 		Name:         "dev",
 		Version:      version,
 		Tables:       []string{table.Name},
-		Destinations: []string{"mock-destination"},
+		Destinations: []string{"test-destination"},
 	})
 }
