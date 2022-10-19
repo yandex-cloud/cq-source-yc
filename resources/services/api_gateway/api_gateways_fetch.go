@@ -1,4 +1,4 @@
-package serverless
+package api_gateway
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 func fetchApiGateways(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
-	it := c.Services.Serverless.APIGateway().ApiGateway().ApiGatewayIterator(ctx,
+	it := c.Services.ApiGateway.ApiGateway().ApiGatewayIterator(ctx,
 		&apigateway.ListApiGatewayRequest{FolderId: c.MultiplexedResourceId},
 	)
 	for it.Next() {

@@ -20,7 +20,11 @@ require (
 )
 
 require (
-	github.com/cloudquery/faker/v3 v3.7.7 // indirect
+	github.com/cloudquery/faker/v3 v3.7.7
+	github.com/golang/mock v1.6.0
+)
+
+require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/getsentry/sentry-go v0.13.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
