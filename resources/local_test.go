@@ -28,7 +28,8 @@ func TestCompute(t *testing.T) {
 
 func TestK8S(t *testing.T) {
 	resourceMap := map[string]*schema.Table{
-		"K8SCluster": k8s.Clusters(),
+		"K8SCluster":    k8s.Clusters(),
+		"K8SNodeGroups": k8s.NodeGroups(),
 	}
 	testingutils.LocalTestProvider(t, resourceMap)
 }
