@@ -5,6 +5,7 @@ import (
 	"net"
 	"testing"
 
+	// "github.com/cloudquery/faker/v3"
 	"github.com/cloudquery/faker/v3"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
@@ -62,6 +63,18 @@ func registerK8SMocks(t *testing.T, serv *grpc.Server) error {
 	if err != nil {
 		return err
 	}
+
+	var cilium k8s1.Cilium
+	err = faker.FakeData(&cilium)
+	if err != nil {
+		return err
+	}
+
+	cluster.InternetGateway = &k8s1.Cluster_GatewayIpv4Address{GatewayIpv4Address: faker.IPv4()}
+	cluster.NetworkImplementation = &k8s1.Cluster_Cilium{Cilium: &cilium}
+
+	// cluster.NetworkImplementation
+
 	mClusterServ := mocks.NewMockClusterServiceServer(ctrl)
 	mClusterServ.
 		EXPECT().
@@ -77,43 +90,6 @@ func registerK8SMocks(t *testing.T, serv *grpc.Server) error {
 		}).
 		AnyTimes()
 	k8s1.RegisterClusterServiceServer(serv, mClusterServ)
-
-	var nodeGroup k8s1.NodeGroup
-	err = faker.FakeData(&nodeGroup)
-	if err != nil {
-		return err
-	}
-	mNodeGroupsServ := mocks.NewMockNodeGroupServiceServer(ctrl)
-	mNodeGroupsServ.
-		EXPECT().
-		List(gomock.Any(), gomock.Any()).
-		DoAndReturn(func(_ context.Context, req *k8s1.ListNodeGroupsRequest) (*k8s1.ListNodeGroupsResponse, error) {
-			if req == nil {
-				return nil, status.Errorf(codes.Canceled, "request is nil")
-			}
-			if req.FolderId != "test-folder-id" {
-				return nil, status.Errorf(codes.NotFound, "folder not found")
-			}
-			return &k8s1.ListNodeGroupsResponse{NodeGroups: []*k8s1.NodeGroup{&nodeGroup}}, nil
-		}).
-		AnyTimes()
-	k8s1.RegisterNodeGroupServiceServer(serv, mNodeGroupsServ)
-
-	mNodeGroupServ := mocks.NewMockNodeGroupServiceServer(ctrl)
-	mNodeGroupServ.
-		EXPECT().
-		List(gomock.Any(), gomock.Any()).
-		DoAndReturn(func(_ context.Context, req *k8s1.ListNodeGroupNodesRequest) (*k8s1.ListNodeGroupNodesResponse, error) {
-			if req == nil {
-				return nil, status.Errorf(codes.Canceled, "request is nil")
-			}
-			if req.FolderId != "test-folder-id" {
-				return nil, status.Errorf(codes.NotFound, "folder not found")
-			}
-			return &k8s1.ListNodeGroupsResponse{NodeGroups: []*k8s1.NodeGroup{&nodeGroup}}, nil
-		}).
-		AnyTimes()
-	k8s1.RegisterNodeGroupServiceServer(serv, mNodeGroupServ)
 
 	return nil
 }

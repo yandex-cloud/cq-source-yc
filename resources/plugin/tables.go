@@ -33,7 +33,6 @@ func Tables() []*schema.Table {
 		iam.UserAccountsByFolder(),
 		iam.UserAccountsByOrganization(),
 		k8s.Clusters(),
-		k8s.NodeGroups(),
 		kms.SymmetricKeys(),
 		organizationmanager.Federations(),
 		organizationmanager.Organizations(),

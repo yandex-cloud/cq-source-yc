@@ -103,19 +103,15 @@ func Clusters() *schema.Table {
 				Resolver: schema.PathResolver("LogGroupId"),
 			},
 			{
-				Name:     "internet_gateway_gateway_ipv_4_address",
-				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("InternetGateway.GatewayIpv4Address"),
+				Name:     "internet_gateway",
+				Type:     schema.TypeJSON,
+				Resolver: schema.PathResolver("InternetGateway"),
 			},
 			{
-				Name:     "network_implementation_cilium_routing_mode",
+				Name:     "network_implementation",
 				Type:     schema.TypeJSON,
-				Resolver: schema.PathResolver("NetworkImplementation.Cilium.RoutingMode"),
+				Resolver: schema.PathResolver("NetworkImplementation"),
 			},
-		},
-
-		Relations: []*schema.Table{
-			NodeGroups(),
 		},
 	}
 }
