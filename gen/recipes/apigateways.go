@@ -8,7 +8,7 @@ import (
 func ApiGateway() []*Resource {
 	return []*Resource{
 		{
-			Service:      "api_gateway",
+			Service:      "api_gateways",
 			SubService:   "api_gateways",
 			Struct:       new(apigateway.ApiGateway),
 			SkipFields:   []string{id},

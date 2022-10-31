@@ -1,4 +1,4 @@
-package apigateways
+package api_gateways
 
 import (
 	"context"
