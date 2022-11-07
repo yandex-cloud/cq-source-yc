@@ -98,7 +98,7 @@ func resolvePathAsSmth(path string, converter Converter) schema.ColumnResolver {
 	return func(_ context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		value := funk.Get(resource.Item, path, funk.WithAllowZero())
 		if value == nil {
-			meta.Logger().Trace().Str("column", c.Name).Msg("no column value specified")
+			meta.(*Client).Logger().Trace().Str("column", c.Name).Msg("no column value specified")
 			return resource.Set(c.Name, nil)
 		}
 
@@ -107,7 +107,7 @@ func resolvePathAsSmth(path string, converter Converter) schema.ColumnResolver {
 			return fmt.Errorf("error converting path %s: %w", path, err)
 		}
 
-		meta.Logger().Trace().Str("column", c.Name).Interface("value", res).Msg("setting column value")
+		meta.(*Client).Logger().Trace().Str("column", c.Name).Interface("value", res).Msg("setting column value")
 		return resource.Set(c.Name, res)
 	}
 }
