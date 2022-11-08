@@ -58,12 +58,12 @@ func Subnets() *schema.Table {
 				Resolver: schema.PathResolver("ZoneId"),
 			},
 			{
-				Name:     "v_4_cidr_blocks",
+				Name:     "v4_cidr_blocks",
 				Type:     schema.TypeStringArray,
 				Resolver: schema.PathResolver("V4CidrBlocks"),
 			},
 			{
-				Name:     "v_6_cidr_blocks",
+				Name:     "v6_cidr_blocks",
 				Type:     schema.TypeStringArray,
 				Resolver: schema.PathResolver("V6CidrBlocks"),
 			},

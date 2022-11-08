@@ -17,10 +17,22 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils"
 )
 
-func TestCompute(t *testing.T) {
+func TestComputeDisks(t *testing.T) {
 	resourceMap := map[string]*schema.Table{
-		"ComputeDisks":     compute.Disks(),
-		"ComputeImages":    compute.Images(),
+		"ComputeDisks": compute.Disks(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestComputeImages(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
+		"ComputeImages": compute.Images(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestComputeInstances(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
 		"ComputeInstances": compute.Instances(),
 	}
 	testingutils.LocalTestProvider(t, resourceMap)
@@ -33,12 +45,30 @@ func TestK8S(t *testing.T) {
 	testingutils.LocalTestProvider(t, resourceMap)
 }
 
-func TestVPC(t *testing.T) {
+func TestVPCAdresses(t *testing.T) {
 	resourceMap := map[string]*schema.Table{
-		"VPCAddresses":      vpc.Addresses(),
-		"VPCNetworks":       vpc.Networks(),
+		"VPCAddresses": vpc.Addresses(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestVPCNetworks(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
+		"VPCNetworks": vpc.Networks(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestVPCSecurityGroups(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
 		"VPCSecurityGroups": vpc.SecurityGroups(),
-		"VPCSubnets":        vpc.Subnets(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestVPCSubnets(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
+		"VPCSubnets": vpc.Subnets(),
 	}
 	testingutils.LocalTestProvider(t, resourceMap)
 }

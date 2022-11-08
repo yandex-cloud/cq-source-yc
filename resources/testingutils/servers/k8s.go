@@ -5,7 +5,6 @@ import (
 	"net"
 	"testing"
 
-	// "github.com/cloudquery/faker/v3"
 	"github.com/cloudquery/faker/v3"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
