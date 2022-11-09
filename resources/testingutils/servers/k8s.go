@@ -50,7 +50,6 @@ func StartK8SServer(t *testing.T, ctx context.Context) (*k8s.Kubernetes, error) 
 }
 
 //go:generate mockgen -destination=../mocks/k8s_cluster_service_server_mock.go -package=mocks github.com/yandex-cloud/go-genproto/yandex/cloud/k8s/v1 ClusterServiceServer
-//go:generate mockgen -destination=../mocks/k8s_node_group_service_server_mock.go -package=mocks github.com/yandex-cloud/go-genproto/yandex/cloud/k8s/v1 NodeGroupServiceServer
 
 func registerK8SMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
