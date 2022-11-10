@@ -113,9 +113,5 @@ func Clusters() *schema.Table {
 				Resolver: schema.PathResolver("NetworkImplementation"),
 			},
 		},
-
-		Relations: []*schema.Table{
-			NodeGroups(),
-		},
 	}
 }

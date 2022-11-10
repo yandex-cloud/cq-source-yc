@@ -45,7 +45,7 @@ func getS3StaticCredentials() (*credentials.Credentials, error) {
 	case idOk && secretOk:
 		return credentials.NewStaticCredentials(id, secret, ""), nil
 	default:
-		return nil, fmt.Errorf("service account static key should be specfied")
+		return nil, fmt.Errorf("service account static key should be specified")
 	}
 }
 

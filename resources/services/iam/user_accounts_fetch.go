@@ -71,10 +71,21 @@ func fetchUserAccountByID(ctx context.Context, client iam.UserAccountServiceClie
 		if err != nil {
 			return err
 		}
+
+		samlUserAccount := userAccount.GetSamlUserAccount()
+		if samlUserAccount == nil {
+			samlUserAccount = &iam.SamlUserAccount{}
+		}
+
+		yandexPassportUserAccount := userAccount.GetYandexPassportUserAccount()
+		if yandexPassportUserAccount == nil {
+			yandexPassportUserAccount = &iam.YandexPassportUserAccount{}
+		}
+
 		res <- UserAccount{
 			UserAccount:               userAccount,
-			SamlUserAccount:           userAccount.GetSamlUserAccount(),
-			YandexPassportUserAccount: userAccount.GetYandexPassportUserAccount(),
+			SamlUserAccount:           samlUserAccount,
+			YandexPassportUserAccount: yandexPassportUserAccount,
 		}
 	}
 	return nil

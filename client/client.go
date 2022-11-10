@@ -44,6 +44,10 @@ type Client struct {
 	MultiplexedResourceId string
 }
 
+func (c *Client) ID() string {
+	return c.MultiplexedResourceId
+}
+
 func (c *Client) Logger() *zerolog.Logger {
 	return &c.logger
 }

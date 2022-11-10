@@ -3,6 +3,7 @@ package plugin
 import (
 	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/access_bindings"
+	apigateways "github.com/yandex-cloud/cq-provider-yandex/resources/services/api_gateways"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/certificatemanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/compute"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/containerregistry"
@@ -11,7 +12,6 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/kms"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/organizationmanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/resourcemanager"
-	"github.com/yandex-cloud/cq-provider-yandex/resources/services/serverless"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/storage"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/vpc"
 )
@@ -33,16 +33,12 @@ func Tables() []*schema.Table {
 		iam.UserAccountsByFolder(),
 		iam.UserAccountsByOrganization(),
 		k8s.Clusters(),
-		k8s.NodeGroups(),
 		kms.SymmetricKeys(),
 		organizationmanager.Federations(),
 		organizationmanager.Organizations(),
 		resourcemanager.Clouds(),
 		resourcemanager.Folders(),
-		serverless.ApiGateways(),
-		serverless.Containers(),
-		serverless.Functions(),
-		serverless.Triggers(),
+		apigateways.ApiGateways(),
 		storage.Buckets(),
 		vpc.Addresses(),
 		vpc.Networks(),

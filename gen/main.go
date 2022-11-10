@@ -17,7 +17,7 @@ func main() {
 		recipes.KMS,
 		recipes.OrganizationManager,
 		recipes.ResourceManager,
-		recipes.Serverless,
+		recipes.ApiGateway,
 		recipes.Storage,
 		recipes.VPC,
 	} {

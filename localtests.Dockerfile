@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.17
+FROM golang:1.19
 WORKDIR /app
 
 # Copy YC provider

@@ -53,19 +53,29 @@ func Subnets() *schema.Table {
 				Resolver: schema.PathResolver("NetworkId"),
 			},
 			{
-				Name:     "status",
-				Type:     schema.TypeInt,
-				Resolver: schema.PathResolver("Status"),
+				Name:     "zone_id",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("ZoneId"),
 			},
 			{
-				Name:     "rules",
+				Name:     "v4_cidr_blocks",
+				Type:     schema.TypeStringArray,
+				Resolver: schema.PathResolver("V4CidrBlocks"),
+			},
+			{
+				Name:     "v6_cidr_blocks",
+				Type:     schema.TypeStringArray,
+				Resolver: schema.PathResolver("V6CidrBlocks"),
+			},
+			{
+				Name:     "route_table_id",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("RouteTableId"),
+			},
+			{
+				Name:     "dhcp_options",
 				Type:     schema.TypeJSON,
-				Resolver: schema.PathResolver("Rules"),
-			},
-			{
-				Name:     "default_for_network",
-				Type:     schema.TypeBool,
-				Resolver: schema.PathResolver("DefaultForNetwork"),
+				Resolver: schema.PathResolver("DhcpOptions"),
 			},
 		},
 	}

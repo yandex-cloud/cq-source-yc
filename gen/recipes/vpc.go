@@ -34,7 +34,7 @@ func VPC() []*Resource {
 		{
 			Service:      "vpc",
 			SubService:   "subnets",
-			Struct:       new(vpc.SecurityGroup),
+			Struct:       new(vpc.Subnet),
 			SkipFields:   []string{id},
 			ExtraColumns: codegen.ColumnDefinitions{idCol},
 			Multiplex:    multiplexFolder,

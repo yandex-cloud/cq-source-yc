@@ -4,6 +4,7 @@ import (
 	"context"
 
 	ycsdk "github.com/yandex-cloud/go-sdk"
+	"github.com/yandex-cloud/go-sdk/gen/apigateway"
 	"github.com/yandex-cloud/go-sdk/gen/certificatemanager"
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"github.com/yandex-cloud/go-sdk/gen/containerregistry"
@@ -28,7 +29,7 @@ type (
 		OrganizationManager     *organizationmanager.OrganizationManager
 		OrganizationManagerSAML *saml.OrganizationManagerSAML
 		ResourceManager         *resourcemanager.ResourceManager
-		Serverless              *ycsdk.Serverless
+		ApiGateway              *apigateway.Apigateway
 		Storage                 *storage.StorageAPI
 		VPC                     *vpc.VPC
 	}
@@ -45,7 +46,7 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		OrganizationManager:     sdk.OrganizationManager(),
 		OrganizationManagerSAML: sdk.OrganizationManagerSAML(),
 		ResourceManager:         sdk.ResourceManager(),
-		Serverless:              sdk.Serverless(),
+		ApiGateway:              sdk.Serverless().APIGateway(),
 		Storage:                 sdk.StorageAPI(),
 		VPC:                     sdk.VPC(),
 	}, nil
