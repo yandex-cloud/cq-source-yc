@@ -1,5 +1,3 @@
-project_name: plugins/source/cq-source-yandex
-
 before:
   hooks:
     - go mod download
