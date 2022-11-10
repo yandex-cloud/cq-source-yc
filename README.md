@@ -17,8 +17,7 @@ spec:
   # Source spec section
   name: "yandex"
   version: "v0.0.0"
-  path: "127.0.0.1:7777"
-
+  path: "yandex-cloud/yandex"
   destinations: ["postgresql"]
 
   skip_tables:
