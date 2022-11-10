@@ -10,13 +10,16 @@ CloudQuery Yandex.Cloud Provider ![BuildStatus](https://img.shields.io/github/wo
 This [CloudQuery](https://github.com/cloudquery/cloudquery)
 provider transforms Yandex.Cloud resources to relational and graph databases.
 
+### Credentials
+You may specify either [`YC_TOKEN`](https://cloud.yandex.com/en-ru/docs/iam/operations/iam-token/create) or [`YC_SERVICE_ACCOUNT_KEY_FILE`](https://cloud.yandex.com/en-ru/docs/iam/operations/api-key/create) as environment variables. `YC_SERVICE_ACCOUNT_KEY_FILE` have higher priority, which means if you specified both of variables, provider will use `YC_SERVICE_ACCOUNT_KEY_FILE`.
+
 ### Config Example
 ``` yaml
 kind: source
 spec:
   # Source spec section
   name: "yandex"
-  version: "v0.0.0"
+  version: "v0.3.0"
   path: "yandex-cloud/yandex"
   destinations: ["postgresql"]
 
