@@ -19,7 +19,7 @@ kind: source
 spec:
   # Source spec section
   name: "yandex"
-  version: "v0.3.1"
+  version: "v0.3.4"
   path: "yandex-cloud/yandex"
   destinations: ["postgresql"]
 
