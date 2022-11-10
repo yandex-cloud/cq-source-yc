@@ -23,7 +23,7 @@ builds:
         goarch: arm64
 archives:
   -
-    name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    name_template: "cq-source-yandex_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     format: zip
 checksum:
   name_template: 'checksums.txt'
