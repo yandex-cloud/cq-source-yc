@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	compute "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockInstanceServiceServer is a mock of InstanceServiceServer interface.
+// MockInstanceServiceServer is a mock of InstanceServiceServer interface
 type MockInstanceServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockInstanceServiceServerMockRecorder
 }
 
-// MockInstanceServiceServerMockRecorder is the mock recorder for MockInstanceServiceServer.
+// MockInstanceServiceServerMockRecorder is the mock recorder for MockInstanceServiceServer
 type MockInstanceServiceServerMockRecorder struct {
 	mock *MockInstanceServiceServer
 }
 
-// NewMockInstanceServiceServer creates a new mock instance.
+// NewMockInstanceServiceServer creates a new mock instance
 func NewMockInstanceServiceServer(ctrl *gomock.Controller) *MockInstanceServiceServer {
 	mock := &MockInstanceServiceServer{ctrl: ctrl}
 	mock.recorder = &MockInstanceServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockInstanceServiceServer) EXPECT() *MockInstanceServiceServerMockRecorder {
 	return m.recorder
 }
 
-// AddOneToOneNat mocks base method.
+// AddOneToOneNat mocks base method
 func (m *MockInstanceServiceServer) AddOneToOneNat(arg0 context.Context, arg1 *compute.AddInstanceOneToOneNatRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddOneToOneNat", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockInstanceServiceServer) AddOneToOneNat(arg0 context.Context, arg1 *c
 	return ret0, ret1
 }
 
-// AddOneToOneNat indicates an expected call of AddOneToOneNat.
+// AddOneToOneNat indicates an expected call of AddOneToOneNat
 func (mr *MockInstanceServiceServerMockRecorder) AddOneToOneNat(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddOneToOneNat", reflect.TypeOf((*MockInstanceServiceServer)(nil).AddOneToOneNat), arg0, arg1)
 }
 
-// AttachDisk mocks base method.
+// AttachDisk mocks base method
 func (m *MockInstanceServiceServer) AttachDisk(arg0 context.Context, arg1 *compute.AttachInstanceDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AttachDisk", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockInstanceServiceServer) AttachDisk(arg0 context.Context, arg1 *compu
 	return ret0, ret1
 }
 
-// AttachDisk indicates an expected call of AttachDisk.
+// AttachDisk indicates an expected call of AttachDisk
 func (mr *MockInstanceServiceServerMockRecorder) AttachDisk(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AttachDisk", reflect.TypeOf((*MockInstanceServiceServer)(nil).AttachDisk), arg0, arg1)
 }
 
-// AttachFilesystem mocks base method.
+// AttachFilesystem mocks base method
 func (m *MockInstanceServiceServer) AttachFilesystem(arg0 context.Context, arg1 *compute.AttachInstanceFilesystemRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AttachFilesystem", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockInstanceServiceServer) AttachFilesystem(arg0 context.Context, arg1 
 	return ret0, ret1
 }
 
-// AttachFilesystem indicates an expected call of AttachFilesystem.
+// AttachFilesystem indicates an expected call of AttachFilesystem
 func (mr *MockInstanceServiceServerMockRecorder) AttachFilesystem(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AttachFilesystem", reflect.TypeOf((*MockInstanceServiceServer)(nil).AttachFilesystem), arg0, arg1)
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockInstanceServiceServer) Create(arg0 context.Context, arg1 *compute.CreateInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockInstanceServiceServer) Create(arg0 context.Context, arg1 *compute.C
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockInstanceServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockInstanceServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockInstanceServiceServer) Delete(arg0 context.Context, arg1 *compute.DeleteInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -105,13 +104,13 @@ func (m *MockInstanceServiceServer) Delete(arg0 context.Context, arg1 *compute.D
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockInstanceServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockInstanceServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// DetachDisk mocks base method.
+// DetachDisk mocks base method
 func (m *MockInstanceServiceServer) DetachDisk(arg0 context.Context, arg1 *compute.DetachInstanceDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DetachDisk", arg0, arg1)
@@ -120,13 +119,13 @@ func (m *MockInstanceServiceServer) DetachDisk(arg0 context.Context, arg1 *compu
 	return ret0, ret1
 }
 
-// DetachDisk indicates an expected call of DetachDisk.
+// DetachDisk indicates an expected call of DetachDisk
 func (mr *MockInstanceServiceServerMockRecorder) DetachDisk(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DetachDisk", reflect.TypeOf((*MockInstanceServiceServer)(nil).DetachDisk), arg0, arg1)
 }
 
-// DetachFilesystem mocks base method.
+// DetachFilesystem mocks base method
 func (m *MockInstanceServiceServer) DetachFilesystem(arg0 context.Context, arg1 *compute.DetachInstanceFilesystemRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DetachFilesystem", arg0, arg1)
@@ -135,13 +134,13 @@ func (m *MockInstanceServiceServer) DetachFilesystem(arg0 context.Context, arg1 
 	return ret0, ret1
 }
 
-// DetachFilesystem indicates an expected call of DetachFilesystem.
+// DetachFilesystem indicates an expected call of DetachFilesystem
 func (mr *MockInstanceServiceServerMockRecorder) DetachFilesystem(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DetachFilesystem", reflect.TypeOf((*MockInstanceServiceServer)(nil).DetachFilesystem), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockInstanceServiceServer) Get(arg0 context.Context, arg1 *compute.GetInstanceRequest) (*compute.Instance, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -150,13 +149,13 @@ func (m *MockInstanceServiceServer) Get(arg0 context.Context, arg1 *compute.GetI
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockInstanceServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockInstanceServiceServer)(nil).Get), arg0, arg1)
 }
 
-// GetSerialPortOutput mocks base method.
+// GetSerialPortOutput mocks base method
 func (m *MockInstanceServiceServer) GetSerialPortOutput(arg0 context.Context, arg1 *compute.GetInstanceSerialPortOutputRequest) (*compute.GetInstanceSerialPortOutputResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSerialPortOutput", arg0, arg1)
@@ -165,13 +164,13 @@ func (m *MockInstanceServiceServer) GetSerialPortOutput(arg0 context.Context, ar
 	return ret0, ret1
 }
 
-// GetSerialPortOutput indicates an expected call of GetSerialPortOutput.
+// GetSerialPortOutput indicates an expected call of GetSerialPortOutput
 func (mr *MockInstanceServiceServerMockRecorder) GetSerialPortOutput(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSerialPortOutput", reflect.TypeOf((*MockInstanceServiceServer)(nil).GetSerialPortOutput), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockInstanceServiceServer) List(arg0 context.Context, arg1 *compute.ListInstancesRequest) (*compute.ListInstancesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -180,13 +179,13 @@ func (m *MockInstanceServiceServer) List(arg0 context.Context, arg1 *compute.Lis
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockInstanceServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockInstanceServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockInstanceServiceServer) ListOperations(arg0 context.Context, arg1 *compute.ListInstanceOperationsRequest) (*compute.ListInstanceOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -195,13 +194,13 @@ func (m *MockInstanceServiceServer) ListOperations(arg0 context.Context, arg1 *c
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockInstanceServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockInstanceServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// Move mocks base method.
+// Move mocks base method
 func (m *MockInstanceServiceServer) Move(arg0 context.Context, arg1 *compute.MoveInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Move", arg0, arg1)
@@ -210,13 +209,13 @@ func (m *MockInstanceServiceServer) Move(arg0 context.Context, arg1 *compute.Mov
 	return ret0, ret1
 }
 
-// Move indicates an expected call of Move.
+// Move indicates an expected call of Move
 func (mr *MockInstanceServiceServerMockRecorder) Move(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Move", reflect.TypeOf((*MockInstanceServiceServer)(nil).Move), arg0, arg1)
 }
 
-// RemoveOneToOneNat mocks base method.
+// RemoveOneToOneNat mocks base method
 func (m *MockInstanceServiceServer) RemoveOneToOneNat(arg0 context.Context, arg1 *compute.RemoveInstanceOneToOneNatRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveOneToOneNat", arg0, arg1)
@@ -225,13 +224,13 @@ func (m *MockInstanceServiceServer) RemoveOneToOneNat(arg0 context.Context, arg1
 	return ret0, ret1
 }
 
-// RemoveOneToOneNat indicates an expected call of RemoveOneToOneNat.
+// RemoveOneToOneNat indicates an expected call of RemoveOneToOneNat
 func (mr *MockInstanceServiceServerMockRecorder) RemoveOneToOneNat(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveOneToOneNat", reflect.TypeOf((*MockInstanceServiceServer)(nil).RemoveOneToOneNat), arg0, arg1)
 }
 
-// Restart mocks base method.
+// Restart mocks base method
 func (m *MockInstanceServiceServer) Restart(arg0 context.Context, arg1 *compute.RestartInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Restart", arg0, arg1)
@@ -240,13 +239,13 @@ func (m *MockInstanceServiceServer) Restart(arg0 context.Context, arg1 *compute.
 	return ret0, ret1
 }
 
-// Restart indicates an expected call of Restart.
+// Restart indicates an expected call of Restart
 func (mr *MockInstanceServiceServerMockRecorder) Restart(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Restart", reflect.TypeOf((*MockInstanceServiceServer)(nil).Restart), arg0, arg1)
 }
 
-// Start mocks base method.
+// Start mocks base method
 func (m *MockInstanceServiceServer) Start(arg0 context.Context, arg1 *compute.StartInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Start", arg0, arg1)
@@ -255,13 +254,13 @@ func (m *MockInstanceServiceServer) Start(arg0 context.Context, arg1 *compute.St
 	return ret0, ret1
 }
 
-// Start indicates an expected call of Start.
+// Start indicates an expected call of Start
 func (mr *MockInstanceServiceServerMockRecorder) Start(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Start", reflect.TypeOf((*MockInstanceServiceServer)(nil).Start), arg0, arg1)
 }
 
-// Stop mocks base method.
+// Stop mocks base method
 func (m *MockInstanceServiceServer) Stop(arg0 context.Context, arg1 *compute.StopInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Stop", arg0, arg1)
@@ -270,13 +269,13 @@ func (m *MockInstanceServiceServer) Stop(arg0 context.Context, arg1 *compute.Sto
 	return ret0, ret1
 }
 
-// Stop indicates an expected call of Stop.
+// Stop indicates an expected call of Stop
 func (mr *MockInstanceServiceServerMockRecorder) Stop(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stop", reflect.TypeOf((*MockInstanceServiceServer)(nil).Stop), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockInstanceServiceServer) Update(arg0 context.Context, arg1 *compute.UpdateInstanceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -285,13 +284,13 @@ func (m *MockInstanceServiceServer) Update(arg0 context.Context, arg1 *compute.U
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockInstanceServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockInstanceServiceServer)(nil).Update), arg0, arg1)
 }
 
-// UpdateMetadata mocks base method.
+// UpdateMetadata mocks base method
 func (m *MockInstanceServiceServer) UpdateMetadata(arg0 context.Context, arg1 *compute.UpdateInstanceMetadataRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateMetadata", arg0, arg1)
@@ -300,13 +299,13 @@ func (m *MockInstanceServiceServer) UpdateMetadata(arg0 context.Context, arg1 *c
 	return ret0, ret1
 }
 
-// UpdateMetadata indicates an expected call of UpdateMetadata.
+// UpdateMetadata indicates an expected call of UpdateMetadata
 func (mr *MockInstanceServiceServerMockRecorder) UpdateMetadata(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMetadata", reflect.TypeOf((*MockInstanceServiceServer)(nil).UpdateMetadata), arg0, arg1)
 }
 
-// UpdateNetworkInterface mocks base method.
+// UpdateNetworkInterface mocks base method
 func (m *MockInstanceServiceServer) UpdateNetworkInterface(arg0 context.Context, arg1 *compute.UpdateInstanceNetworkInterfaceRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateNetworkInterface", arg0, arg1)
@@ -315,7 +314,7 @@ func (m *MockInstanceServiceServer) UpdateNetworkInterface(arg0 context.Context,
 	return ret0, ret1
 }
 
-// UpdateNetworkInterface indicates an expected call of UpdateNetworkInterface.
+// UpdateNetworkInterface indicates an expected call of UpdateNetworkInterface
 func (mr *MockInstanceServiceServerMockRecorder) UpdateNetworkInterface(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNetworkInterface", reflect.TypeOf((*MockInstanceServiceServer)(nil).UpdateNetworkInterface), arg0, arg1)

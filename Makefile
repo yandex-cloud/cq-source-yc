@@ -4,17 +4,9 @@ NC=\033[0m
 
 # Provider generation
 
-cloudapi:
-	@git clone https://github.com/yandex-cloud/cloudapi.git
-
 .PHONY: generate-resources
-generate-resources: cloudapi
-	@go run gen/full/base/main.go
-	@go run gen/full/serverless/main.go
-	@go run gen/full/access_bindings/main.go
-	@go run gen/full/resource_manager/main.go
-	@go run gen/full/resource_manager_tests/main.go
-	@go run gen/full/provider/main.go
+generate-resources:
+	@go run gen/main.go
 
 # Debug
 
@@ -31,6 +23,11 @@ postgres:
 	 postgres:latest
 
 # Tests
+.PHONY: local-tests
+local-tests: docker-build-local-tests
+	@docker run --rm \
+	--name=cq_provider_yandex_local_tests \
+	cq_provider_yandex_local_tests
 
 .PHONY: docker-build-local-tests
 docker-build-local-tests:
@@ -74,14 +71,6 @@ docker-minio: docker-create-net
     	minio/minio server /mnt/data
 	@until nc -vz localhost 9000;do echo -n .; sleep 1;done;echo ""
 	@env AWS_ACCESS_KEY_ID=user AWS_SECRET_ACCESS_KEY=12345678 aws --endpoint=http://localhost:9000 s3 mb s3://cq-test-bucket
-
-.PHONY: local-tests
-local-tests: docker-postgresql docker-build-local-tests docker-minio
-	@docker run --rm \
-	--name=cq_provider_yandex_local_tests \
-	--network=cq_provider_yandex_net \
-	-e DATABASE_URL="host=cq_provider_yandex_postgresql user=postgres password=pass DB.name=postgres port=5432" \
-	cq_provider_yandex_local_tests
 
 .PHONY: integration-tests
 integration-tests: docker-postgresql docker-build-integration-tests

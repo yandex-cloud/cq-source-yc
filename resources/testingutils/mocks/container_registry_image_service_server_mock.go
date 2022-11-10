@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	containerregistry "github.com/yandex-cloud/go-genproto/yandex/cloud/containerregistry/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockContainerRegistryImageServiceServer is a mock of ImageServiceServer interface.
+// MockContainerRegistryImageServiceServer is a mock of ImageServiceServer interface
 type MockContainerRegistryImageServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockContainerRegistryImageServiceServerMockRecorder
 }
 
-// MockContainerRegistryImageServiceServerMockRecorder is the mock recorder for MockContainerRegistryImageServiceServer.
+// MockContainerRegistryImageServiceServerMockRecorder is the mock recorder for MockContainerRegistryImageServiceServer
 type MockContainerRegistryImageServiceServerMockRecorder struct {
 	mock *MockContainerRegistryImageServiceServer
 }
 
-// NewMockContainerRegistryImageServiceServer creates a new mock instance.
+// NewMockContainerRegistryImageServiceServer creates a new mock instance
 func NewMockContainerRegistryImageServiceServer(ctrl *gomock.Controller) *MockContainerRegistryImageServiceServer {
 	mock := &MockContainerRegistryImageServiceServer{ctrl: ctrl}
 	mock.recorder = &MockContainerRegistryImageServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockContainerRegistryImageServiceServer) EXPECT() *MockContainerRegistryImageServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockContainerRegistryImageServiceServer) Delete(arg0 context.Context, arg1 *containerregistry.DeleteImageRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockContainerRegistryImageServiceServer) Delete(arg0 context.Context, a
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockContainerRegistryImageServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockContainerRegistryImageServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockContainerRegistryImageServiceServer) Get(arg0 context.Context, arg1 *containerregistry.GetImageRequest) (*containerregistry.Image, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockContainerRegistryImageServiceServer) Get(arg0 context.Context, arg1
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockContainerRegistryImageServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockContainerRegistryImageServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockContainerRegistryImageServiceServer) List(arg0 context.Context, arg1 *containerregistry.ListImagesRequest) (*containerregistry.ListImagesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -75,7 +74,7 @@ func (m *MockContainerRegistryImageServiceServer) List(arg0 context.Context, arg
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockContainerRegistryImageServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockContainerRegistryImageServiceServer)(nil).List), arg0, arg1)

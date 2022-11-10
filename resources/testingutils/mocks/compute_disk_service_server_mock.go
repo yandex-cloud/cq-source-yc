@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	compute "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockDiskServiceServer is a mock of DiskServiceServer interface.
+// MockDiskServiceServer is a mock of DiskServiceServer interface
 type MockDiskServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockDiskServiceServerMockRecorder
 }
 
-// MockDiskServiceServerMockRecorder is the mock recorder for MockDiskServiceServer.
+// MockDiskServiceServerMockRecorder is the mock recorder for MockDiskServiceServer
 type MockDiskServiceServerMockRecorder struct {
 	mock *MockDiskServiceServer
 }
 
-// NewMockDiskServiceServer creates a new mock instance.
+// NewMockDiskServiceServer creates a new mock instance
 func NewMockDiskServiceServer(ctrl *gomock.Controller) *MockDiskServiceServer {
 	mock := &MockDiskServiceServer{ctrl: ctrl}
 	mock.recorder = &MockDiskServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockDiskServiceServer) EXPECT() *MockDiskServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockDiskServiceServer) Create(arg0 context.Context, arg1 *compute.CreateDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockDiskServiceServer) Create(arg0 context.Context, arg1 *compute.Creat
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockDiskServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockDiskServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockDiskServiceServer) Delete(arg0 context.Context, arg1 *compute.DeleteDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockDiskServiceServer) Delete(arg0 context.Context, arg1 *compute.Delet
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockDiskServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockDiskServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockDiskServiceServer) Get(arg0 context.Context, arg1 *compute.GetDiskRequest) (*compute.Disk, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockDiskServiceServer) Get(arg0 context.Context, arg1 *compute.GetDiskR
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockDiskServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockDiskServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockDiskServiceServer) List(arg0 context.Context, arg1 *compute.ListDisksRequest) (*compute.ListDisksResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockDiskServiceServer) List(arg0 context.Context, arg1 *compute.ListDis
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockDiskServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockDiskServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockDiskServiceServer) ListOperations(arg0 context.Context, arg1 *compute.ListDiskOperationsRequest) (*compute.ListDiskOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -105,13 +104,28 @@ func (m *MockDiskServiceServer) ListOperations(arg0 context.Context, arg1 *compu
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockDiskServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockDiskServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// Move mocks base method.
+// ListSnapshotSchedules mocks base method
+func (m *MockDiskServiceServer) ListSnapshotSchedules(arg0 context.Context, arg1 *compute.ListDiskSnapshotSchedulesRequest) (*compute.ListDiskSnapshotSchedulesResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListSnapshotSchedules", arg0, arg1)
+	ret0, _ := ret[0].(*compute.ListDiskSnapshotSchedulesResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSnapshotSchedules indicates an expected call of ListSnapshotSchedules
+func (mr *MockDiskServiceServerMockRecorder) ListSnapshotSchedules(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSnapshotSchedules", reflect.TypeOf((*MockDiskServiceServer)(nil).ListSnapshotSchedules), arg0, arg1)
+}
+
+// Move mocks base method
 func (m *MockDiskServiceServer) Move(arg0 context.Context, arg1 *compute.MoveDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Move", arg0, arg1)
@@ -120,13 +134,13 @@ func (m *MockDiskServiceServer) Move(arg0 context.Context, arg1 *compute.MoveDis
 	return ret0, ret1
 }
 
-// Move indicates an expected call of Move.
+// Move indicates an expected call of Move
 func (mr *MockDiskServiceServerMockRecorder) Move(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Move", reflect.TypeOf((*MockDiskServiceServer)(nil).Move), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockDiskServiceServer) Update(arg0 context.Context, arg1 *compute.UpdateDiskRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -135,7 +149,7 @@ func (m *MockDiskServiceServer) Update(arg0 context.Context, arg1 *compute.Updat
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockDiskServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockDiskServiceServer)(nil).Update), arg0, arg1)

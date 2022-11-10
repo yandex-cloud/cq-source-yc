@@ -50,7 +50,8 @@ func StartOrganizationManagerServer(t *testing.T, ctx context.Context) (*organiz
 	), nil
 }
 
-//go:generate mockgen -destination=../mocks/organization_manager_organization_service_server_mock.go -package=mocks github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1 OrganizationServiceServer
+// go:generate mockgen -destination=../mocks/organization_manager_organization_service_server_mock.go -package=mocks github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1 OrganizationServiceServer
+// go:generate mockgen -destination=../mocks/organization_manager_group_service_server_mock.go -package=mocks github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1 GroupServiceServer
 
 func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
@@ -73,6 +74,7 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 			return &organizationmanager1.ListOrganizationsResponse{Organizations: []*organizationmanager1.Organization{&organization}}, nil
 		}).
 		AnyTimes()
+
 	var accessBinding access.AccessBinding
 	err = faker.FakeData(&accessBinding)
 	if err != nil {
@@ -89,6 +91,26 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 		}).
 		AnyTimes()
 	organizationmanager1.RegisterOrganizationServiceServer(serv, mOrganizationServ)
+
+	mGroupServ := mocks.NewMockGroupServiceServer(ctrl)
+	var group organizationmanager1.Group
+	faker.SetIgnoreInterface(true)
+	err = faker.FakeData(&group)
+	if err != nil {
+		return err
+	}
+	mGroupServ.
+		EXPECT().
+		List(gomock.Any(), gomock.Any()).
+		DoAndReturn(func(_ context.Context, req *organizationmanager1.ListGroupsRequest) (*organizationmanager1.ListGroupsResponse, error) {
+			if req == nil {
+				return nil, status.Errorf(codes.Canceled, "request is nil")
+			}
+			return &organizationmanager1.ListGroupsResponse{Groups: []*organizationmanager1.Group{&group}}, nil
+		}).
+		AnyTimes()
+
+	organizationmanager1.RegisterGroupServiceServer(serv, mGroupServ)
 
 	return nil
 }

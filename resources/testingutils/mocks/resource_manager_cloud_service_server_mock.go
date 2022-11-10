@@ -6,38 +6,37 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	access "github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
 	resourcemanager "github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
+	reflect "reflect"
 )
 
-// MockCloudServiceServer is a mock of CloudServiceServer interface.
+// MockCloudServiceServer is a mock of CloudServiceServer interface
 type MockCloudServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockCloudServiceServerMockRecorder
 }
 
-// MockCloudServiceServerMockRecorder is the mock recorder for MockCloudServiceServer.
+// MockCloudServiceServerMockRecorder is the mock recorder for MockCloudServiceServer
 type MockCloudServiceServerMockRecorder struct {
 	mock *MockCloudServiceServer
 }
 
-// NewMockCloudServiceServer creates a new mock instance.
+// NewMockCloudServiceServer creates a new mock instance
 func NewMockCloudServiceServer(ctrl *gomock.Controller) *MockCloudServiceServer {
 	mock := &MockCloudServiceServer{ctrl: ctrl}
 	mock.recorder = &MockCloudServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockCloudServiceServer) EXPECT() *MockCloudServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockCloudServiceServer) Create(arg0 context.Context, arg1 *resourcemanager.CreateCloudRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -46,13 +45,13 @@ func (m *MockCloudServiceServer) Create(arg0 context.Context, arg1 *resourcemana
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockCloudServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCloudServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockCloudServiceServer) Delete(arg0 context.Context, arg1 *resourcemanager.DeleteCloudRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -61,13 +60,13 @@ func (m *MockCloudServiceServer) Delete(arg0 context.Context, arg1 *resourcemana
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockCloudServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCloudServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockCloudServiceServer) Get(arg0 context.Context, arg1 *resourcemanager.GetCloudRequest) (*resourcemanager.Cloud, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -76,13 +75,13 @@ func (m *MockCloudServiceServer) Get(arg0 context.Context, arg1 *resourcemanager
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockCloudServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCloudServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockCloudServiceServer) List(arg0 context.Context, arg1 *resourcemanager.ListCloudsRequest) (*resourcemanager.ListCloudsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -91,13 +90,13 @@ func (m *MockCloudServiceServer) List(arg0 context.Context, arg1 *resourcemanage
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockCloudServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockCloudServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListAccessBindings mocks base method.
+// ListAccessBindings mocks base method
 func (m *MockCloudServiceServer) ListAccessBindings(arg0 context.Context, arg1 *access.ListAccessBindingsRequest) (*access.ListAccessBindingsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAccessBindings", arg0, arg1)
@@ -106,13 +105,13 @@ func (m *MockCloudServiceServer) ListAccessBindings(arg0 context.Context, arg1 *
 	return ret0, ret1
 }
 
-// ListAccessBindings indicates an expected call of ListAccessBindings.
+// ListAccessBindings indicates an expected call of ListAccessBindings
 func (mr *MockCloudServiceServerMockRecorder) ListAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccessBindings", reflect.TypeOf((*MockCloudServiceServer)(nil).ListAccessBindings), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockCloudServiceServer) ListOperations(arg0 context.Context, arg1 *resourcemanager.ListCloudOperationsRequest) (*resourcemanager.ListCloudOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -121,13 +120,13 @@ func (m *MockCloudServiceServer) ListOperations(arg0 context.Context, arg1 *reso
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockCloudServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockCloudServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// SetAccessBindings mocks base method.
+// SetAccessBindings mocks base method
 func (m *MockCloudServiceServer) SetAccessBindings(arg0 context.Context, arg1 *access.SetAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetAccessBindings", arg0, arg1)
@@ -136,13 +135,13 @@ func (m *MockCloudServiceServer) SetAccessBindings(arg0 context.Context, arg1 *a
 	return ret0, ret1
 }
 
-// SetAccessBindings indicates an expected call of SetAccessBindings.
+// SetAccessBindings indicates an expected call of SetAccessBindings
 func (mr *MockCloudServiceServerMockRecorder) SetAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAccessBindings", reflect.TypeOf((*MockCloudServiceServer)(nil).SetAccessBindings), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockCloudServiceServer) Update(arg0 context.Context, arg1 *resourcemanager.UpdateCloudRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -151,13 +150,13 @@ func (m *MockCloudServiceServer) Update(arg0 context.Context, arg1 *resourcemana
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockCloudServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCloudServiceServer)(nil).Update), arg0, arg1)
 }
 
-// UpdateAccessBindings mocks base method.
+// UpdateAccessBindings mocks base method
 func (m *MockCloudServiceServer) UpdateAccessBindings(arg0 context.Context, arg1 *access.UpdateAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateAccessBindings", arg0, arg1)
@@ -166,7 +165,7 @@ func (m *MockCloudServiceServer) UpdateAccessBindings(arg0 context.Context, arg1
 	return ret0, ret1
 }
 
-// UpdateAccessBindings indicates an expected call of UpdateAccessBindings.
+// UpdateAccessBindings indicates an expected call of UpdateAccessBindings
 func (mr *MockCloudServiceServerMockRecorder) UpdateAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccessBindings", reflect.TypeOf((*MockCloudServiceServer)(nil).UpdateAccessBindings), arg0, arg1)

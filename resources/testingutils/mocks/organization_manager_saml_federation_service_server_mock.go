@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
 	saml "github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1/saml"
+	reflect "reflect"
 )
 
-// MockFederationServiceServer is a mock of FederationServiceServer interface.
+// MockFederationServiceServer is a mock of FederationServiceServer interface
 type MockFederationServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockFederationServiceServerMockRecorder
 }
 
-// MockFederationServiceServerMockRecorder is the mock recorder for MockFederationServiceServer.
+// MockFederationServiceServerMockRecorder is the mock recorder for MockFederationServiceServer
 type MockFederationServiceServerMockRecorder struct {
 	mock *MockFederationServiceServer
 }
 
-// NewMockFederationServiceServer creates a new mock instance.
+// NewMockFederationServiceServer creates a new mock instance
 func NewMockFederationServiceServer(ctrl *gomock.Controller) *MockFederationServiceServer {
 	mock := &MockFederationServiceServer{ctrl: ctrl}
 	mock.recorder = &MockFederationServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockFederationServiceServer) EXPECT() *MockFederationServiceServerMockRecorder {
 	return m.recorder
 }
 
-// AddUserAccounts mocks base method.
+// AddUserAccounts mocks base method
 func (m *MockFederationServiceServer) AddUserAccounts(arg0 context.Context, arg1 *saml.AddFederatedUserAccountsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddUserAccounts", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockFederationServiceServer) AddUserAccounts(arg0 context.Context, arg1
 	return ret0, ret1
 }
 
-// AddUserAccounts indicates an expected call of AddUserAccounts.
+// AddUserAccounts indicates an expected call of AddUserAccounts
 func (mr *MockFederationServiceServerMockRecorder) AddUserAccounts(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserAccounts", reflect.TypeOf((*MockFederationServiceServer)(nil).AddUserAccounts), arg0, arg1)
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockFederationServiceServer) Create(arg0 context.Context, arg1 *saml.CreateFederationRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockFederationServiceServer) Create(arg0 context.Context, arg1 *saml.Cr
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockFederationServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFederationServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockFederationServiceServer) Delete(arg0 context.Context, arg1 *saml.DeleteFederationRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockFederationServiceServer) Delete(arg0 context.Context, arg1 *saml.De
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockFederationServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockFederationServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockFederationServiceServer) Get(arg0 context.Context, arg1 *saml.GetFederationRequest) (*saml.Federation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockFederationServiceServer) Get(arg0 context.Context, arg1 *saml.GetFe
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockFederationServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockFederationServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockFederationServiceServer) List(arg0 context.Context, arg1 *saml.ListFederationsRequest) (*saml.ListFederationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -105,13 +104,13 @@ func (m *MockFederationServiceServer) List(arg0 context.Context, arg1 *saml.List
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockFederationServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockFederationServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockFederationServiceServer) ListOperations(arg0 context.Context, arg1 *saml.ListFederationOperationsRequest) (*saml.ListFederationOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -120,13 +119,13 @@ func (m *MockFederationServiceServer) ListOperations(arg0 context.Context, arg1 
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockFederationServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockFederationServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// ListUserAccounts mocks base method.
+// ListUserAccounts mocks base method
 func (m *MockFederationServiceServer) ListUserAccounts(arg0 context.Context, arg1 *saml.ListFederatedUserAccountsRequest) (*saml.ListFederatedUserAccountsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListUserAccounts", arg0, arg1)
@@ -135,13 +134,13 @@ func (m *MockFederationServiceServer) ListUserAccounts(arg0 context.Context, arg
 	return ret0, ret1
 }
 
-// ListUserAccounts indicates an expected call of ListUserAccounts.
+// ListUserAccounts indicates an expected call of ListUserAccounts
 func (mr *MockFederationServiceServerMockRecorder) ListUserAccounts(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUserAccounts", reflect.TypeOf((*MockFederationServiceServer)(nil).ListUserAccounts), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockFederationServiceServer) Update(arg0 context.Context, arg1 *saml.UpdateFederationRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -150,7 +149,7 @@ func (m *MockFederationServiceServer) Update(arg0 context.Context, arg1 *saml.Up
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockFederationServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockFederationServiceServer)(nil).Update), arg0, arg1)

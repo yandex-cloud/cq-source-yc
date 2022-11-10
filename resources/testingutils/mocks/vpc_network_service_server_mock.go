@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
 	vpc "github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
+	reflect "reflect"
 )
 
-// MockNetworkServiceServer is a mock of NetworkServiceServer interface.
+// MockNetworkServiceServer is a mock of NetworkServiceServer interface
 type MockNetworkServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockNetworkServiceServerMockRecorder
 }
 
-// MockNetworkServiceServerMockRecorder is the mock recorder for MockNetworkServiceServer.
+// MockNetworkServiceServerMockRecorder is the mock recorder for MockNetworkServiceServer
 type MockNetworkServiceServerMockRecorder struct {
 	mock *MockNetworkServiceServer
 }
 
-// NewMockNetworkServiceServer creates a new mock instance.
+// NewMockNetworkServiceServer creates a new mock instance
 func NewMockNetworkServiceServer(ctrl *gomock.Controller) *MockNetworkServiceServer {
 	mock := &MockNetworkServiceServer{ctrl: ctrl}
 	mock.recorder = &MockNetworkServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockNetworkServiceServer) EXPECT() *MockNetworkServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockNetworkServiceServer) Create(arg0 context.Context, arg1 *vpc.CreateNetworkRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockNetworkServiceServer) Create(arg0 context.Context, arg1 *vpc.Create
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockNetworkServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockNetworkServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockNetworkServiceServer) Delete(arg0 context.Context, arg1 *vpc.DeleteNetworkRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockNetworkServiceServer) Delete(arg0 context.Context, arg1 *vpc.Delete
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockNetworkServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockNetworkServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockNetworkServiceServer) Get(arg0 context.Context, arg1 *vpc.GetNetworkRequest) (*vpc.Network, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockNetworkServiceServer) Get(arg0 context.Context, arg1 *vpc.GetNetwor
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockNetworkServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockNetworkServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockNetworkServiceServer) List(arg0 context.Context, arg1 *vpc.ListNetworksRequest) (*vpc.ListNetworksResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockNetworkServiceServer) List(arg0 context.Context, arg1 *vpc.ListNetw
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockNetworkServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockNetworkServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockNetworkServiceServer) ListOperations(arg0 context.Context, arg1 *vpc.ListNetworkOperationsRequest) (*vpc.ListNetworkOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -105,13 +104,13 @@ func (m *MockNetworkServiceServer) ListOperations(arg0 context.Context, arg1 *vp
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockNetworkServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockNetworkServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// ListRouteTables mocks base method.
+// ListRouteTables mocks base method
 func (m *MockNetworkServiceServer) ListRouteTables(arg0 context.Context, arg1 *vpc.ListNetworkRouteTablesRequest) (*vpc.ListNetworkRouteTablesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListRouteTables", arg0, arg1)
@@ -120,13 +119,13 @@ func (m *MockNetworkServiceServer) ListRouteTables(arg0 context.Context, arg1 *v
 	return ret0, ret1
 }
 
-// ListRouteTables indicates an expected call of ListRouteTables.
+// ListRouteTables indicates an expected call of ListRouteTables
 func (mr *MockNetworkServiceServerMockRecorder) ListRouteTables(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRouteTables", reflect.TypeOf((*MockNetworkServiceServer)(nil).ListRouteTables), arg0, arg1)
 }
 
-// ListSecurityGroups mocks base method.
+// ListSecurityGroups mocks base method
 func (m *MockNetworkServiceServer) ListSecurityGroups(arg0 context.Context, arg1 *vpc.ListNetworkSecurityGroupsRequest) (*vpc.ListNetworkSecurityGroupsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListSecurityGroups", arg0, arg1)
@@ -135,13 +134,13 @@ func (m *MockNetworkServiceServer) ListSecurityGroups(arg0 context.Context, arg1
 	return ret0, ret1
 }
 
-// ListSecurityGroups indicates an expected call of ListSecurityGroups.
+// ListSecurityGroups indicates an expected call of ListSecurityGroups
 func (mr *MockNetworkServiceServerMockRecorder) ListSecurityGroups(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSecurityGroups", reflect.TypeOf((*MockNetworkServiceServer)(nil).ListSecurityGroups), arg0, arg1)
 }
 
-// ListSubnets mocks base method.
+// ListSubnets mocks base method
 func (m *MockNetworkServiceServer) ListSubnets(arg0 context.Context, arg1 *vpc.ListNetworkSubnetsRequest) (*vpc.ListNetworkSubnetsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListSubnets", arg0, arg1)
@@ -150,13 +149,13 @@ func (m *MockNetworkServiceServer) ListSubnets(arg0 context.Context, arg1 *vpc.L
 	return ret0, ret1
 }
 
-// ListSubnets indicates an expected call of ListSubnets.
+// ListSubnets indicates an expected call of ListSubnets
 func (mr *MockNetworkServiceServerMockRecorder) ListSubnets(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSubnets", reflect.TypeOf((*MockNetworkServiceServer)(nil).ListSubnets), arg0, arg1)
 }
 
-// Move mocks base method.
+// Move mocks base method
 func (m *MockNetworkServiceServer) Move(arg0 context.Context, arg1 *vpc.MoveNetworkRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Move", arg0, arg1)
@@ -165,13 +164,13 @@ func (m *MockNetworkServiceServer) Move(arg0 context.Context, arg1 *vpc.MoveNetw
 	return ret0, ret1
 }
 
-// Move indicates an expected call of Move.
+// Move indicates an expected call of Move
 func (mr *MockNetworkServiceServerMockRecorder) Move(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Move", reflect.TypeOf((*MockNetworkServiceServer)(nil).Move), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockNetworkServiceServer) Update(arg0 context.Context, arg1 *vpc.UpdateNetworkRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -180,7 +179,7 @@ func (m *MockNetworkServiceServer) Update(arg0 context.Context, arg1 *vpc.Update
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockNetworkServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockNetworkServiceServer)(nil).Update), arg0, arg1)

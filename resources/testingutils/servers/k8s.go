@@ -61,6 +61,18 @@ func registerK8SMocks(t *testing.T, serv *grpc.Server) error {
 	if err != nil {
 		return err
 	}
+
+	var cilium k8s1.Cilium
+	err = faker.FakeData(&cilium)
+	if err != nil {
+		return err
+	}
+
+	cluster.InternetGateway = &k8s1.Cluster_GatewayIpv4Address{GatewayIpv4Address: faker.IPv4()}
+	cluster.NetworkImplementation = &k8s1.Cluster_Cilium{Cilium: &cilium}
+
+	// cluster.NetworkImplementation
+
 	mClusterServ := mocks.NewMockClusterServiceServer(ctrl)
 	mClusterServ.
 		EXPECT().

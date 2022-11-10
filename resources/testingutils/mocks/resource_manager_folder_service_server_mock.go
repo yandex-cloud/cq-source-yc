@@ -6,38 +6,37 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	access "github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
 	resourcemanager "github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
+	reflect "reflect"
 )
 
-// MockFolderServiceServer is a mock of FolderServiceServer interface.
+// MockFolderServiceServer is a mock of FolderServiceServer interface
 type MockFolderServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockFolderServiceServerMockRecorder
 }
 
-// MockFolderServiceServerMockRecorder is the mock recorder for MockFolderServiceServer.
+// MockFolderServiceServerMockRecorder is the mock recorder for MockFolderServiceServer
 type MockFolderServiceServerMockRecorder struct {
 	mock *MockFolderServiceServer
 }
 
-// NewMockFolderServiceServer creates a new mock instance.
+// NewMockFolderServiceServer creates a new mock instance
 func NewMockFolderServiceServer(ctrl *gomock.Controller) *MockFolderServiceServer {
 	mock := &MockFolderServiceServer{ctrl: ctrl}
 	mock.recorder = &MockFolderServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockFolderServiceServer) EXPECT() *MockFolderServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockFolderServiceServer) Create(arg0 context.Context, arg1 *resourcemanager.CreateFolderRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -46,13 +45,13 @@ func (m *MockFolderServiceServer) Create(arg0 context.Context, arg1 *resourceman
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockFolderServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFolderServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockFolderServiceServer) Delete(arg0 context.Context, arg1 *resourcemanager.DeleteFolderRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -61,13 +60,13 @@ func (m *MockFolderServiceServer) Delete(arg0 context.Context, arg1 *resourceman
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockFolderServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockFolderServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockFolderServiceServer) Get(arg0 context.Context, arg1 *resourcemanager.GetFolderRequest) (*resourcemanager.Folder, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -76,13 +75,13 @@ func (m *MockFolderServiceServer) Get(arg0 context.Context, arg1 *resourcemanage
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockFolderServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockFolderServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockFolderServiceServer) List(arg0 context.Context, arg1 *resourcemanager.ListFoldersRequest) (*resourcemanager.ListFoldersResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -91,13 +90,13 @@ func (m *MockFolderServiceServer) List(arg0 context.Context, arg1 *resourcemanag
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockFolderServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockFolderServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListAccessBindings mocks base method.
+// ListAccessBindings mocks base method
 func (m *MockFolderServiceServer) ListAccessBindings(arg0 context.Context, arg1 *access.ListAccessBindingsRequest) (*access.ListAccessBindingsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAccessBindings", arg0, arg1)
@@ -106,13 +105,13 @@ func (m *MockFolderServiceServer) ListAccessBindings(arg0 context.Context, arg1 
 	return ret0, ret1
 }
 
-// ListAccessBindings indicates an expected call of ListAccessBindings.
+// ListAccessBindings indicates an expected call of ListAccessBindings
 func (mr *MockFolderServiceServerMockRecorder) ListAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccessBindings", reflect.TypeOf((*MockFolderServiceServer)(nil).ListAccessBindings), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockFolderServiceServer) ListOperations(arg0 context.Context, arg1 *resourcemanager.ListFolderOperationsRequest) (*resourcemanager.ListFolderOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -121,13 +120,13 @@ func (m *MockFolderServiceServer) ListOperations(arg0 context.Context, arg1 *res
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockFolderServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockFolderServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// SetAccessBindings mocks base method.
+// SetAccessBindings mocks base method
 func (m *MockFolderServiceServer) SetAccessBindings(arg0 context.Context, arg1 *access.SetAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetAccessBindings", arg0, arg1)
@@ -136,13 +135,13 @@ func (m *MockFolderServiceServer) SetAccessBindings(arg0 context.Context, arg1 *
 	return ret0, ret1
 }
 
-// SetAccessBindings indicates an expected call of SetAccessBindings.
+// SetAccessBindings indicates an expected call of SetAccessBindings
 func (mr *MockFolderServiceServerMockRecorder) SetAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAccessBindings", reflect.TypeOf((*MockFolderServiceServer)(nil).SetAccessBindings), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockFolderServiceServer) Update(arg0 context.Context, arg1 *resourcemanager.UpdateFolderRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -151,13 +150,13 @@ func (m *MockFolderServiceServer) Update(arg0 context.Context, arg1 *resourceman
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockFolderServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockFolderServiceServer)(nil).Update), arg0, arg1)
 }
 
-// UpdateAccessBindings mocks base method.
+// UpdateAccessBindings mocks base method
 func (m *MockFolderServiceServer) UpdateAccessBindings(arg0 context.Context, arg1 *access.UpdateAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateAccessBindings", arg0, arg1)
@@ -166,7 +165,7 @@ func (m *MockFolderServiceServer) UpdateAccessBindings(arg0 context.Context, arg
 	return ret0, ret1
 }
 
-// UpdateAccessBindings indicates an expected call of UpdateAccessBindings.
+// UpdateAccessBindings indicates an expected call of UpdateAccessBindings
 func (mr *MockFolderServiceServerMockRecorder) UpdateAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccessBindings", reflect.TypeOf((*MockFolderServiceServer)(nil).UpdateAccessBindings), arg0, arg1)

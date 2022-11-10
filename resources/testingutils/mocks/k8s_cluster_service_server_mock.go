@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	k8s "github.com/yandex-cloud/go-genproto/yandex/cloud/k8s/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockClusterServiceServer is a mock of ClusterServiceServer interface.
+// MockClusterServiceServer is a mock of ClusterServiceServer interface
 type MockClusterServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockClusterServiceServerMockRecorder
 }
 
-// MockClusterServiceServerMockRecorder is the mock recorder for MockClusterServiceServer.
+// MockClusterServiceServerMockRecorder is the mock recorder for MockClusterServiceServer
 type MockClusterServiceServerMockRecorder struct {
 	mock *MockClusterServiceServer
 }
 
-// NewMockClusterServiceServer creates a new mock instance.
+// NewMockClusterServiceServer creates a new mock instance
 func NewMockClusterServiceServer(ctrl *gomock.Controller) *MockClusterServiceServer {
 	mock := &MockClusterServiceServer{ctrl: ctrl}
 	mock.recorder = &MockClusterServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockClusterServiceServer) EXPECT() *MockClusterServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockClusterServiceServer) Create(arg0 context.Context, arg1 *k8s.CreateClusterRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockClusterServiceServer) Create(arg0 context.Context, arg1 *k8s.Create
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockClusterServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockClusterServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockClusterServiceServer) Delete(arg0 context.Context, arg1 *k8s.DeleteClusterRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockClusterServiceServer) Delete(arg0 context.Context, arg1 *k8s.Delete
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockClusterServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockClusterServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockClusterServiceServer) Get(arg0 context.Context, arg1 *k8s.GetClusterRequest) (*k8s.Cluster, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockClusterServiceServer) Get(arg0 context.Context, arg1 *k8s.GetCluste
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockClusterServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockClusterServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockClusterServiceServer) List(arg0 context.Context, arg1 *k8s.ListClustersRequest) (*k8s.ListClustersResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockClusterServiceServer) List(arg0 context.Context, arg1 *k8s.ListClus
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockClusterServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockClusterServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListNodeGroups mocks base method.
+// ListNodeGroups mocks base method
 func (m *MockClusterServiceServer) ListNodeGroups(arg0 context.Context, arg1 *k8s.ListClusterNodeGroupsRequest) (*k8s.ListClusterNodeGroupsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListNodeGroups", arg0, arg1)
@@ -105,13 +104,13 @@ func (m *MockClusterServiceServer) ListNodeGroups(arg0 context.Context, arg1 *k8
 	return ret0, ret1
 }
 
-// ListNodeGroups indicates an expected call of ListNodeGroups.
+// ListNodeGroups indicates an expected call of ListNodeGroups
 func (mr *MockClusterServiceServerMockRecorder) ListNodeGroups(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListNodeGroups", reflect.TypeOf((*MockClusterServiceServer)(nil).ListNodeGroups), arg0, arg1)
 }
 
-// ListNodes mocks base method.
+// ListNodes mocks base method
 func (m *MockClusterServiceServer) ListNodes(arg0 context.Context, arg1 *k8s.ListClusterNodesRequest) (*k8s.ListClusterNodesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListNodes", arg0, arg1)
@@ -120,13 +119,13 @@ func (m *MockClusterServiceServer) ListNodes(arg0 context.Context, arg1 *k8s.Lis
 	return ret0, ret1
 }
 
-// ListNodes indicates an expected call of ListNodes.
+// ListNodes indicates an expected call of ListNodes
 func (mr *MockClusterServiceServerMockRecorder) ListNodes(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListNodes", reflect.TypeOf((*MockClusterServiceServer)(nil).ListNodes), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockClusterServiceServer) ListOperations(arg0 context.Context, arg1 *k8s.ListClusterOperationsRequest) (*k8s.ListClusterOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -135,13 +134,13 @@ func (m *MockClusterServiceServer) ListOperations(arg0 context.Context, arg1 *k8
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockClusterServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockClusterServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// Start mocks base method.
+// Start mocks base method
 func (m *MockClusterServiceServer) Start(arg0 context.Context, arg1 *k8s.StartClusterRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Start", arg0, arg1)
@@ -150,13 +149,13 @@ func (m *MockClusterServiceServer) Start(arg0 context.Context, arg1 *k8s.StartCl
 	return ret0, ret1
 }
 
-// Start indicates an expected call of Start.
+// Start indicates an expected call of Start
 func (mr *MockClusterServiceServerMockRecorder) Start(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Start", reflect.TypeOf((*MockClusterServiceServer)(nil).Start), arg0, arg1)
 }
 
-// Stop mocks base method.
+// Stop mocks base method
 func (m *MockClusterServiceServer) Stop(arg0 context.Context, arg1 *k8s.StopClusterRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Stop", arg0, arg1)
@@ -165,13 +164,13 @@ func (m *MockClusterServiceServer) Stop(arg0 context.Context, arg1 *k8s.StopClus
 	return ret0, ret1
 }
 
-// Stop indicates an expected call of Stop.
+// Stop indicates an expected call of Stop
 func (mr *MockClusterServiceServerMockRecorder) Stop(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stop", reflect.TypeOf((*MockClusterServiceServer)(nil).Stop), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockClusterServiceServer) Update(arg0 context.Context, arg1 *k8s.UpdateClusterRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -180,7 +179,7 @@ func (m *MockClusterServiceServer) Update(arg0 context.Context, arg1 *k8s.Update
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockClusterServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockClusterServiceServer)(nil).Update), arg0, arg1)

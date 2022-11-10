@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	compute "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockImageServiceServer is a mock of ImageServiceServer interface.
+// MockImageServiceServer is a mock of ImageServiceServer interface
 type MockImageServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockImageServiceServerMockRecorder
 }
 
-// MockImageServiceServerMockRecorder is the mock recorder for MockImageServiceServer.
+// MockImageServiceServerMockRecorder is the mock recorder for MockImageServiceServer
 type MockImageServiceServerMockRecorder struct {
 	mock *MockImageServiceServer
 }
 
-// NewMockImageServiceServer creates a new mock instance.
+// NewMockImageServiceServer creates a new mock instance
 func NewMockImageServiceServer(ctrl *gomock.Controller) *MockImageServiceServer {
 	mock := &MockImageServiceServer{ctrl: ctrl}
 	mock.recorder = &MockImageServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockImageServiceServer) EXPECT() *MockImageServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
+// Create mocks base method
 func (m *MockImageServiceServer) Create(arg0 context.Context, arg1 *compute.CreateImageRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockImageServiceServer) Create(arg0 context.Context, arg1 *compute.Crea
 	return ret0, ret1
 }
 
-// Create indicates an expected call of Create.
+// Create indicates an expected call of Create
 func (mr *MockImageServiceServerMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockImageServiceServer)(nil).Create), arg0, arg1)
 }
 
-// Delete mocks base method.
+// Delete mocks base method
 func (m *MockImageServiceServer) Delete(arg0 context.Context, arg1 *compute.DeleteImageRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockImageServiceServer) Delete(arg0 context.Context, arg1 *compute.Dele
 	return ret0, ret1
 }
 
-// Delete indicates an expected call of Delete.
+// Delete indicates an expected call of Delete
 func (mr *MockImageServiceServerMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockImageServiceServer)(nil).Delete), arg0, arg1)
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockImageServiceServer) Get(arg0 context.Context, arg1 *compute.GetImageRequest) (*compute.Image, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockImageServiceServer) Get(arg0 context.Context, arg1 *compute.GetImag
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockImageServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockImageServiceServer)(nil).Get), arg0, arg1)
 }
 
-// GetLatestByFamily mocks base method.
+// GetLatestByFamily mocks base method
 func (m *MockImageServiceServer) GetLatestByFamily(arg0 context.Context, arg1 *compute.GetImageLatestByFamilyRequest) (*compute.Image, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLatestByFamily", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockImageServiceServer) GetLatestByFamily(arg0 context.Context, arg1 *c
 	return ret0, ret1
 }
 
-// GetLatestByFamily indicates an expected call of GetLatestByFamily.
+// GetLatestByFamily indicates an expected call of GetLatestByFamily
 func (mr *MockImageServiceServerMockRecorder) GetLatestByFamily(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestByFamily", reflect.TypeOf((*MockImageServiceServer)(nil).GetLatestByFamily), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockImageServiceServer) List(arg0 context.Context, arg1 *compute.ListImagesRequest) (*compute.ListImagesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -105,13 +104,13 @@ func (m *MockImageServiceServer) List(arg0 context.Context, arg1 *compute.ListIm
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockImageServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockImageServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockImageServiceServer) ListOperations(arg0 context.Context, arg1 *compute.ListImageOperationsRequest) (*compute.ListImageOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -120,13 +119,13 @@ func (m *MockImageServiceServer) ListOperations(arg0 context.Context, arg1 *comp
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockImageServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockImageServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockImageServiceServer) Update(arg0 context.Context, arg1 *compute.UpdateImageRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -135,7 +134,7 @@ func (m *MockImageServiceServer) Update(arg0 context.Context, arg1 *compute.Upda
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockImageServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockImageServiceServer)(nil).Update), arg0, arg1)

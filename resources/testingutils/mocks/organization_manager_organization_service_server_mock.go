@@ -6,38 +6,37 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	access "github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
 	organizationmanager "github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1"
+	reflect "reflect"
 )
 
-// MockOrganizationServiceServer is a mock of OrganizationServiceServer interface.
+// MockOrganizationServiceServer is a mock of OrganizationServiceServer interface
 type MockOrganizationServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockOrganizationServiceServerMockRecorder
 }
 
-// MockOrganizationServiceServerMockRecorder is the mock recorder for MockOrganizationServiceServer.
+// MockOrganizationServiceServerMockRecorder is the mock recorder for MockOrganizationServiceServer
 type MockOrganizationServiceServerMockRecorder struct {
 	mock *MockOrganizationServiceServer
 }
 
-// NewMockOrganizationServiceServer creates a new mock instance.
+// NewMockOrganizationServiceServer creates a new mock instance
 func NewMockOrganizationServiceServer(ctrl *gomock.Controller) *MockOrganizationServiceServer {
 	mock := &MockOrganizationServiceServer{ctrl: ctrl}
 	mock.recorder = &MockOrganizationServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockOrganizationServiceServer) EXPECT() *MockOrganizationServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockOrganizationServiceServer) Get(arg0 context.Context, arg1 *organizationmanager.GetOrganizationRequest) (*organizationmanager.Organization, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -46,13 +45,13 @@ func (m *MockOrganizationServiceServer) Get(arg0 context.Context, arg1 *organiza
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockOrganizationServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockOrganizationServiceServer)(nil).Get), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockOrganizationServiceServer) List(arg0 context.Context, arg1 *organizationmanager.ListOrganizationsRequest) (*organizationmanager.ListOrganizationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -61,13 +60,13 @@ func (m *MockOrganizationServiceServer) List(arg0 context.Context, arg1 *organiz
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockOrganizationServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockOrganizationServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListAccessBindings mocks base method.
+// ListAccessBindings mocks base method
 func (m *MockOrganizationServiceServer) ListAccessBindings(arg0 context.Context, arg1 *access.ListAccessBindingsRequest) (*access.ListAccessBindingsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAccessBindings", arg0, arg1)
@@ -76,13 +75,13 @@ func (m *MockOrganizationServiceServer) ListAccessBindings(arg0 context.Context,
 	return ret0, ret1
 }
 
-// ListAccessBindings indicates an expected call of ListAccessBindings.
+// ListAccessBindings indicates an expected call of ListAccessBindings
 func (mr *MockOrganizationServiceServerMockRecorder) ListAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccessBindings", reflect.TypeOf((*MockOrganizationServiceServer)(nil).ListAccessBindings), arg0, arg1)
 }
 
-// ListOperations mocks base method.
+// ListOperations mocks base method
 func (m *MockOrganizationServiceServer) ListOperations(arg0 context.Context, arg1 *organizationmanager.ListOrganizationOperationsRequest) (*organizationmanager.ListOrganizationOperationsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOperations", arg0, arg1)
@@ -91,13 +90,13 @@ func (m *MockOrganizationServiceServer) ListOperations(arg0 context.Context, arg
 	return ret0, ret1
 }
 
-// ListOperations indicates an expected call of ListOperations.
+// ListOperations indicates an expected call of ListOperations
 func (mr *MockOrganizationServiceServerMockRecorder) ListOperations(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOperations", reflect.TypeOf((*MockOrganizationServiceServer)(nil).ListOperations), arg0, arg1)
 }
 
-// SetAccessBindings mocks base method.
+// SetAccessBindings mocks base method
 func (m *MockOrganizationServiceServer) SetAccessBindings(arg0 context.Context, arg1 *access.SetAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetAccessBindings", arg0, arg1)
@@ -106,13 +105,13 @@ func (m *MockOrganizationServiceServer) SetAccessBindings(arg0 context.Context, 
 	return ret0, ret1
 }
 
-// SetAccessBindings indicates an expected call of SetAccessBindings.
+// SetAccessBindings indicates an expected call of SetAccessBindings
 func (mr *MockOrganizationServiceServerMockRecorder) SetAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAccessBindings", reflect.TypeOf((*MockOrganizationServiceServer)(nil).SetAccessBindings), arg0, arg1)
 }
 
-// Update mocks base method.
+// Update mocks base method
 func (m *MockOrganizationServiceServer) Update(arg0 context.Context, arg1 *organizationmanager.UpdateOrganizationRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
@@ -121,13 +120,13 @@ func (m *MockOrganizationServiceServer) Update(arg0 context.Context, arg1 *organ
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
+// Update indicates an expected call of Update
 func (mr *MockOrganizationServiceServerMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockOrganizationServiceServer)(nil).Update), arg0, arg1)
 }
 
-// UpdateAccessBindings mocks base method.
+// UpdateAccessBindings mocks base method
 func (m *MockOrganizationServiceServer) UpdateAccessBindings(arg0 context.Context, arg1 *access.UpdateAccessBindingsRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateAccessBindings", arg0, arg1)
@@ -136,7 +135,7 @@ func (m *MockOrganizationServiceServer) UpdateAccessBindings(arg0 context.Contex
 	return ret0, ret1
 }
 
-// UpdateAccessBindings indicates an expected call of UpdateAccessBindings.
+// UpdateAccessBindings indicates an expected call of UpdateAccessBindings
 func (mr *MockOrganizationServiceServerMockRecorder) UpdateAccessBindings(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccessBindings", reflect.TypeOf((*MockOrganizationServiceServer)(nil).UpdateAccessBindings), arg0, arg1)

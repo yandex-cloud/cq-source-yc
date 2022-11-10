@@ -6,37 +6,36 @@ package mocks
 
 import (
 	context "context"
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	containerregistry "github.com/yandex-cloud/go-genproto/yandex/cloud/containerregistry/v1"
 	operation "github.com/yandex-cloud/go-genproto/yandex/cloud/operation"
+	reflect "reflect"
 )
 
-// MockScannerServiceServer is a mock of ScannerServiceServer interface.
+// MockScannerServiceServer is a mock of ScannerServiceServer interface
 type MockScannerServiceServer struct {
 	ctrl     *gomock.Controller
 	recorder *MockScannerServiceServerMockRecorder
 }
 
-// MockScannerServiceServerMockRecorder is the mock recorder for MockScannerServiceServer.
+// MockScannerServiceServerMockRecorder is the mock recorder for MockScannerServiceServer
 type MockScannerServiceServerMockRecorder struct {
 	mock *MockScannerServiceServer
 }
 
-// NewMockScannerServiceServer creates a new mock instance.
+// NewMockScannerServiceServer creates a new mock instance
 func NewMockScannerServiceServer(ctrl *gomock.Controller) *MockScannerServiceServer {
 	mock := &MockScannerServiceServer{ctrl: ctrl}
 	mock.recorder = &MockScannerServiceServerMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockScannerServiceServer) EXPECT() *MockScannerServiceServerMockRecorder {
 	return m.recorder
 }
 
-// Get mocks base method.
+// Get mocks base method
 func (m *MockScannerServiceServer) Get(arg0 context.Context, arg1 *containerregistry.GetScanResultRequest) (*containerregistry.ScanResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
@@ -45,13 +44,13 @@ func (m *MockScannerServiceServer) Get(arg0 context.Context, arg1 *containerregi
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get.
+// Get indicates an expected call of Get
 func (mr *MockScannerServiceServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockScannerServiceServer)(nil).Get), arg0, arg1)
 }
 
-// GetLast mocks base method.
+// GetLast mocks base method
 func (m *MockScannerServiceServer) GetLast(arg0 context.Context, arg1 *containerregistry.GetLastScanResultRequest) (*containerregistry.ScanResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLast", arg0, arg1)
@@ -60,13 +59,13 @@ func (m *MockScannerServiceServer) GetLast(arg0 context.Context, arg1 *container
 	return ret0, ret1
 }
 
-// GetLast indicates an expected call of GetLast.
+// GetLast indicates an expected call of GetLast
 func (mr *MockScannerServiceServerMockRecorder) GetLast(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLast", reflect.TypeOf((*MockScannerServiceServer)(nil).GetLast), arg0, arg1)
 }
 
-// List mocks base method.
+// List mocks base method
 func (m *MockScannerServiceServer) List(arg0 context.Context, arg1 *containerregistry.ListScanResultsRequest) (*containerregistry.ListScanResultsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
@@ -75,13 +74,13 @@ func (m *MockScannerServiceServer) List(arg0 context.Context, arg1 *containerreg
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
+// List indicates an expected call of List
 func (mr *MockScannerServiceServerMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockScannerServiceServer)(nil).List), arg0, arg1)
 }
 
-// ListVulnerabilities mocks base method.
+// ListVulnerabilities mocks base method
 func (m *MockScannerServiceServer) ListVulnerabilities(arg0 context.Context, arg1 *containerregistry.ListVulnerabilitiesRequest) (*containerregistry.ListVulnerabilitiesResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListVulnerabilities", arg0, arg1)
@@ -90,13 +89,13 @@ func (m *MockScannerServiceServer) ListVulnerabilities(arg0 context.Context, arg
 	return ret0, ret1
 }
 
-// ListVulnerabilities indicates an expected call of ListVulnerabilities.
+// ListVulnerabilities indicates an expected call of ListVulnerabilities
 func (mr *MockScannerServiceServerMockRecorder) ListVulnerabilities(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListVulnerabilities", reflect.TypeOf((*MockScannerServiceServer)(nil).ListVulnerabilities), arg0, arg1)
 }
 
-// Scan mocks base method.
+// Scan mocks base method
 func (m *MockScannerServiceServer) Scan(arg0 context.Context, arg1 *containerregistry.ScanRequest) (*operation.Operation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Scan", arg0, arg1)
@@ -105,7 +104,7 @@ func (m *MockScannerServiceServer) Scan(arg0 context.Context, arg1 *containerreg
 	return ret0, ret1
 }
 
-// Scan indicates an expected call of Scan.
+// Scan indicates an expected call of Scan
 func (mr *MockScannerServiceServerMockRecorder) Scan(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Scan", reflect.TypeOf((*MockScannerServiceServer)(nil).Scan), arg0, arg1)

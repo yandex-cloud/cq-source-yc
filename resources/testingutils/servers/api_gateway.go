@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudquery/faker/v3"
 	"github.com/golang/mock/gomock"
+	_ "github.com/golang/mock/mockgen/model"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	apigateway1 "github.com/yandex-cloud/go-genproto/yandex/cloud/serverless/apigateway/v1"
 	"github.com/yandex-cloud/go-sdk/gen/apigateway"

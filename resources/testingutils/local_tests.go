@@ -4,17 +4,14 @@ import (
 	"context"
 	"testing"
 
-	"github.com/cloudquery/cq-provider-sdk/logging"
-	"github.com/cloudquery/cq-provider-sdk/provider"
-	"github.com/cloudquery/cq-provider-sdk/provider/diag"
-	"github.com/cloudquery/cq-provider-sdk/provider/schema"
-	providertest "github.com/cloudquery/cq-provider-sdk/provider/testing"
-	"github.com/hashicorp/go-hclog"
+	// "github.com/cloudquery/plugin-sdk/schema"
+
+	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/servers"
 )
 
-func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verifiers map[string][]providertest.Verifier) {
+func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table) {
 	back := context.Background()
 	ctx, cancel := context.WithCancel(back)
 	defer cancel()
@@ -74,40 +71,21 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table, verif
 		t.Fatal(err)
 	}
 
-	// TODO: s3 testing wit MINIO
-
-	resource := providertest.ResourceTestCase{
-		Provider: &provider.Provider{
-			ResourceMap: resourceMap,
-			Config: func() provider.Config {
-				return &client.Config{
-					FolderIDs: []string{"test-folder-id"},
-				}
-			},
-			Configure: func(logger hclog.Logger, _ interface{}) (schema.ClientMeta, diag.Diagnostics) {
-				log := logging.New(&hclog.LoggerOptions{Level: hclog.Warn})
-				folderIds := []string{"test-folder-id"}
-				cloudIds := []string{"test-cloud-id"}
-				organizationIds := []string{"test-organization-id"}
-				services := &client.Services{
-					Compute:                 computeServ,
-					K8S:                     k8sServ,
-					VPC:                     vpcServ,
-					KMS:                     kmsServ,
-					OrganizationManager:     organizationManagerServ,
-					OrganizationManagerSAML: organizationManagerSAMLServ,
-					CertificateManager:      certificateManagerServ,
-					IAM:                     iamServ,
-					ContainerRegistry:       containerRegistryServ,
-					ApiGateway:              apiGatewayServ,
-					ResourceManager:         resourceManagerServ,
-				}
-				c := client.NewYandexClient(log, folderIds, cloudIds, organizationIds, services, nil)
-				return c, nil
-			},
-		},
-		Verifiers: verifiers,
+	services := &client.Services{
+		Compute:                 computeServ,
+		K8S:                     k8sServ,
+		VPC:                     vpcServ,
+		KMS:                     kmsServ,
+		OrganizationManager:     organizationManagerServ,
+		OrganizationManagerSAML: organizationManagerSAMLServ,
+		CertificateManager:      certificateManagerServ,
+		IAM:                     iamServ,
+		ContainerRegistry:       containerRegistryServ,
+		ApiGateway:              apiGatewayServ,
+		ResourceManager:         resourceManagerServ,
 	}
 
-	providertest.TestResource(t, resource)
+	for _, table := range resourceMap {
+		client.MockTestHelper(t, table, func() (*client.Services, error) { return services, nil }, client.TestOptions{})
+	}
 }

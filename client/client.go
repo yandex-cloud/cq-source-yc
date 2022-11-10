@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/cloudquery/cq-provider-sdk/provider/diag"
-	"github.com/cloudquery/cq-provider-sdk/provider/schema"
-	"github.com/hashicorp/go-hclog"
+	"github.com/cloudquery/plugin-sdk/schema"
+	"github.com/cloudquery/plugin-sdk/specs"
 	"github.com/mitchellh/go-homedir"
+	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
@@ -29,11 +29,11 @@ type AccessBindingsLister interface {
 }
 
 type Client struct {
-	organizations []string
-	clouds        []string
-	folders       []string
+	orgs    []string
+	clouds  []string
+	folders []string
 
-	logger hclog.Logger
+	logger zerolog.Logger
 
 	// All yandex services initialized by client
 	Services *Services
@@ -44,69 +44,74 @@ type Client struct {
 	MultiplexedResourceId string
 }
 
-func (c Client) Logger() hclog.Logger {
-	return c.logger
+func (c *Client) ID() string {
+	return c.MultiplexedResourceId
 }
 
-func (c Client) withResource(id string) *Client {
+func (c *Client) Logger() *zerolog.Logger {
+	return &c.logger
+}
+
+func (c *Client) withResource(id string) *Client {
 	return &Client{
-		organizations:         c.organizations,
+		orgs:                  c.orgs,
 		folders:               c.folders,
 		clouds:                c.clouds,
 		Services:              c.Services,
 		s3Client:              c.s3Client,
-		logger:                c.logger.With("id", id),
+		logger:                c.logger.With().Str("id", id).Logger(),
 		MultiplexedResourceId: id,
 	}
 }
 
-func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, diag.Diagnostics) {
-	providerConfig := config.(*Config)
-	if providerConfig.Endpoint == "" {
-		providerConfig.Endpoint = defaultEndpoint
-	}
-
-	clouds := providerConfig.CloudIDs
-	folders := providerConfig.FolderIDs
-
-	var err error
-	sdk, err := buildSDK(providerConfig.Endpoint)
+func Configure(ctx context.Context, logger zerolog.Logger, s specs.Source) (schema.ClientMeta, error) {
+	var spec Spec
+	err := s.UnmarshalSpec(&spec)
 	if err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+		return nil, fmt.Errorf("failed to unmarshal Yandex Cloud spec: %w", err)
 	}
 
-	extractedClouds, err := getClouds(sdk, providerConfig.OrganizationIDs)
-	if err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+	if spec.Endpoint == "" {
+		spec.Endpoint = defaultEndpoint
 	}
-	clouds = unionStrings(clouds, extractedClouds)
 
-	extractedFolders, err := getFolders(logger, sdk, providerConfig.FolderFilter, clouds)
+	sdk, err := buildSDK(spec.Endpoint)
 	if err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+		return nil, err
 	}
-	folders = unionStrings(folders, extractedFolders)
+
+	extractedClouds, err := getClouds(sdk, spec.OrganizationIDs)
+	if err != nil {
+		return nil, err
+	}
+	clouds := unionStrings(spec.CloudIDs, extractedClouds)
+
+	extractedFolders, err := getFolders(logger, sdk, spec.FolderFilter, clouds)
+	if err != nil {
+		return nil, err
+	}
+	folders := unionStrings(spec.FolderIDs, extractedFolders)
 
 	if err = validateFolders(folders); err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+		return nil, err
 	}
 
-	services, err := initServices(context.Background(), sdk)
+	services, err := initServices(ctx, sdk)
 	if err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+		return nil, err
 	}
 
-	client := NewYandexClient(logger, folders, clouds, providerConfig.OrganizationIDs, services, nil)
+	client := NewYandexClient(logger, folders, clouds, spec.OrganizationIDs, services, nil)
 	return client, nil
 }
 
-func (c *Client) GetS3Client(ctx context.Context) (*s3.S3, error) {
+func (c *Client) GetS3Client() (*s3.S3, error) {
 	if c.s3Client != nil {
 		return c.s3Client, nil
 	}
 	s3Client, err := initS3Clint()
 	if err != nil {
-		return nil, diag.FromError(err, diag.INTERNAL)
+		return nil, err
 	}
 	c.s3Client = s3Client
 	return c.s3Client, nil
@@ -233,7 +238,7 @@ func getClouds(sdk *ycsdk.SDK, organizationsIds []string) ([]string, error) {
 	return folders, nil
 }
 
-func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIds []string) ([]string, error) {
+func getFolders(logger zerolog.Logger, sdk *ycsdk.SDK, filter string, cloudIds []string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
@@ -257,7 +262,9 @@ func getFolders(logger hclog.Logger, sdk *ycsdk.SDK, filter string, cloudIds []s
 					if folder.GetStatus() == resourcemanager.Folder_ACTIVE {
 						ch <- folder.Id
 					} else {
-						logger.Info("Folder state is not active. Folder will be ignored", "folder_id", folder.Id)
+						logger.Info().
+							Str("folder_id", folder.Id).
+							Msg("Folder state is not active. Folder will be ignored")
 					}
 				}
 
@@ -310,13 +317,13 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(log hclog.Logger, folders, clouds, organizations []string, services *Services, s3Client *s3.S3) *Client {
+func NewYandexClient(logger zerolog.Logger, folders, clouds, organizations []string, services *Services, s3Client *s3.S3) *Client {
 	return &Client{
-		logger:        log,
-		organizations: organizations,
-		folders:       folders,
-		clouds:        clouds,
-		Services:      services,
-		s3Client:      s3Client,
+		logger:   logger,
+		orgs:     organizations,
+		folders:  folders,
+		clouds:   clouds,
+		Services: services,
+		s3Client: s3Client,
 	}
 }
