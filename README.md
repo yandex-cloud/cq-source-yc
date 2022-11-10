@@ -10,6 +10,27 @@ CloudQuery Yandex.Cloud Provider ![BuildStatus](https://img.shields.io/github/wo
 This [CloudQuery](https://github.com/cloudquery/cloudquery)
 provider transforms Yandex.Cloud resources to relational and graph databases.
 
+### Config Example
+``` yaml
+kind: source
+spec:
+  # Source spec section
+  name: "yandex"
+  version: "v0.0.0"
+  path: "127.0.0.1:7777"
+
+  destinations: ["postgresql"]
+
+  skip_tables:
+    - yandex_storage_buckets
+  
+  spec:
+    folder_ids: 
+      - abcdefj1234567890xyz
+```
+
+For more parameters see [plugin-sdk](https://github.com/cloudquery/plugin-sdk/blob/main/specs/source.go#L17)
+
 ## What is CloudQuery
 
 CloudQuery pulls, normalize, expose and monitor your cloud infrastructure and SaaS apps as SQL or Graph(Neo4j) database.
@@ -33,3 +54,4 @@ and [terraform](https://github.com/hashicorp/terraform), cool right?
 #### Note about previous history
 CloudQuery providers where split into standalone repository. Previous history
 is available at the main [cloudquery/cloudquery](https://github.com/cloudquery/cloudquery) repository.
+
