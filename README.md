@@ -24,9 +24,14 @@ spec:
   skip_tables:
     - yandex_storage_buckets
   
+  # yc provider spec
   spec:
     folder_ids: 
       - abcdefj1234567890xyz
+    # cloud_ids:
+    # folder_ids:
+    # endpoint:
+    # folder_filter:
 ```
 
 For more parameters see [plugin-sdk](https://github.com/cloudquery/plugin-sdk/blob/main/specs/source.go#L17)
