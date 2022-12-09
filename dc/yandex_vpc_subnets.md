@@ -1,12 +1,18 @@
 # Table: yandex_vpc_subnets
 
 
+
 The primary key for this table is **id**.
+
 
 
 ## Columns
 | Name          | Type          |
 | ------------- | ------------- |
+|_cq_source_name|String|
+|_cq_sync_time|Timestamp|
+|_cq_id|UUID|
+|_cq_parent_id|UUID|
 |id (PK)|String|
 |folder_id|String|
 |created_at|Timestamp|
@@ -14,8 +20,8 @@ The primary key for this table is **id**.
 |description|String|
 |labels|JSON|
 |network_id|String|
-|status|Int|
-|rules|JSON|
-|default_for_network|Bool|
-|_cq_id|UUID|
-|_cq_fetch_time|Timestamp|
+|zone_id|String|
+|v4_cidr_blocks|StringArray|
+|v6_cidr_blocks|StringArray|
+|route_table_id|String|
+|dhcp_options|JSON|

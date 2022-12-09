@@ -1,12 +1,18 @@
 # Table: yandex_organizationmanager_federations
 
 
+
 The primary key for this table is **id**.
+
 
 
 ## Columns
 | Name          | Type          |
 | ------------- | ------------- |
+|_cq_source_name|String|
+|_cq_sync_time|Timestamp|
+|_cq_id|UUID|
+|_cq_parent_id|UUID|
 |id (PK)|String|
 |organization_id|String|
 |name|String|
@@ -20,5 +26,3 @@ The primary key for this table is **id**.
 |security_settings|JSON|
 |case_insensitive_name_ids|Bool|
 |labels|JSON|
-|_cq_id|UUID|
-|_cq_fetch_time|Timestamp|

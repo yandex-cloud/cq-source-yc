@@ -12,6 +12,7 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/iam"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/k8s"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/kms"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/lockbox"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/organizationmanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/vpc"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils"
@@ -160,6 +161,13 @@ func TestIAMUserAccountsByFolder(t *testing.T) {
 func TestIAMUserAccountsByOrganization(t *testing.T) {
 	resourceMap := map[string]*schema.Table{
 		"IAMUserAccountsByOrganization": iam.UserAccountsByOrganization(),
+	}
+	testingutils.LocalTestProvider(t, resourceMap)
+}
+
+func TestLockboxSecret(t *testing.T) {
+	resourceMap := map[string]*schema.Table{
+		"LockboxSecrets": lockbox.Secrets(),
 	}
 	testingutils.LocalTestProvider(t, resourceMap)
 }

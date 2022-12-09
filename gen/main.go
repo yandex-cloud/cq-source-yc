@@ -20,6 +20,7 @@ func main() {
 		recipes.ApiGateway,
 		recipes.Storage,
 		recipes.VPC,
+		recipes.Lockbox,
 	} {
 		for _, resource := range f() {
 			if err := resource.Generate(); err != nil {

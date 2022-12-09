@@ -10,6 +10,7 @@ import (
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/iam"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/k8s"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/kms"
+	"github.com/yandex-cloud/cq-provider-yandex/resources/services/lockbox"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/organizationmanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/resourcemanager"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/services/storage"
@@ -44,5 +45,6 @@ func Tables() []*schema.Table {
 		vpc.Networks(),
 		vpc.SecurityGroups(),
 		vpc.Subnets(),
+		lockbox.Secrets(),
 	}
 }

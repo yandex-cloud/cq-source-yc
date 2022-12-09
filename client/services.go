@@ -11,6 +11,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/iam"
 	"github.com/yandex-cloud/go-sdk/gen/kms"
 	k8s "github.com/yandex-cloud/go-sdk/gen/kubernetes"
+	lockbox "github.com/yandex-cloud/go-sdk/gen/lockboxsecret"
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager"
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager/saml"
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
@@ -32,6 +33,7 @@ type (
 		ApiGateway              *apigateway.Apigateway
 		Storage                 *storage.StorageAPI
 		VPC                     *vpc.VPC
+		LockboxSecret           *lockbox.LockboxSecret
 	}
 )
 
@@ -49,5 +51,6 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		ApiGateway:              sdk.Serverless().APIGateway(),
 		Storage:                 sdk.StorageAPI(),
 		VPC:                     sdk.VPC(),
+		LockboxSecret:           sdk.LockboxSecret(),
 	}, nil
 }
