@@ -4,8 +4,6 @@ import (
 	"context"
 	"testing"
 
-	// "github.com/cloudquery/plugin-sdk/schema"
-
 	"github.com/cloudquery/plugin-sdk/schema"
 	"github.com/yandex-cloud/cq-provider-yandex/client"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/servers"
@@ -71,6 +69,11 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table) {
 		t.Fatal(err)
 	}
 
+	lockboxServ, err := servers.StartLockboxServer(t, ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	services := &client.Services{
 		Compute:                 computeServ,
 		K8S:                     k8sServ,
@@ -83,6 +86,7 @@ func LocalTestProvider(t *testing.T, resourceMap map[string]*schema.Table) {
 		ContainerRegistry:       containerRegistryServ,
 		ApiGateway:              apiGatewayServ,
 		ResourceManager:         resourceManagerServ,
+		LockboxSecret:           lockboxServ,
 	}
 
 	for _, table := range resourceMap {

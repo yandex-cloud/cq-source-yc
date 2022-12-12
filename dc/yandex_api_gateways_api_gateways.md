@@ -1,4 +1,4 @@
-# Table: yandex_resourcemanager_clouds
+# Table: yandex_api_gateways_api_gateways
 
 
 
@@ -14,8 +14,13 @@ The primary key for this table is **id**.
 |_cq_id|UUID|
 |_cq_parent_id|UUID|
 |id (PK)|String|
+|folder_id|String|
 |created_at|Timestamp|
 |name|String|
 |description|String|
-|organization_id|String|
 |labels|JSON|
+|status|Int|
+|domain|String|
+|log_group_id|String|
+|attached_domains|JSON|
+|connectivity|JSON|

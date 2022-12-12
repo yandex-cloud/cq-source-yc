@@ -1,12 +1,18 @@
 # Table: yandex_storage_buckets
 
 
+
 The primary key for this table is **id**.
+
 
 
 ## Columns
 | Name          | Type          |
 | ------------- | ------------- |
+|_cq_source_name|String|
+|_cq_sync_time|Timestamp|
+|_cq_id|UUID|
+|_cq_parent_id|UUID|
 |id (PK)|String|
 |name|String|
 |folder_id|String|
@@ -21,5 +27,3 @@ The primary key for this table is **id**.
 |website_settings|JSON|
 |lifecycle_rules|JSON|
 |server_side_encryption|JSON|
-|_cq_id|UUID|
-|_cq_fetch_time|Timestamp|
