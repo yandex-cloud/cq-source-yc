@@ -63,7 +63,7 @@ func fetchAccessBindings(ctx context.Context, _client accessBindingsClient, reso
 func fetchUserAccountByID(ctx context.Context, client iam.UserAccountServiceClient, subjects <-chan *access.AccessBinding, res chan<- interface{}) error {
 	for subject := range subjects {
 		accountType := subject.Subject.Type
-		if accountType == "serviceAccount" {
+		if accountType == "serviceAccount" || accountType == "group" {
 			continue
 		}
 		req := &iam.GetUserAccountRequest{UserAccountId: subject.Subject.Id}
