@@ -17,9 +17,9 @@ func (it *InterceptTransport) RoundTrip(req *http.Request) (*http.Response, erro
 	return it.T.RoundTrip(req)
 }
 
-func NewInterceptTransport(T http.RoundTripper, f InterceptFunc) *InterceptTransport {
-	if T == nil {
-		T = http.DefaultTransport
+func NewInterceptTransport(t http.RoundTripper, f InterceptFunc) *InterceptTransport {
+	if t == nil {
+		t = http.DefaultTransport
 	}
-	return &InterceptTransport{T, f}
+	return &InterceptTransport{t, f}
 }
