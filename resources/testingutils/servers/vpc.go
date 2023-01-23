@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	vpc1 "github.com/yandex-cloud/go-genproto/yandex/cloud/vpc/v1"
@@ -57,10 +57,9 @@ func StartVpcServer(t *testing.T, ctx context.Context) (*vpc.VPC, error) {
 func registerVpcMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var address vpc1.Address
-	err = faker.FakeData(&address)
+	err = faker.FakeObject(&address)
 	if err != nil {
 		return err
 	}
@@ -81,7 +80,7 @@ func registerVpcMocks(t *testing.T, serv *grpc.Server) error {
 	vpc1.RegisterAddressServiceServer(serv, addressServ)
 
 	var network vpc1.Network
-	err = faker.FakeData(&network)
+	err = faker.FakeObject(&network)
 	if err != nil {
 		return err
 	}
@@ -102,7 +101,7 @@ func registerVpcMocks(t *testing.T, serv *grpc.Server) error {
 	vpc1.RegisterNetworkServiceServer(serv, networkServ)
 
 	var securityGroup vpc1.SecurityGroup
-	err = faker.FakeData(&securityGroup)
+	err = faker.FakeObject(&securityGroup)
 	if err != nil {
 		return err
 	}
@@ -123,7 +122,7 @@ func registerVpcMocks(t *testing.T, serv *grpc.Server) error {
 	vpc1.RegisterSecurityGroupServiceServer(serv, securityGroupServ)
 
 	var subnet vpc1.Subnet
-	err = faker.FakeData(&subnet)
+	err = faker.FakeObject(&subnet)
 	if err != nil {
 		return err
 	}

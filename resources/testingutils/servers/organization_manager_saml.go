@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	organizationmanager1 "github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1/saml"
@@ -54,10 +54,9 @@ func StartOrganizationManagerSAMLServer(t *testing.T, ctx context.Context) (*org
 func registerOrganizationManagerSAMLMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var federation organizationmanager1.Federation
-	err = faker.FakeData(&federation)
+	err = faker.FakeObject(&federation)
 	if err != nil {
 		return err
 	}

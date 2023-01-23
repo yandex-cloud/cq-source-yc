@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	compute1 "github.com/yandex-cloud/go-genproto/yandex/cloud/compute/v1"
@@ -56,10 +56,9 @@ func StartComputeServer(t *testing.T, ctx context.Context) (*compute.Compute, er
 func registerComputeMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var disk compute1.Disk
-	err = faker.FakeData(&disk)
+	err = faker.FakeObject(&disk)
 	if err != nil {
 		return err
 	}
@@ -80,8 +79,8 @@ func registerComputeMocks(t *testing.T, serv *grpc.Server) error {
 	compute1.RegisterDiskServiceServer(serv, mDiskServ)
 
 	var image compute1.Image
-	faker.SetIgnoreInterface(true)
-	err = faker.FakeData(&image)
+
+	err = faker.FakeObject(&image)
 	if err != nil {
 		return err
 	}
@@ -102,8 +101,8 @@ func registerComputeMocks(t *testing.T, serv *grpc.Server) error {
 	compute1.RegisterImageServiceServer(serv, mImageServ)
 
 	var instance compute1.Instance
-	faker.SetIgnoreInterface(true)
-	err = faker.FakeData(&instance)
+
+	err = faker.FakeObject(&instance)
 	if err != nil {
 		return err
 	}

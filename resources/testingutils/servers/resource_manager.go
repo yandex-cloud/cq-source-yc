@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
@@ -56,10 +56,9 @@ func StartResourceManagerServer(t *testing.T, ctx context.Context) (*resourceman
 func registerResourceManagerMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var folder resourcemanager1.Folder
-	err = faker.FakeData(&folder)
+	err = faker.FakeObject(&folder)
 	if err != nil {
 		return err
 	}
@@ -78,7 +77,7 @@ func registerResourceManagerMocks(t *testing.T, serv *grpc.Server) error {
 		}).
 		AnyTimes()
 	var accessBindingByFolder access.AccessBinding
-	err = faker.FakeData(&accessBindingByFolder)
+	err = faker.FakeObject(&accessBindingByFolder)
 	if err != nil {
 		return err
 	}
@@ -95,7 +94,7 @@ func registerResourceManagerMocks(t *testing.T, serv *grpc.Server) error {
 	resourcemanager1.RegisterFolderServiceServer(serv, mFolderServ)
 
 	var cloud resourcemanager1.Cloud
-	err = faker.FakeData(&cloud)
+	err = faker.FakeObject(&cloud)
 	if err != nil {
 		return err
 	}
@@ -111,7 +110,7 @@ func registerResourceManagerMocks(t *testing.T, serv *grpc.Server) error {
 		}).
 		AnyTimes()
 	var accessBindingByCloud access.AccessBinding
-	err = faker.FakeData(&accessBindingByCloud)
+	err = faker.FakeObject(&accessBindingByCloud)
 	if err != nil {
 		return err
 	}

@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	_ "github.com/golang/mock/mockgen/model"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
@@ -55,10 +55,9 @@ func StartApiGatewayServer(t *testing.T, ctx context.Context) (*apigateway.Apiga
 func registerApiGatewayMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var apigateway apigateway1.ApiGateway
-	err = faker.FakeData(&apigateway)
+	err = faker.FakeObject(&apigateway)
 	if err != nil {
 		return err
 	}

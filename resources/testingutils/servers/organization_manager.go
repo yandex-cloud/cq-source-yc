@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
@@ -56,10 +56,9 @@ func StartOrganizationManagerServer(t *testing.T, ctx context.Context) (*organiz
 func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var organization organizationmanager1.Organization
-	err = faker.FakeData(&organization)
+	err = faker.FakeObject(&organization)
 	if err != nil {
 		return err
 	}
@@ -76,7 +75,7 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 		AnyTimes()
 
 	var accessBinding access.AccessBinding
-	err = faker.FakeData(&accessBinding)
+	err = faker.FakeObject(&accessBinding)
 	if err != nil {
 		return err
 	}
@@ -94,8 +93,8 @@ func registerOrganizationManagerMocks(t *testing.T, serv *grpc.Server) error {
 
 	mGroupServ := mocks.NewMockGroupServiceServer(ctrl)
 	var group organizationmanager1.Group
-	faker.SetIgnoreInterface(true)
-	err = faker.FakeData(&group)
+
+	err = faker.FakeObject(&group)
 	if err != nil {
 		return err
 	}

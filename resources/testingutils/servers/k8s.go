@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	k8s1 "github.com/yandex-cloud/go-genproto/yandex/cloud/k8s/v1"
@@ -54,24 +54,26 @@ func StartK8SServer(t *testing.T, ctx context.Context) (*k8s.Kubernetes, error) 
 func registerK8SMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var cluster k8s1.Cluster
-	err = faker.FakeData(&cluster)
+	err = faker.FakeObject(&cluster)
 	if err != nil {
 		return err
 	}
 
 	var cilium k8s1.Cilium
-	err = faker.FakeData(&cilium)
+	err = faker.FakeObject(&cilium)
 	if err != nil {
 		return err
 	}
 
-	cluster.InternetGateway = &k8s1.Cluster_GatewayIpv4Address{GatewayIpv4Address: faker.IPv4()}
-	cluster.NetworkImplementation = &k8s1.Cluster_Cilium{Cilium: &cilium}
+	cluster.InternetGateway = &k8s1.Cluster_GatewayIpv4Address{}
+	err = faker.FakeObject(&cluster.InternetGateway)
+	if err != nil {
+		return err
+	}
 
-	// cluster.NetworkImplementation
+	cluster.NetworkImplementation = &k8s1.Cluster_Cilium{Cilium: &cilium}
 
 	mClusterServ := mocks.NewMockClusterServiceServer(ctrl)
 	mClusterServ.
