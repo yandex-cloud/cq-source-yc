@@ -1,36 +1,17 @@
-package client
+package s3
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	endpoint = "https://storage.yandexcloud.net"
-	region   = "ru-central1"
-)
-
-func initS3Clint() (*s3.S3, error) {
-	s := session.Must(session.NewSession())
-	creds, err := getS3StaticCredentials()
-	if err != nil {
-		return nil, err
-	}
-	client := s3.New(s, aws.NewConfig().
-		WithEndpoint(endpoint).
-		WithRegion(region).
-		WithCredentials(creds),
-	)
-	return client, nil
-}
-
-func getS3StaticCredentials() (*credentials.Credentials, error) {
+// GetStaticCredentials generates [credentials.Credentials] using environtment variables:
+// - static key (`YC_STORAGE_ACCESS_KEY` + `YC_STORAGE_SECRET_KEY`)
+// - yaml file (`YC_SA_STATIC_KEY_FILE`)
+func GetStaticCredentials() (*credentials.Credentials, error) {
 	id, idOk := os.LookupEnv("YC_STORAGE_ACCESS_KEY")
 	secret, secretOk := os.LookupEnv("YC_STORAGE_SECRET_KEY")
 	filename, filenameOk := os.LookupEnv("YC_SA_STATIC_KEY_FILE")

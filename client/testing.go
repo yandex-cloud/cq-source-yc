@@ -30,12 +30,12 @@ func MockTestHelper(t *testing.T, table *schema.Table, createService func() (*Se
 		if err := spec.UnmarshalSpec(&ycSpec); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal yc spec: %w", err)
 		}
-		c := NewYandexClient(logger,
+		c := NewYandexClient(logger, nil, nil,
 			[]string{"test-folder-id"},
 			[]string{"test-cloud-id"},
 			[]string{"test-organization-id"},
 			svc,
-			nil)
+		)
 
 		return c, nil
 	}
