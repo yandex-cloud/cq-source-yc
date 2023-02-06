@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	lockbox1 "github.com/yandex-cloud/go-genproto/yandex/cloud/lockbox/v1"
@@ -55,10 +55,9 @@ func StartLockboxServer(t *testing.T, ctx context.Context) (*lockbox.LockboxSecr
 func registerLockboxMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var secret lockbox1.Secret
-	err = faker.FakeData(&secret)
+	err = faker.FakeObject(&secret)
 	if err != nil {
 		return err
 	}

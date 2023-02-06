@@ -8,4 +8,6 @@ type Spec struct {
 
 	Endpoint     string `json:"endpoint"`
 	FolderFilter string `json:"folder_filter"`
+
+	UseIAMForStorage bool `json:"use_iam_for_storage"`
 }

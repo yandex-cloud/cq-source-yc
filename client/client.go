@@ -13,6 +13,7 @@ import (
 	"github.com/cloudquery/plugin-sdk/specs"
 	"github.com/mitchellh/go-homedir"
 	"github.com/rs/zerolog"
+	ycs3 "github.com/yandex-cloud/cq-provider-yandex/client/s3"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/access"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
@@ -35,10 +36,14 @@ type Client struct {
 
 	logger zerolog.Logger
 
+	// YC SDK
+	sdk *ycsdk.SDK
+
+	// S3 client to manage objects storages
+	s3 *s3.S3
+
 	// All yandex services initialized by client
 	Services *Services
-	// S3 client to manage objects storages
-	s3Client *s3.S3
 
 	// this is set by table client multiplexer
 	MultiplexedResourceId string
@@ -52,13 +57,17 @@ func (c *Client) Logger() *zerolog.Logger {
 	return &c.logger
 }
 
+func (c *Client) S3() *s3.S3 {
+	return c.s3
+}
+
 func (c *Client) withResource(id string) *Client {
 	return &Client{
 		orgs:                  c.orgs,
 		folders:               c.folders,
 		clouds:                c.clouds,
 		Services:              c.Services,
-		s3Client:              c.s3Client,
+		s3:                    c.s3,
 		logger:                c.logger.With().Str("id", id).Logger(),
 		MultiplexedResourceId: id,
 	}
@@ -101,20 +110,33 @@ func Configure(ctx context.Context, logger zerolog.Logger, s specs.Source) (sche
 		return nil, err
 	}
 
-	client := NewYandexClient(logger, folders, clouds, spec.OrganizationIDs, services, nil)
-	return client, nil
-}
-
-func (c *Client) GetS3Client() (*s3.S3, error) {
-	if c.s3Client != nil {
-		return c.s3Client, nil
-	}
-	s3Client, err := initS3Clint()
+	s3Client, err := initS3(spec.UseIAMForStorage, sdk, logger)
 	if err != nil {
 		return nil, err
 	}
-	c.s3Client = s3Client
-	return c.s3Client, nil
+
+	client := NewYandexClient(logger, sdk, s3Client, folders, clouds, spec.OrganizationIDs, services)
+	return client, nil
+}
+
+func initS3(useIAM bool, sdk *ycsdk.SDK, logger zerolog.Logger) (*s3.S3, error) {
+	if useIAM {
+		s3Client, err := ycs3.NewS3Client(nil, sdk, logger)
+		if err != nil {
+			return nil, err
+		}
+		return s3Client, nil
+	} else {
+		creds, err := ycs3.GetStaticCredentials()
+		if err != nil {
+			return nil, err
+		}
+		s3Client, err := ycs3.NewS3Client(creds, nil, logger)
+		if err != nil {
+			return nil, err
+		}
+		return s3Client, nil
+	}
 }
 
 func buildSDK(endpoint string) (*ycsdk.SDK, error) {
@@ -317,13 +339,14 @@ func validateFolders(folders []string) error {
 	return nil
 }
 
-func NewYandexClient(logger zerolog.Logger, folders, clouds, organizations []string, services *Services, s3Client *s3.S3) *Client {
+func NewYandexClient(logger zerolog.Logger, sdk *ycsdk.SDK, s3Client *s3.S3, folders, clouds, organizations []string, services *Services) *Client {
 	return &Client{
 		logger:   logger,
+		sdk:      sdk,
 		orgs:     organizations,
 		folders:  folders,
 		clouds:   clouds,
 		Services: services,
-		s3Client: s3Client,
+		s3:       s3Client,
 	}
 }

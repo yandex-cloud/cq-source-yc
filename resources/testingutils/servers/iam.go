@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	iam1 "github.com/yandex-cloud/go-genproto/yandex/cloud/iam/v1"
@@ -55,10 +55,9 @@ func StartIamServer(t *testing.T, ctx context.Context) (*iam.IAM, error) {
 func registerIamMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var serviceAccount iam1.ServiceAccount
-	err = faker.FakeData(&serviceAccount)
+	err = faker.FakeObject(&serviceAccount)
 	if err != nil {
 		return err
 	}
@@ -79,7 +78,7 @@ func registerIamMocks(t *testing.T, serv *grpc.Server) error {
 	iam1.RegisterServiceAccountServiceServer(serv, mServiceAccount)
 
 	var userAccount iam1.UserAccount
-	err = faker.FakeData(&userAccount)
+	err = faker.FakeObject(&userAccount)
 	if err != nil {
 		return err
 	}

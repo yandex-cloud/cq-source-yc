@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	kms1 "github.com/yandex-cloud/go-genproto/yandex/cloud/kms/v1"
@@ -54,10 +54,9 @@ func StartKmsServer(t *testing.T, ctx context.Context) (*kms.KMS, error) {
 func registerKmsMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var symmetricKey kms1.SymmetricKey
-	err = faker.FakeData(&symmetricKey)
+	err = faker.FakeObject(&symmetricKey)
 	if err != nil {
 		return err
 	}

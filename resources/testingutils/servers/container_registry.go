@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/cloudquery/faker/v3"
+	"github.com/cloudquery/plugin-sdk/faker"
 	"github.com/golang/mock/gomock"
 	"github.com/yandex-cloud/cq-provider-yandex/resources/testingutils/mocks"
 	containerregistry1 "github.com/yandex-cloud/go-genproto/yandex/cloud/containerregistry/v1"
@@ -55,10 +55,9 @@ func StartContainerRegistryServer(t *testing.T, ctx context.Context) (*container
 func registerContainerRegistryMocks(t *testing.T, serv *grpc.Server) error {
 	ctrl := gomock.NewController(t)
 	var err error
-	faker.SetIgnoreInterface(true)
 
 	var image containerregistry1.Image
-	err = faker.FakeData(&image)
+	err = faker.FakeObject(&image)
 	if err != nil {
 		return err
 	}
@@ -79,7 +78,7 @@ func registerContainerRegistryMocks(t *testing.T, serv *grpc.Server) error {
 	containerregistry1.RegisterImageServiceServer(serv, mImageServ)
 
 	var scanResult containerregistry1.ScanResult
-	err = faker.FakeData(&scanResult)
+	err = faker.FakeObject(&scanResult)
 	if err != nil {
 		return err
 	}
