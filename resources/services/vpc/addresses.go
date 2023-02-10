@@ -67,6 +67,11 @@ func Addresses() *schema.Table {
 				Type:     schema.TypeInt,
 				Resolver: schema.PathResolver("IpVersion"),
 			},
+			{
+				Name:     "deletion_protection",
+				Type:     schema.TypeBool,
+				Resolver: schema.PathResolver("DeletionProtection"),
+			},
 		},
 	}
 }

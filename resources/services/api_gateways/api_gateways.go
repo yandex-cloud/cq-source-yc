@@ -72,6 +72,11 @@ func ApiGateways() *schema.Table {
 				Type:     schema.TypeJSON,
 				Resolver: schema.PathResolver("Connectivity"),
 			},
+			{
+				Name:     "log_options",
+				Type:     schema.TypeJSON,
+				Resolver: schema.PathResolver("LogOptions"),
+			},
 		},
 	}
 }
