@@ -14,15 +14,6 @@ func Buckets() *schema.Table {
 		Multiplex: client.MultiplexBy(client.Folders),
 		Columns: []schema.Column{
 			{
-				Name:        "id",
-				Type:        schema.TypeString,
-				Resolver:    schema.PathResolver("Id"),
-				Description: `Resource ID`,
-				CreationOptions: schema.ColumnCreationOptions{
-					PrimaryKey: true,
-				},
-			},
-			{
 				Name:     "name",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Name"),
@@ -81,6 +72,16 @@ func Buckets() *schema.Table {
 				Name:     "lifecycle_rules",
 				Type:     schema.TypeJSON,
 				Resolver: schema.PathResolver("LifecycleRules"),
+			},
+			{
+				Name:     "tags",
+				Type:     schema.TypeJSON,
+				Resolver: schema.PathResolver("Tags"),
+			},
+			{
+				Name:     "object_lock",
+				Type:     schema.TypeJSON,
+				Resolver: schema.PathResolver("ObjectLock"),
 			},
 			{
 				Name:     "server_side_encryption",
