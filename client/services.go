@@ -8,6 +8,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/certificatemanager"
 	"github.com/yandex-cloud/go-sdk/gen/compute"
 	"github.com/yandex-cloud/go-sdk/gen/containerregistry"
+	"github.com/yandex-cloud/go-sdk/gen/dns"
 	"github.com/yandex-cloud/go-sdk/gen/iam"
 	"github.com/yandex-cloud/go-sdk/gen/kms"
 	k8s "github.com/yandex-cloud/go-sdk/gen/kubernetes"
@@ -34,6 +35,7 @@ type (
 		Storage                 *storage.StorageAPI
 		VPC                     *vpc.VPC
 		LockboxSecret           *lockbox.LockboxSecret
+		DNS                     *dns.DNS
 	}
 )
 
@@ -52,5 +54,6 @@ func initServices(_ context.Context, sdk *ycsdk.SDK) (*Services, error) {
 		Storage:                 sdk.StorageAPI(),
 		VPC:                     sdk.VPC(),
 		LockboxSecret:           sdk.LockboxSecret(),
+		DNS:                     sdk.DNS(),
 	}, nil
 }
