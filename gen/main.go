@@ -21,6 +21,7 @@ func main() {
 		recipes.Storage,
 		recipes.VPC,
 		recipes.Lockbox,
+		recipes.DNS,
 	} {
 		for _, resource := range f() {
 			if err := resource.Generate(); err != nil {
