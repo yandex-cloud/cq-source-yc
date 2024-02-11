@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-/__debug_bin
 
 # Test binary, built with `go test -c`
 *.test
@@ -13,38 +12,14 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-vendor/
+# vendor/
 
-# Ignores the whole .idea folder and all .iml files
-# See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
-.idea/
+# IDE & OS
+.DS_Store
+.vscode
+.idea
 
-# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
-*.iml
-
-# Scripts for developing
-/scripts/
-
-# Files for running CQ with provider
-/config.hcl
-/cq-provider-yandex
-/.cq_reattach
-/cloudquery.log
-/.cq
-
-# Idea project files
-modules.xml
-.idea/misc.xml
-*.ipr
-
-/.vscode
-
-# Secrets
-/key.json
-
-
-/build
-
-/cloudapi
-
-dist
+# Cloudquery specific
+.cq
+cq-source-yc
+*.log
