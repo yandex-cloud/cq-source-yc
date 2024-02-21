@@ -2,7 +2,7 @@
 
 The Yandex Cloud Source Plugin extracts information from [Yandex Cloud API](https://cloud.yandex.ru/ru/docs/api-design-guide/)
 
-> Old version is available [here](https://github.com/yandex-cloud/cq-source-yandex/tree/v0.3.8)
+> Previous version is available [here](https://github.com/yandex-cloud/cq-source-yandex/tree/v0.3.8)
 
 ---
 
@@ -44,7 +44,7 @@ Authentication is done via IAM tokens/keys.
 
 You can set following environment variables:
 
-- `YC_SERVICE_ACCOUNT_KEY` – Service Account key (in json format,)
+- `YC_SERVICE_ACCOUNT_KEY` – Service Account key (in json format)
 - `YC_TOKEN` – IAM or OAuth token
 
 If none of the variables are set, plugin will try to use Compute Metadata API to get IAM token.
