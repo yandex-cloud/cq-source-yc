@@ -1,5 +1,6 @@
 {
   ".":"security/cloudquery/github_toplevel/cq-source-yc",
+  ".github/workflows/release-hub.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release-hub.yml",
   ".github/workflows/release.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release.yml",
   ".gitignore":"security/cloudquery/cq-source-yc/.gitignore",
   ".goreleaser.yaml":"security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml",
@@ -180,6 +181,7 @@
   "resources/vpc/security_groups.go":"security/cloudquery/cq-source-yc/resources/vpc/security_groups.go",
   "resources/vpc/subnets.go":"security/cloudquery/cq-source-yc/resources/vpc/subnets.go",
   "resources/ydb/databases.go":"security/cloudquery/cq-source-yc/resources/ydb/databases.go",
+  "security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release-hub.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release-hub.yml",
   "security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release.yml",
   "security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml":"security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml",
   "security/cloudquery/github_toplevel/cq-source-yc/AUTHORS":"security/cloudquery/github_toplevel/cq-source-yc/AUTHORS",

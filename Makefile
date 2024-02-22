@@ -4,16 +4,17 @@ test:
 
 .PHONY: build
 build:
-	go build -o cq-source-yc main.go
+	go build -o yc main.go
+
+.PHONY: gen-docs
+gen-docs: build
+	# TODO: replace with cloudquery cli invocation
+	rm -rf ./docs/tables/*
+	go run main.go doc ./docs/tables
 
 .PHONY: lint
 lint:
 	@golangci-lint run --timeout 10m
-
-.PHONY: gen-docs
-gen-docs:
-	rm -rf ./docs/tables/*
-	go run main.go doc ./docs/tables
 
 # All gen targets
 .PHONY: gen
@@ -24,4 +25,4 @@ gen: gen-docs
 
 .PHONY: start-source
 start-source: build
-	./cq-source-yc serve --log-level debug
+	./yc serve --log-level debug
