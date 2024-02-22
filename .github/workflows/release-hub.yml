@@ -26,6 +26,8 @@ jobs:
 
       - name: Setup Go 1.x
         uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
 
       - name: Setup CloudQuery
         uses: cloudquery/setup-cloudquery@v3

@@ -2,8 +2,6 @@ module github.com/yandex-cloud/cq-source-yc
 
 go 1.21.5
 
-toolchain go1.21.6
-
 require (
 	github.com/apache/arrow/go/v15 v15.0.0-20240118114426-a2aa1c4122fc
 	github.com/aws/smithy-go v1.19.0

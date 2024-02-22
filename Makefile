@@ -19,10 +19,3 @@ lint:
 # All gen targets
 .PHONY: gen
 gen: gen-docs
-
-
-# Integration tests helpers
-
-.PHONY: start-source
-start-source: build
-	./yc serve --log-level debug
