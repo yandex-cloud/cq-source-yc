@@ -83,7 +83,7 @@ jobs:
 
       - name: Run package command
         run: |
-          go run main.go package -m ${{ steps.release-notes.outputs.result }} ${{ steps.semver-tag.outputs.version }} .
+          go run main.go package -m ${{ steps.release-notes.outputs.result }} v${{ steps.semver-tag.outputs.version }} .
 
       - name: Publish plugin to hub
         env:
