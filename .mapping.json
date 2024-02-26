@@ -19,6 +19,9 @@
   "client/sdk.go":"security/cloudquery/cq-source-yc/client/sdk.go",
   "client/spec.go":"security/cloudquery/cq-source-yc/client/spec.go",
   "client/transformers.go":"security/cloudquery/cq-source-yc/client/transformers.go",
+  "docs/_authentication.md":"security/cloudquery/cq-source-yc/docs/_authentication.md",
+  "docs/configuration.md":"security/cloudquery/cq-source-yc/docs/configuration.md",
+  "docs/overview.md":"security/cloudquery/cq-source-yc/docs/overview.md",
   "docs/tables/README.md":"security/cloudquery/cq-source-yc/docs/tables/README.md",
   "docs/tables/yc_access_bindings_containerregistry_registries.md":"security/cloudquery/cq-source-yc/docs/tables/yc_access_bindings_containerregistry_registries.md",
   "docs/tables/yc_access_bindings_containerregistry_repositories.md":"security/cloudquery/cq-source-yc/docs/tables/yc_access_bindings_containerregistry_repositories.md",
@@ -190,5 +193,6 @@
   "security/cloudquery/github_toplevel/cq-source-yc/CHANGELOG.md":"security/cloudquery/github_toplevel/cq-source-yc/CHANGELOG.md",
   "security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING":"security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING",
   "security/cloudquery/github_toplevel/cq-source-yc/LICENSE":"security/cloudquery/github_toplevel/cq-source-yc/LICENSE",
-  "security/cloudquery/github_toplevel/cq-source-yc/README.md":"security/cloudquery/github_toplevel/cq-source-yc/README.md"
+  "security/cloudquery/github_toplevel/cq-source-yc/README.md":"security/cloudquery/github_toplevel/cq-source-yc/README.md",
+  "test/config.yaml":"security/cloudquery/cq-source-yc/test/config.yaml"
 }

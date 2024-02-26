@@ -22,4 +22,9 @@
 # Cloudquery specific
 .cq
 cq-source-yc
+integration
 *.log
+dist
+db.sql
+logs
+yc
