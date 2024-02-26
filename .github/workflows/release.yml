@@ -1,4 +1,4 @@
-name: Release plugin to GitHub
+name: Release plugin
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - "v*"
 
 jobs:
-  release:
+  release-gh:
+    name: Publish to Github Releases
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -32,3 +33,95 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-hub:
+    name: Publish to CloudQuery Hub
+    needs: [release-gh]
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install dependencies from npm
+        run: npm i semver@^7.6
+
+      - name: Setup Go 1.x
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Setup CloudQuery
+        uses: cloudquery/setup-cloudquery@v3
+        with:
+          version: v5.5.6
+
+      - name: Parse and validate semver tag
+        id: semver-tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const semverParse = require("semver/functions/parse");
+
+            const input = context.ref.replace('refs/tags/', '');
+            const version = semverParse(input);
+            if (!version) {
+                throw new Error("invalid semver string")
+            }
+            
+            core.setOutput("raw", version.raw);
+            core.setOutput("version", version.version);
+            core.setOutput("major", version.major);
+            core.setOutput("minor", version.minor);
+            core.setOutput("patch", version.path);
+            core.setOutput("prerelease", version.prerelease.join("."));
+            core.setOutput("build", version.build.join("."));
+
+      - name: Get Release Notes
+        id: release-notes
+        uses: actions/github-script@v7
+        env:
+          PRERELEASE: ${{ steps.semver-tag.outputs.prerelease }}
+        with:
+          result-encoding: string
+          retries: 3
+          script: |
+            const fs = require('node:fs');
+            const FILENAME = "message.txt";
+            const { PRERELEASE } = process.env;
+            let message;
+            if (PRERELEASE) {
+              message = "This is a pre-release version of the plugin and should be used for testing purposes only";
+            } else {
+              const { data } = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: context.ref.replace('refs/tags/', ''),
+              });
+              message = data;
+            }
+            fs.writeFileSync(FILENAME, message);
+            return `@${FILENAME}`; // @ is for cloudquery cli to read from file
+
+      - name: Run package command
+        run: |
+          go run main.go package -m ${{ steps.release-notes.outputs.result }} v${{ steps.semver-tag.outputs.version }} .
+
+      - name: Publish plugin to hub
+        env:
+          CLOUDQUERY_API_KEY: ${{ secrets.CLOUDQUERY_API_KEY }}
+          PRERELEASE: ${{ steps.semver-tag.outputs.prerelease }}
+        run: |
+          if [[ -z $PRERELEASE ]]; then
+            cloudquery plugin publish --finalize
+          else
+            cloudquery plugin publish 
+          fi

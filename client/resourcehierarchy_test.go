@@ -10,6 +10,7 @@ import (
 )
 
 func TestResourceHierarchy(t *testing.T) {
+	t.Skip("test not mocked")
 	ctx := context.Background()
 	credentials, err := getCredentials()
 	if err != nil {
