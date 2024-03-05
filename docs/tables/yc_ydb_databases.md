@@ -6,6 +6,11 @@ https://cloud.yandex.ru/docs/ydb/api-ref/grpc/database_service#Database1
 
 The primary key for this table is **id**.
 
+## Relations
+
+The following tables depend on yc_ydb_databases:
+  - [yc_access_bindings_ydb_databases](yc_access_bindings_ydb_databases.md)
+
 ## Columns
 
 | Name          | Type          |

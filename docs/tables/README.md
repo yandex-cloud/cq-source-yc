@@ -78,3 +78,4 @@
 - [yc_vpc_security_groups](yc_vpc_security_groups.md)
 - [yc_vpc_subnets](yc_vpc_subnets.md)
 - [yc_ydb_databases](yc_ydb_databases.md)
+  - [yc_access_bindings_ydb_databases](yc_access_bindings_ydb_databases.md)

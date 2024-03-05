@@ -5,6 +5,7 @@ import (
 
 	"github.com/cloudquery/plugin-sdk/v4/schema"
 	"github.com/yandex-cloud/cq-source-yc/client"
+	"github.com/yandex-cloud/cq-source-yc/resources/access"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/ydb/v1"
 )
 
@@ -18,6 +19,7 @@ func Databases() *schema.Table {
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},
+		Relations: schema.Tables{access.YDBDatabasesAccessBindings()},
 	}
 }
 
