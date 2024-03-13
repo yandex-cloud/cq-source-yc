@@ -12,7 +12,7 @@ require (
 	github.com/yandex-cloud/go-genproto v0.0.0-20240208115856-f10ab5b2cfa9
 	github.com/yandex-cloud/go-sdk v0.0.0-20240205112400-7fabb70436b0
 	google.golang.org/grpc v1.61.0
-	google.golang.org/protobuf v1.32.0
+	google.golang.org/protobuf v1.33.0
 )
 
 require (
