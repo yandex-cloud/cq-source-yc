@@ -30,6 +30,7 @@ The primary key for this table is **id**.
 |local_disks|`json`|
 |filesystems|`json`|
 |network_interfaces|`json`|
+|serial_port_settings|`json`|
 |gpu_settings|`json`|
 |fqdn|`utf8`|
 |scheduling_policy|`json`|

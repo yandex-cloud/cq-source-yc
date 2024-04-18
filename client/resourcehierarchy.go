@@ -192,7 +192,7 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 // while holding the hierarchy (i.e. organization -> cloud -> folder).
 // Some properties of the hierarchy:
 //   - the hierarchy could be partially incomplete, e.g. nil -> cloud_id1 -> folder_id1.
-//   - likewise both of these must exist for scoped resolution (e.g. Cloud Access Bindings):
+//   - likewise both entries must exist for scoped resolution (e.g. Cloud Access Bindings):
 //     cloud_id1 -> nil        (resolve tables for Cloud)
 //     cloud_id1 -> folder_id1 (resolve tables for Folder)
 //

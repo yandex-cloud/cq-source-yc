@@ -21,3 +21,4 @@ This table depends on [yc_iam_service_accounts](yc_iam_service_accounts.md).
 |service_account_id|`utf8`|
 |created_at|`timestamp[us, tz=UTC]`|
 |description|`utf8`|
+|last_used_at|`timestamp[us, tz=UTC]`|

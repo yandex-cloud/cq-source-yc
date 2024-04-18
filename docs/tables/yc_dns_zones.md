@@ -27,3 +27,4 @@ The following tables depend on yc_dns_zones:
 |zone|`utf8`|
 |private_visibility|`json`|
 |public_visibility|`json`|
+|deletion_protection|`bool`|

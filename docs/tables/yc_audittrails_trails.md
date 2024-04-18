@@ -1,8 +1,8 @@
-# Table: yc_vpc_addresses
+# Table: yc_audittrails_trails
 
-This table shows data for YC VPC Addresses.
+This table shows data for YC Audit Trails Trails.
 
-https://cloud.yandex.ru/docs/vpc/api-ref/grpc/address_service#Address2
+https://yandex.cloud/ru/docs/audit-trails/api-ref/grpc/trail_service#Trail1
 
 The primary key for this table is **id**.
 
@@ -16,13 +16,12 @@ The primary key for this table is **id**.
 |id (PK)|`utf8`|
 |folder_id|`utf8`|
 |created_at|`timestamp[us, tz=UTC]`|
+|updated_at|`timestamp[us, tz=UTC]`|
 |name|`utf8`|
 |description|`utf8`|
 |labels|`json`|
-|address|`json`|
-|reserved|`bool`|
-|used|`bool`|
-|type|`utf8`|
-|ip_version|`utf8`|
-|deletion_protection|`bool`|
-|dns_records|`json`|
+|destination|`json`|
+|service_account_id|`utf8`|
+|status|`utf8`|
+|filter|`json`|
+|status_error_message|`utf8`|
