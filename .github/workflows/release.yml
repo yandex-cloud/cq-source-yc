@@ -62,7 +62,7 @@ jobs:
       - name: Setup CloudQuery
         uses: cloudquery/setup-cloudquery@v3
         with:
-          version: v5.5.6
+          version: v5.12.2
 
       - name: Parse and validate semver tag
         id: semver-tag
@@ -106,7 +106,7 @@ jobs:
                 repo: context.repo.repo,
                 tag: context.ref.replace('refs/tags/', ''),
               });
-              message = data;
+              message = data.body;
             }
             fs.writeFileSync(FILENAME, message);
             return `@${FILENAME}`; // @ is for cloudquery cli to read from file
