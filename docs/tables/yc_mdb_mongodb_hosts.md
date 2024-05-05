@@ -27,3 +27,4 @@ This table depends on [yc_mdb_mongodb_clusters](yc_mdb_mongodb_clusters.md).
 |assign_public_ip|`bool`|
 |shard_name|`utf8`|
 |type|`utf8`|
+|host_parameters|`json`|
