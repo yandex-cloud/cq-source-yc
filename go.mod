@@ -3,15 +3,15 @@ module github.com/yandex-cloud/cq-source-yc
 go 1.22
 
 require (
-	github.com/apache/arrow/go/v15 v15.0.2
-	github.com/cloudquery/plugin-sdk/v4 v4.40.0
+	github.com/apache/arrow/go/v16 v16.1.0
+	github.com/cloudquery/plugin-sdk/v4 v4.43.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/rs/zerolog v1.32.0
 	github.com/thoas/go-funk v0.9.3
-	github.com/yandex-cloud/go-genproto v0.0.0-20240502080826-5fa7aabf7673
-	github.com/yandex-cloud/go-sdk v0.0.0-20240502081211-7639841896bb
-	google.golang.org/grpc v1.63.2
-	google.golang.org/protobuf v1.34.0
+	github.com/yandex-cloud/go-genproto v0.0.0-20240513082302-2e0a3cd8443b
+	github.com/yandex-cloud/go-sdk v0.0.0-20240513082658-e33b8a503812
+	google.golang.org/grpc v1.64.0
+	google.golang.org/protobuf v1.34.1
 )
 
 require (
@@ -30,8 +30,8 @@ require (
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
-	github.com/cloudquery/cloudquery-api-go v1.9.1 // indirect
-	github.com/cloudquery/plugin-pb-go v1.19.9 // indirect
+	github.com/cloudquery/cloudquery-api-go v1.11.2 // indirect
+	github.com/cloudquery/plugin-pb-go v1.19.15 // indirect
 	github.com/cloudquery/plugin-sdk/v2 v2.7.0 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect

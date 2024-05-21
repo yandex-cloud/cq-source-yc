@@ -20,6 +20,8 @@
   - [yc_access_bindings_datasphere_communities](yc_access_bindings_datasphere_communities.md)
   - [yc_datasphere_projects](yc_datasphere_projects.md)
     - [yc_access_bindings_datasphere_projects](yc_access_bindings_datasphere_projects.md)
+- [yc_datatransfer_endpoints](yc_datatransfer_endpoints.md)
+- [yc_datatransfer_transfers](yc_datatransfer_transfers.md)
 - [yc_dns_zones](yc_dns_zones.md)
   - [yc_dns_record_sets](yc_dns_record_sets.md)
 - [yc_iam_service_accounts](yc_iam_service_accounts.md)
