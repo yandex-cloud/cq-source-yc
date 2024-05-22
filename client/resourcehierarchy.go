@@ -237,7 +237,7 @@ func NewResourceHierarchy(ctx context.Context, logger zerolog.Logger, sdk *ycsdk
 			(items[i].Cloud < items[j].Cloud) &&
 			(items[i].Folder < items[j].Folder)
 	})
-	slices.Compact(items)
+	items = slices.Compact(items)
 
 	return &ResourceHierarchy{
 		items: items,
