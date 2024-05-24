@@ -77,13 +77,11 @@ func (c *Client) Sync(ctx context.Context, options plugin.SyncOptions, res chan<
 
 	stateClient := state.Client(&state.NoOpClient{})
 	if options.BackendOptions != nil {
-		conn, err := grpc.DialContext(ctx, options.BackendOptions.Connection,
-			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		conn, err := grpc.NewClient(options.BackendOptions.Connection, grpc.WithTransportCredentials(insecure.NewCredentials()),
 			grpc.WithDefaultCallOptions(
 				grpc.MaxCallRecvMsgSize(maxMsgSize),
 				grpc.MaxCallSendMsgSize(maxMsgSize),
-			),
-		)
+			))
 		if err != nil {
 			return fmt.Errorf("dial grpc source plugin at %s: %w", options.BackendOptions.Connection, err)
 		}
