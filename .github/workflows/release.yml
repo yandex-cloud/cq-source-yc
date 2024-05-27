@@ -62,7 +62,7 @@ jobs:
       - name: Setup CloudQuery
         uses: cloudquery/setup-cloudquery@v3
         with:
-          version: v5.12.2
+          version: v5.20.3
 
       - name: Parse and validate semver tag
         id: semver-tag
