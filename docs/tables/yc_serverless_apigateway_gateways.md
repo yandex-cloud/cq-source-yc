@@ -32,3 +32,4 @@ The following tables depend on yc_serverless_apigateway_gateways:
 |log_options|`json`|
 |variables|`json`|
 |canary|`json`|
+|execution_timeout|`json`|

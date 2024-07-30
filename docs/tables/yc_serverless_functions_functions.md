@@ -22,6 +22,5 @@ The following tables depend on yc_serverless_functions_functions:
 |name|`utf8`|
 |description|`utf8`|
 |labels|`json`|
-|log_group_id|`utf8`|
 |http_invoke_url|`utf8`|
 |status|`utf8`|

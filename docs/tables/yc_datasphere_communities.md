@@ -25,3 +25,4 @@ The following tables depend on yc_datasphere_communities:
 |labels|`json`|
 |created_by_id|`utf8`|
 |organization_id|`utf8`|
+|zone_id|`utf8`|

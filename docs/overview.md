@@ -15,10 +15,6 @@ The CloudQuery Yandex Cloud plugin pulls configuration out of Yandex Cloud resou
 
 :authentication
 
-## Sentry
-
-If `SENTRY_DSN` environment variable is set, plugin will send errors to provided Sentry DSN. Global tags can be set via `SENTRY_TAGS_*` environment variables ([source](https://github.com/getsentry/sentry-go/blob/255c1722faa79726b2fce76074a6f45a7e510839/integrations.go#L331))
-
 ## Query Examples
 
 ### Find all compute instances having public IPv4 address
