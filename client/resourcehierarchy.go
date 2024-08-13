@@ -1,10 +1,10 @@
 package client
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"slices"
-	"sort"
 
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/internal/util"
@@ -232,10 +232,14 @@ func NewResourceHierarchy(ctx context.Context, logger zerolog.Logger, sdk *ycsdk
 
 	// merge & deduplicate
 	items = append(itemsA, itemsB...)
-	sort.Slice(items, func(i, j int) bool {
-		return (items[i].Organization < items[j].Organization) &&
-			(items[i].Cloud < items[j].Cloud) &&
-			(items[i].Folder < items[j].Folder)
+	slices.SortFunc(items, func(a, b ResourceHierarchyItem) int {
+		if n := cmp.Compare(a.Organization, b.Organization); n != 0 {
+			return n
+		}
+		if n := cmp.Compare(a.Cloud, b.Cloud); n != 0 {
+			return n
+		}
+		return cmp.Compare(a.Folder, b.Folder)
 	})
 	items = slices.Compact(items)
 
