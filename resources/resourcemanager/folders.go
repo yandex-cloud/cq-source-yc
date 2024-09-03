@@ -13,22 +13,19 @@ func Folders() *schema.Table {
 		Name:        "yc_resourcemanager_folders",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/folder_service#Folder1`,
 		Resolver:    fetchFolders,
-		Multiplex:   client.CloudMultiplex,
+		Multiplex:   client.FolderMultiplex,
 		Transform:   client.TransformWithStruct(&resourcemanager.Folder{}, client.PrimaryKeyIdTransformer),
-		Columns: schema.ColumnList{
-			client.CloudIdColumn,
-		},
 	}
 }
 
 func fetchFolders(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
-	cloudId := c.CloudId
 
-	it := c.SDK.ResourceManager().Folder().FolderIterator(ctx, &resourcemanager.ListFoldersRequest{CloudId: cloudId})
-	for it.Next() {
-		res <- it.Value()
+	folder, err := c.SDK.ResourceManager().Folder().Get(ctx, &resourcemanager.GetFolderRequest{FolderId: c.FolderId})
+	if err != nil {
+		return err
 	}
+	res <- folder
 
-	return it.Error()
+	return nil
 }

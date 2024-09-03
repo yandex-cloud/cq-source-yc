@@ -12,6 +12,7 @@ func Clouds() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_resourcemanager_clouds",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/cloud_service#Cloud1`,
+		Multiplex:   client.CloudMultiplex,
 		Resolver:    fetchClouds,
 		Transform:   client.TransformWithStruct(&resourcemanager.Cloud{}, client.PrimaryKeyIdTransformer),
 	}
@@ -20,10 +21,11 @@ func Clouds() *schema.Table {
 func fetchClouds(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
-	it := c.SDK.ResourceManager().Cloud().CloudIterator(ctx, &resourcemanager.ListCloudsRequest{})
-	for it.Next() {
-		res <- it.Value()
+	cloud, err := c.SDK.ResourceManager().Cloud().Get(ctx, &resourcemanager.GetCloudRequest{CloudId: c.CloudId})
+	if err != nil {
+		return err
 	}
+	res <- cloud
 
-	return it.Error()
+	return nil
 }

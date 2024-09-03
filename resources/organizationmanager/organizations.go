@@ -13,7 +13,7 @@ func Organizations() *schema.Table {
 		Name:        "yc_organizationmanager_organizations",
 		Description: `https://cloud.yandex.ru/docs/organization/api-ref/grpc/organization_service#Organization1`,
 		Resolver:    fetchOrganizations,
-		Multiplex:   client.PrependEmptyMultiplex(client.OrganizationMultiplex),
+		Multiplex:   client.OrganizationMultiplex,
 		Transform:   client.TransformWithStruct(&organizationmanager.Organization{}, client.PrimaryKeyIdTransformer),
 	}
 }
@@ -21,23 +21,11 @@ func Organizations() *schema.Table {
 func fetchOrganizations(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 
-	// In some cases List API call returns only a subset of available Organizations, thus we want to allow to explicitly define Organizations that needs to be queried
-	// Hence we use client.PrependEmptyMultiplex to have `Client{OrganizationId: ""} -> List, Client{OrganizationId: "b1..."} -> Get`
-	if c.OrganizationId == "" {
-		// List
-		it := c.SDK.OrganizationManager().Organization().OrganizationIterator(ctx, &organizationmanager.ListOrganizationsRequest{})
-		for it.Next() {
-			res <- it.Value()
-
-		}
-		return it.Error()
-	} else {
-		// Get
-		org, err := c.SDK.OrganizationManager().Organization().Get(ctx, &organizationmanager.GetOrganizationRequest{OrganizationId: c.OrganizationId})
-		if err != nil {
-			return err
-		}
-		res <- org
+	org, err := c.SDK.OrganizationManager().Organization().Get(ctx, &organizationmanager.GetOrganizationRequest{OrganizationId: c.OrganizationId})
+	if err != nil {
+		return err
 	}
+	res <- org
+
 	return nil
 }
