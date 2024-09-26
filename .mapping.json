@@ -86,6 +86,7 @@
   "docs/tables/yc_mdb_postgresql_databases.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_postgresql_databases.md",
   "docs/tables/yc_mdb_postgresql_hosts.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_postgresql_hosts.md",
   "docs/tables/yc_mdb_postgresql_users.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_postgresql_users.md",
+  "docs/tables/yc_mdb_postgresql_backups.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_postgresql_backups.md",
   "docs/tables/yc_mdb_redis_clusters.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_redis_clusters.md",
   "docs/tables/yc_mdb_redis_hosts.md":"security/cloudquery/cq-source-yc/docs/tables/yc_mdb_redis_hosts.md",
   "docs/tables/yc_nlb_balancers.md":"security/cloudquery/cq-source-yc/docs/tables/yc_nlb_balancers.md",

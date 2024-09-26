@@ -62,6 +62,7 @@
   - [yc_mdb_postgresql_databases](yc_mdb_postgresql_databases.md)
   - [yc_mdb_postgresql_hosts](yc_mdb_postgresql_hosts.md)
   - [yc_mdb_postgresql_users](yc_mdb_postgresql_users.md)
+- [yc_mdb_postgresql_backups](yc_mdb_postgresql_backups.md)
 - [yc_mdb_redis_clusters](yc_mdb_redis_clusters.md)
   - [yc_mdb_redis_hosts](yc_mdb_redis_hosts.md)
 - [yc_nlb_balancers](yc_nlb_balancers.md)
