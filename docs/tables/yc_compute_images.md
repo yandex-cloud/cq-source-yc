@@ -26,3 +26,5 @@ The primary key for this table is **id**.
 |status|`utf8`|
 |os|`json`|
 |pooled|`bool`|
+|hardware_generation|`json`|
+|kms_key|`json`|

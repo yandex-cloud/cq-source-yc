@@ -28,3 +28,4 @@ The following tables depend on yc_lockbox_secrets:
 |status|`utf8`|
 |current_version|`json`|
 |deletion_protection|`bool`|
+|payload_specification|`json`|

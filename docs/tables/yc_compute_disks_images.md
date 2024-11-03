@@ -31,3 +31,5 @@ This table depends on [yc_compute_disks](yc_compute_disks.md).
 |status|`utf8`|
 |os|`json`|
 |pooled|`bool`|
+|hardware_generation|`json`|
+|kms_key|`json`|

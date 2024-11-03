@@ -24,3 +24,4 @@ The primary key for this table is **subject_claims_sub**.
 |subject_claims_phone_number|`utf8`|
 |subject_claims_sub_type|`utf8`|
 |subject_claims_federation|`json`|
+|subject_claims_last_authenticated_at|`timestamp[us, tz=UTC]`|

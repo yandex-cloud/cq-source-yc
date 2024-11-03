@@ -25,3 +25,4 @@ This table depends on [yc_mdb_opensearch_clusters](yc_mdb_opensearch_clusters.md
 |saml_dashboards_url|`utf8`|
 |saml_roles_key|`utf8`|
 |saml_subject_key|`utf8`|
+|saml_jwt_default_expiration_timeout|`json`|

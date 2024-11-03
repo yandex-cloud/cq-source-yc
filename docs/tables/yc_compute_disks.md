@@ -33,3 +33,5 @@ The following tables depend on yc_compute_disks:
 |source|`json`|
 |instance_ids|`list<item: utf8, nullable>`|
 |disk_placement_policy|`json`|
+|hardware_generation|`json`|
+|kms_key|`json`|

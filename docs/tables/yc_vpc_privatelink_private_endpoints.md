@@ -1,8 +1,8 @@
-# Table: yc_audittrails_trails
+# Table: yc_vpc_privatelink_private_endpoints
 
-This table shows data for YC Audit Trails Trails.
+This table shows data for VPC Private Endpoints.
 
-https://yandex.cloud/ru/docs/audit-trails/api-ref/grpc/trail_service#Trail1
+https://yandex.cloud/ru/docs/vpc/privatelink/api-ref/grpc/PrivateEndpoint/list#yandex.cloud.vpc.v1.privatelink.PrivateEndpoint
 
 The primary key for this table is **id**.
 
@@ -16,13 +16,11 @@ The primary key for this table is **id**.
 |id (PK)|`utf8`|
 |folder_id|`utf8`|
 |created_at|`timestamp[us, tz=UTC]`|
-|updated_at|`timestamp[us, tz=UTC]`|
 |name|`utf8`|
 |description|`utf8`|
 |labels|`json`|
-|destination|`json`|
-|service_account_id|`utf8`|
+|network_id|`utf8`|
 |status|`utf8`|
-|filter|`json`|
-|status_error_message|`utf8`|
-|filtering_policy|`json`|
+|address|`json`|
+|dns_options|`json`|
+|service|`json`|
