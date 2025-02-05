@@ -22,3 +22,4 @@ This table depends on [yc_mdb_mysql_clusters](yc_mdb_mysql_clusters.md).
 |global_permissions|`list<item: int64, nullable>`|
 |connection_limits|`json`|
 |authentication_plugin|`utf8`|
+|connection_manager|`json`|

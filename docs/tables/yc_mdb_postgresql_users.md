@@ -25,3 +25,4 @@ This table depends on [yc_mdb_postgresql_clusters](yc_mdb_postgresql_clusters.md
 |grants|`list<item: utf8, nullable>`|
 |deletion_protection|`json`|
 |user_password_encryption|`utf8`|
+|connection_manager|`json`|

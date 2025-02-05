@@ -52,3 +52,9 @@ func TransformWithStruct(t any, opts ...transformers.StructTransformerOption) sc
 }
 
 var PrimaryKeyIdTransformer transformers.StructTransformerOption = transformers.WithPrimaryKeys(("Id"))
+
+func TransformColumnPrimaryKey(column schema.Column) schema.Column {
+	col := column
+	col.PrimaryKey = true
+	return col
+}

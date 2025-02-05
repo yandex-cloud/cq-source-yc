@@ -12,6 +12,7 @@ The primary key for this table is **subject_claims_sub**.
 | ------------- | ------------- |
 |_cq_id|`uuid`|
 |_cq_parent_id|`uuid`|
+|organization_id|`utf8`|
 |subject_claims_sub (PK)|`utf8`|
 |subject_claims_name|`utf8`|
 |subject_claims_given_name|`utf8`|

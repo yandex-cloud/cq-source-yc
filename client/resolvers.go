@@ -52,8 +52,6 @@ var MultiplexedResourceIdColumn schema.Column = schema.Column{
 	Type: arrow.BinaryTypes.String,
 	Resolver: func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		client := meta.(*Client)
-		client.Logger.Debug().Str("MultiplexedResourceId", client.MultiplexedResourceId)
-
 		return resource.Set(c.Name, client.MultiplexedResourceId)
 	},
 }
@@ -71,6 +69,12 @@ func ResolveCloud(ctx context.Context, meta schema.ClientMeta, resource *schema.
 func ResolveFolder(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 	client := meta.(*Client)
 	return resource.Set(c.Name, client.FolderId)
+}
+
+var OrganiztionIdColumn schema.Column = schema.Column{
+	Name:     "organization_id",
+	Type:     arrow.BinaryTypes.String,
+	Resolver: ResolveOrganization,
 }
 
 var CloudIdColumn schema.Column = schema.Column{

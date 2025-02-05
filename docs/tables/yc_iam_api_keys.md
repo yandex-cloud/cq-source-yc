@@ -23,4 +23,5 @@ This table depends on [yc_iam_service_accounts](yc_iam_service_accounts.md).
 |description|`utf8`|
 |last_used_at|`timestamp[us, tz=UTC]`|
 |scope|`utf8`|
+|scopes|`list<item: utf8, nullable>`|
 |expires_at|`timestamp[us, tz=UTC]`|

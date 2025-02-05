@@ -16,6 +16,9 @@ func Users() *schema.Table {
 		Multiplex:   client.OrganizationMultiplex,
 		Resolver:    fetchUsers,
 		Transform:   client.TransformWithStruct(&organizationmanager.ListMembersResponse_OrganizationUser{}, transformers.WithUnwrapStructFields("SubjectClaims"), transformers.WithPrimaryKeys("SubjectClaims.Sub")),
+		Columns: schema.ColumnList{
+			client.OrganiztionIdColumn,
+		},
 	}
 }
 

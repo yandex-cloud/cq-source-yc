@@ -26,3 +26,4 @@ The composite primary key for this table is (**name**, **folder_id**).
 |tags|`json`|
 |object_lock|`json`|
 |encryption|`json`|
+|allowed_private_endpoints|`json`|
