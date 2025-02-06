@@ -1,8 +1,6 @@
 module github.com/yandex-cloud/cq-source-yc
 
-go 1.22.0
-
-toolchain go1.22.5
+go 1.22.5
 
 require (
 	github.com/apache/arrow/go/v17 v17.0.0

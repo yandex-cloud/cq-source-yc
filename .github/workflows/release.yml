@@ -1,5 +1,9 @@
 name: Release plugin
 
+permissions:
+  attestations: write
+  id-token: write
+
 on:
   push:
     tags:
@@ -20,19 +24,22 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Setup Go 1.x
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+      - uses: anchore/sbom-action/download-syft@v0.18.0 # installs syft
       
       - name: Install GoReleaser & publish
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
-          version: latest
+          version: "~> v2"
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-checksums: ./dist/checksums.txt
 
   release-hub:
     name: Publish to CloudQuery Hub
@@ -60,9 +67,9 @@ jobs:
           go-version-file: go.mod
 
       - name: Setup CloudQuery
-        uses: cloudquery/setup-cloudquery@v3
+        uses: cloudquery/setup-cloudquery@v4
         with:
-          version: v5.20.3
+          version: v6.15.1
 
       - name: Parse and validate semver tag
         id: semver-tag

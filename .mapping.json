@@ -1,4 +1,5 @@
 {
+  "":"security/cloudquery/cq-source-yc",
   ".":"security/cloudquery/github_toplevel/cq-source-yc",
   ".github/workflows/lint.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/lint.yml",
   ".github/workflows/release.yml":"security/cloudquery/github_toplevel/cq-source-yc/.github/workflows/release.yml",
@@ -7,7 +8,7 @@
   ".goreleaser.yaml":"security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml",
   "AUTHORS":"security/cloudquery/github_toplevel/cq-source-yc/AUTHORS",
   "CHANGELOG.md":"security/cloudquery/github_toplevel/cq-source-yc/CHANGELOG.md",
-  "CONTRIBUTING":"security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING",
+  "CONTRIBUTING.md":"security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING.md",
   "LICENSE":"security/cloudquery/github_toplevel/cq-source-yc/LICENSE",
   "Makefile":"security/cloudquery/cq-source-yc/Makefile",
   "README.md":"security/cloudquery/cq-source-yc/README.md",
@@ -212,7 +213,7 @@
   "security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml":"security/cloudquery/github_toplevel/cq-source-yc/.goreleaser.yaml",
   "security/cloudquery/github_toplevel/cq-source-yc/AUTHORS":"security/cloudquery/github_toplevel/cq-source-yc/AUTHORS",
   "security/cloudquery/github_toplevel/cq-source-yc/CHANGELOG.md":"security/cloudquery/github_toplevel/cq-source-yc/CHANGELOG.md",
-  "security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING":"security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING",
+  "security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING.md":"security/cloudquery/github_toplevel/cq-source-yc/CONTRIBUTING.md",
   "security/cloudquery/github_toplevel/cq-source-yc/LICENSE":"security/cloudquery/github_toplevel/cq-source-yc/LICENSE",
   "security/cloudquery/github_toplevel/cq-source-yc/README.md":"security/cloudquery/github_toplevel/cq-source-yc/README.md",
   "test/config.yaml":"security/cloudquery/cq-source-yc/test/config.yaml"
