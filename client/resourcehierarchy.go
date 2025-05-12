@@ -13,6 +13,8 @@ import (
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // Self-made name for struct holding info about resource model hierarchy.
@@ -134,6 +136,12 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 				}
 			}
 			if err := it.Error(); err != nil {
+				switch status.Code(err) {
+				case codes.FailedPrecondition:
+					logger.Warn().Str("id", item.Cloud).Err(err).Msg("Failed to list folders in cloud")
+					continue
+				default: // do not ignore other errors
+				}
 				return nil, err
 			}
 		} else if item.Organization != "" && services[serviceResourceManager] {
@@ -149,6 +157,12 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 				}
 			}
 			if err := it.Error(); err != nil {
+				switch status.Code(err) {
+				case codes.FailedPrecondition:
+					logger.Warn().Str("id", item.Cloud).Err(err).Msg("Failed to list clouds in organization")
+					continue
+				default: // do not ignore other errors
+				}
 				return nil, err
 			}
 		} else if services[serviceOrganizationManager] {
