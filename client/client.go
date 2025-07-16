@@ -10,9 +10,11 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/rs/zerolog"
 	ycsdk "github.com/yandex-cloud/go-sdk"
+	"github.com/yandex-cloud/go-sdk/pkg/idempotency"
 	"github.com/yandex-cloud/go-sdk/pkg/requestid"
-	"github.com/yandex-cloud/go-sdk/pkg/retry"
+	"github.com/yandex-cloud/go-sdk/pkg/retry/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 )
 
 const (
@@ -89,17 +91,24 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 
 	unaryInterceptors := []grpc.UnaryClientInterceptor{
 		requestid.Interceptor(),
+		idempotency.Interceptor(),
 	}
 	streamInterceptors := []grpc.StreamClientInterceptor{}
 
-	// retry interceptor must always be first
+	var dialOpts = []grpc.DialOption{
+		grpc.WithChainUnaryInterceptor(unaryInterceptors...),
+		grpc.WithChainStreamInterceptor(streamInterceptors...),
+	}
+
 	if spec.MaxRetries > 0 {
-		unaryInterceptors = append(unaryInterceptors, retry.Interceptor(
-			retry.WithMax(spec.MaxRetries),
-			// default is 50ms base, 1min cap
-			retry.WithBackoff(retry.DefaultBackoff()),
-			retry.WithAttemptHeader(true),
-		))
+		o, err := retry.RetryDialOption(
+			retry.WithRetries(retry.DefaultNameConfig(), spec.MaxRetries),
+			retry.WithRetryableStatusCodes(retry.DefaultNameConfig(), codes.ResourceExhausted, codes.Unavailable),
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create retry option: %w", err)
+		}
+		dialOpts = append(dialOpts, o)
 	}
 
 	// debug interceptors are last

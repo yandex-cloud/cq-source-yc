@@ -7,18 +7,15 @@ build:
 	go build -o yc main.go
 
 .PHONY: gen-docs
-# gen-docs: build
-# 	@command -v cloudquery >/dev/null 2>&1 || { \
-# 		echo "Error: 'cloudquery' command not found. Please install it before running gen-docs."; \
-# 		echo "You can install it by following the instructions at: https://www.cloudquery.io/docs/quickstart"; \
-# 		exit 1; \
-# 	}
-# 	rm -rf docs/tables
-# 	cloudquery tables --format markdown --output-dir docs test/config.yaml
-# 	mv docs/yc docs/tables
-gen-docs:
+gen-docs: build
+	@command -v cloudquery >/dev/null 2>&1 || { \
+		echo "Error: 'cloudquery' command not found. Please install it before running gen-docs."; \
+		echo "You can install it by following the instructions at: https://cli-docs.cloudquery.io/docs/quickstart"; \
+		exit 1; \
+	}
 	rm -rf docs/tables
-	go run main.go doc docs/tables
+	cloudquery --no-log-file tables --format markdown --output-dir docs test/config.yaml
+	mv docs/yc docs/tables
 
 .PHONY: lint
 lint:

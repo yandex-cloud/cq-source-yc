@@ -45,3 +45,5 @@ The following tables depend on yc_mdb_greenplum_clusters:
 |cloud_storage|`json`|
 |master_host_group_ids|`list<item: utf8, nullable>`|
 |segment_host_group_ids|`list<item: utf8, nullable>`|
+|service_account_id|`utf8`|
+|logging|`json`|

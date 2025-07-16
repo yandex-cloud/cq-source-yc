@@ -38,3 +38,5 @@ The following tables depend on yc_mdb_redis_clusters:
 |deletion_protection|`bool`|
 |persistence_mode|`utf8`|
 |announce_hostnames|`bool`|
+|auth_sentinel|`bool`|
+|disk_encryption_key_id|`json`|

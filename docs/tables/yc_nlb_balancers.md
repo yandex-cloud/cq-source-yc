@@ -26,3 +26,5 @@ The primary key for this table is **id**.
 |listeners|`json`|
 |attached_target_groups|`json`|
 |deletion_protection|`bool`|
+|allow_zonal_shift|`bool`|
+|disable_zone_statuses|`json`|

@@ -36,3 +36,4 @@ The following tables depend on yc_mdb_kafka_clusters:
 |deletion_protection|`bool`|
 |maintenance_window|`json`|
 |planned_operation|`json`|
+|kafka_ui|`json`|

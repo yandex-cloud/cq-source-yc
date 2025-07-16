@@ -18,6 +18,7 @@ func Instances() *schema.Table {
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},
+		SensitiveColumns: []string{"metadata"},
 	}
 }
 

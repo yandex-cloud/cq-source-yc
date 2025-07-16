@@ -28,3 +28,4 @@ The primary key for this table is **id**.
 |created_at|`timestamp[us, tz=UTC]`|
 |auto_scale_policy|`json`|
 |log_options|`json`|
+|allow_zonal_shift|`bool`|

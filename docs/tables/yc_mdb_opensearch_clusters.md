@@ -36,3 +36,4 @@ The following tables depend on yc_mdb_opensearch_clusters:
 |deletion_protection|`bool`|
 |maintenance_window|`json`|
 |planned_operation|`json`|
+|disk_encryption_key_id|`json`|

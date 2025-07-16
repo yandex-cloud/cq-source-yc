@@ -32,3 +32,4 @@ The primary key for this table is **id**.
 |kms_provider|`json`|
 |log_group_id|`utf8`|
 |network_implementation|`json`|
+|scheduled_maintenance|`json`|

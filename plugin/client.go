@@ -62,8 +62,12 @@ func (*Client) Close(_ context.Context) error {
 	return nil
 }
 
-func (c *Client) Tables(_ context.Context, _ plugin.TableOptions) (schema.Tables, error) {
-	return c.allTables, nil
+func (c *Client) Tables(_ context.Context, options plugin.TableOptions) (schema.Tables, error) {
+	tt, err := c.allTables.FilterDfs(options.Tables, options.SkipTables, options.SkipDependentTables)
+	if err != nil {
+		return nil, err
+	}
+	return tt, nil
 }
 
 func (c *Client) Sync(ctx context.Context, options plugin.SyncOptions, res chan<- message.SyncMessage) error {

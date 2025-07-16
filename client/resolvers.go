@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/apache/arrow/go/v17/arrow"
+	"github.com/apache/arrow-go/v18/arrow"
 	"github.com/cloudquery/plugin-sdk/v4/schema"
 	"github.com/thoas/go-funk"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -54,6 +54,7 @@ var MultiplexedResourceIdColumn schema.Column = schema.Column{
 		client := meta.(*Client)
 		return resource.Set(c.Name, client.MultiplexedResourceId)
 	},
+	PrimaryKey: true,
 }
 
 func ResolveOrganization(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {

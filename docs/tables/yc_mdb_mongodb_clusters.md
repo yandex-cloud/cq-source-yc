@@ -37,3 +37,4 @@ The following tables depend on yc_mdb_mongodb_clusters:
 |planned_operation|`json`|
 |security_group_ids|`list<item: utf8, nullable>`|
 |deletion_protection|`bool`|
+|disk_encryption_key_id|`json`|

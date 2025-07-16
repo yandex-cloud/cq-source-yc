@@ -1,4 +1,4 @@
-# Table: yc_mdb_postgresql_databases
+# Table: yc_mdb_postgresql_backups
 
 This table shows data for YC Managed Service for Postgresql Backups.
 
@@ -10,15 +10,13 @@ The primary key for this table is **id**.
 
 | Name          | Type          |
 | ------------- | ------------- |
-|_cq_sync_time|`timestamp[us, tz=UTC]`|
-|_cq_source_name|`utf8`|
 |_cq_id|`uuid`|
 |_cq_parent_id|`uuid`|
 |cloud_id|`utf8`|
 |id (PK)|`utf8`|
 |folder_id|`utf8`|
 |created_at|`timestamp[us, tz=UTC]`|
-|source_cluster_id|`uuid`|
+|source_cluster_id|`utf8`|
 |started_at|`timestamp[us, tz=UTC]`|
 |size|`int64`|
 |type|`utf8`|
