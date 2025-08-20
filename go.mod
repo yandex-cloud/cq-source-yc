@@ -1,6 +1,6 @@
 module github.com/yandex-cloud/cq-source-yc
 
-go 1.23.4
+go 1.23.8
 
 require (
 	github.com/apache/arrow-go/v18 v18.3.0
@@ -8,7 +8,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/rs/zerolog v1.34.0
 	github.com/thoas/go-funk v0.9.3
-	github.com/yandex-cloud/go-genproto v0.14.0
+	github.com/yandex-cloud/go-genproto v0.17.0
 	github.com/yandex-cloud/go-sdk v0.15.0
 	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6

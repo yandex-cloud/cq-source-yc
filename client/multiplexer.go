@@ -43,3 +43,13 @@ func PrependEmptyMultiplex(multiplexer schema.Multiplexer) schema.Multiplexer {
 		return append([]schema.ClientMeta{client}, multiplexer(meta)...)
 	}
 }
+
+func CombineMultiplex(multiplexers ...schema.Multiplexer) schema.Multiplexer {
+	return func(meta schema.ClientMeta) []schema.ClientMeta {
+		clients := []schema.ClientMeta{}
+		for _, m := range multiplexers {
+			clients = append(clients, m(meta)...)
+		}
+		return clients
+	}
+}

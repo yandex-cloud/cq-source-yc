@@ -8,6 +8,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/internal/util"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/billing/v1"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/endpoint"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
@@ -18,7 +19,8 @@ import (
 )
 
 // Self-made name for struct holding info about resource model hierarchy.
-// Each field could be nil.
+// Each field could be empty.
+// https://yandex.cloud/en/docs/resource-manager/concepts/resources-hierarchy
 type ResourceHierarchyItem struct {
 	Organization string
 	Cloud        string
@@ -84,10 +86,35 @@ func (h *ResourceHierarchy) FolderRows() []ResourceHierarchyItem {
 	})
 }
 
+type Service string
+
 const (
-	serviceResourceManager     = "resource-manager"
-	serviceOrganizationManager = "organization-manager"
+	ServiceResourceManager     Service = "resource-manager"
+	ServiceOrganizationManager Service = "organization-manager"
 )
+
+type ResourceType string
+
+const (
+	ResourceTypeOrganization   ResourceType = "organization-manager.organization"
+	ResourceTypeCloud          ResourceType = "resource-manager.cloud"
+	ResourceTypeFolder         ResourceType = "resource-manager.folder"
+	ResourceTypeBillingAccount ResourceType = "billing.account"
+)
+
+// TODO: codegen
+func ResourceTypeFromProto(p any) (ResourceType, bool) {
+	switch p.(type) {
+	case organizationmanager.Organization:
+		return ResourceTypeOrganization, true
+	case resourcemanager.Cloud:
+		return ResourceTypeCloud, true
+	case billing.BillingAccount:
+		return ResourceTypeBillingAccount, true
+	default:
+		return ResourceType(""), false
+	}
+}
 
 // discover the hierarchy using Breadth-first search
 func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []ResourceHierarchyItem, organizations []string, clouds []string, folders []string, opts ...grpc.CallOption) ([]ResourceHierarchyItem, error) {
@@ -123,7 +150,7 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 		if item.Folder != "" {
 			// just append to items
 			continue
-		} else if item.Cloud != "" && services[serviceResourceManager] {
+		} else if item.Cloud != "" && services[string(ServiceResourceManager)] {
 			// discover folders
 			it := sdk.ResourceManager().Folder().FolderIterator(ctx, &resourcemanager.ListFoldersRequest{CloudId: item.Cloud}, opts...)
 			for it.Next() {
@@ -144,7 +171,7 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 				}
 				return nil, err
 			}
-		} else if item.Organization != "" && services[serviceResourceManager] {
+		} else if item.Organization != "" && services[string(ServiceResourceManager)] {
 			// discover clouds
 			it := sdk.ResourceManager().Cloud().CloudIterator(ctx, &resourcemanager.ListCloudsRequest{OrganizationId: item.Organization}, opts...)
 			for it.Next() {
@@ -165,7 +192,7 @@ func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []Reso
 				}
 				return nil, err
 			}
-		} else if services[serviceOrganizationManager] {
+		} else if services[string(ServiceOrganizationManager)] {
 			// discover organizations
 			it := sdk.OrganizationManager().Organization().OrganizationIterator(ctx, &organizationmanager.ListOrganizationsRequest{}, opts...)
 			for it.Next() {

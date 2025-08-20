@@ -25,10 +25,11 @@ const (
 type Client struct {
 	hierarchy *ResourceHierarchy
 
-	OrganizationId        string
-	CloudId               string
-	FolderId              string
-	MultiplexedResourceId string
+	OrganizationId          string
+	CloudId                 string
+	FolderId                string
+	MultiplexedResourceId   string
+	MultiplexedResourceType ResourceType
 
 	Backend state.Client
 	Logger  zerolog.Logger
@@ -59,6 +60,7 @@ func (c *Client) WithOrganization(id string) *Client {
 	newC := *c
 	newC.Logger = c.Logger.With().Str("organization", id).Logger()
 	newC.OrganizationId = id
+	newC.MultiplexedResourceType = ResourceTypeOrganization
 	return &newC
 }
 
@@ -66,6 +68,7 @@ func (c *Client) WithCloud(id string) *Client {
 	newC := *c
 	newC.Logger = c.Logger.With().Str("cloud", id).Logger()
 	newC.CloudId = id
+	newC.MultiplexedResourceType = ResourceTypeCloud
 	return &newC
 }
 
@@ -73,6 +76,7 @@ func (c *Client) WithFolder(id string) *Client {
 	newC := *c
 	newC.Logger = c.Logger.With().Str("folder", id).Logger()
 	newC.FolderId = id
+	newC.MultiplexedResourceType = ResourceTypeFolder
 	return &newC
 }
 
@@ -96,8 +100,7 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 	streamInterceptors := []grpc.StreamClientInterceptor{}
 
 	var dialOpts = []grpc.DialOption{
-		grpc.WithChainUnaryInterceptor(unaryInterceptors...),
-		grpc.WithChainStreamInterceptor(streamInterceptors...),
+		grpc.WithUserAgent(DefaultUserAgent),
 	}
 
 	if spec.MaxRetries > 0 {
@@ -117,14 +120,14 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		streamInterceptors = append(streamInterceptors, logging.StreamClientInterceptor(grpczerolog.InterceptorLogger(logger)))
 	}
 
+	dialOpts = append(dialOpts, grpc.WithChainUnaryInterceptor(unaryInterceptors...), grpc.WithChainStreamInterceptor(streamInterceptors...))
+
 	sdk, err := ycsdk.Build(ctx,
 		ycsdk.Config{
 			Credentials: credentials,
 			Endpoint:    spec.Endpoint,
 		},
-		grpc.WithUserAgent(DefaultUserAgent),
-		grpc.WithChainUnaryInterceptor(unaryInterceptors...),
-		grpc.WithChainStreamInterceptor(streamInterceptors...),
+		dialOpts...,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("initialize Yandex Cloud SDK: %w", err)

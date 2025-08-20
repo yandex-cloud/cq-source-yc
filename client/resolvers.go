@@ -10,6 +10,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoimpl"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 func ResolveProtoEnum(path string) schema.ColumnResolver {
@@ -37,6 +38,20 @@ func ResolveProtoTimestamp(path string) schema.ColumnResolver {
 			return fmt.Errorf("unexpected type, wanted \"*timestamppb.Timestamp\", have \"%T\"", data)
 		}
 		return resource.Set(c.Name, ts.AsTime())
+	}
+}
+
+func ResolveDouble(path string) schema.ColumnResolver {
+	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+		data := funk.Get(resource.Item, path)
+		if data == nil {
+			return nil
+		}
+		double, ok := data.(*wrapperspb.DoubleValue)
+		if !ok {
+			return fmt.Errorf("unexpected type, wanted \"*wrapperspb.DoubleValue\", have \"%T\"", data)
+		}
+		return resource.Set(c.Name, double.GetValue())
 	}
 }
 

@@ -71,6 +71,8 @@
 - [yc_organizationmanager_organizations](yc_organizationmanager_organizations.md)
 - [yc_organizationmanager_oslogin_settings](yc_organizationmanager_oslogin_settings.md)
 - [yc_organizationmanager_users](yc_organizationmanager_users.md)
+- [yc_quotamanager_quota_services](yc_quotamanager_quota_services.md)
+  - [yc_quotamanager_quota_limits](yc_quotamanager_quota_limits.md)
 - [yc_resourcemanager_clouds](yc_resourcemanager_clouds.md)
 - [yc_resourcemanager_folders](yc_resourcemanager_folders.md)
 - [yc_serverless_apigateway_gateways](yc_serverless_apigateway_gateways.md)

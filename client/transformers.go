@@ -9,6 +9,7 @@ import (
 	cqtypes "github.com/cloudquery/plugin-sdk/v4/types"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 func typeTransformer(field reflect.StructField) (arrow.DataType, error) {
@@ -16,6 +17,9 @@ func typeTransformer(field reflect.StructField) (arrow.DataType, error) {
 	case *timestamppb.Timestamp,
 		timestamppb.Timestamp:
 		return arrow.FixedWidthTypes.Timestamp_us, nil
+	case *wrapperspb.DoubleValue,
+		wrapperspb.DoubleValue:
+		return arrow.PrimitiveTypes.Float64, nil
 	case protoreflect.Enum:
 		return arrow.BinaryTypes.String, nil
 	case nil:
@@ -30,6 +34,9 @@ func resolverTransformer(field reflect.StructField, path string) schema.ColumnRe
 	case *timestamppb.Timestamp,
 		timestamppb.Timestamp:
 		return ResolveProtoTimestamp(path)
+	case *wrapperspb.DoubleValue,
+		wrapperspb.DoubleValue:
+		return ResolveDouble(path)
 	case protoreflect.Enum:
 		return ResolveProtoEnum(path)
 	default:

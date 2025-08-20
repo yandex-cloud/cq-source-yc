@@ -26,3 +26,5 @@ The primary key for this table is **id**.
 |origin_protocol|`utf8`|
 |ssl_certificate|`json`|
 |labels|`json`|
+|provider_type|`utf8`|
+|provider_cname|`utf8`|
