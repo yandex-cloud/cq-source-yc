@@ -21,12 +21,10 @@ func QuotaServices() *schema.Table {
 		Description: `https://yandex.cloud/ru/docs/quota-manager/api-ref/grpc/QuotaLimit/listServices#yandex.cloud.quotamanager.v1.Service`,
 		Resolver:    fetchQuotaServices,
 		Transform:   client.TransformWithStruct(&Service{}, transformers.WithUnwrapAllEmbeddedStructs(), transformers.WithPrimaryKeys("Id", "ResourceType")),
-		Relations: schema.Tables{
-			QuotaLimits(),
-		},
 	}
 }
 
+// NOTE: no API to get this list, so hardcode
 var quotaEnabledResourceTypes = []client.ResourceType{client.ResourceTypeOrganization, client.ResourceTypeCloud}
 
 func fetchQuotaServices(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- interface{}) error {
