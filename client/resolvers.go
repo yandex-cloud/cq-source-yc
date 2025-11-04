@@ -7,6 +7,8 @@ import (
 	"github.com/apache/arrow-go/v18/arrow"
 	"github.com/cloudquery/plugin-sdk/v4/schema"
 	"github.com/thoas/go-funk"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoimpl"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -41,17 +43,57 @@ func ResolveProtoTimestamp(path string) schema.ColumnResolver {
 	}
 }
 
-func ResolveDouble(path string) schema.ColumnResolver {
+// WrapperValue is a constraint for protobuf wrapper types that have a GetValue method
+type WrapperValue[T any] interface {
+	*wrapperspb.DoubleValue | *wrapperspb.FloatValue | *wrapperspb.StringValue |
+		*wrapperspb.Int64Value | *wrapperspb.Int32Value | *wrapperspb.UInt64Value |
+		*wrapperspb.UInt32Value | *wrapperspb.BoolValue | *wrapperspb.BytesValue
+	GetValue() T
+}
+
+// ResolveWrapperValue is a generic resolver for protobuf wrapper types
+func ResolveWrapperValue[T any, W WrapperValue[T]](path string) schema.ColumnResolver {
 	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
 		data := funk.Get(resource.Item, path)
 		if data == nil {
 			return nil
 		}
-		double, ok := data.(*wrapperspb.DoubleValue)
+		wrapper, ok := data.(W)
 		if !ok {
-			return fmt.Errorf("unexpected type, wanted \"*wrapperspb.DoubleValue\", have \"%T\"", data)
+			var zero W
+			return fmt.Errorf("unexpected type, wanted \"%T\", have \"%T\"", zero, data)
 		}
-		return resource.Set(c.Name, double.GetValue())
+		return resource.Set(c.Name, wrapper.GetValue())
+	}
+}
+
+// ResolveProtoMessage creates a resolver that serializes protobuf messages using protojson
+func ResolveProtoMessage(path string) schema.ColumnResolver {
+	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+		data := funk.Get(resource.Item, path)
+		if data == nil {
+			return nil
+		}
+
+		// Check if data implements proto.Message
+		msg, ok := data.(proto.Message)
+		if !ok {
+			return fmt.Errorf("unexpected type, wanted proto.Message, have %T", data)
+		}
+
+		// Serialize using protojson with enums as strings
+		marshaler := protojson.MarshalOptions{
+			UseEnumNumbers:    false,
+			EmitDefaultValues: true,
+			UseProtoNames:     true,
+		}
+
+		jsonBytes, err := marshaler.Marshal(msg)
+		if err != nil {
+			return fmt.Errorf("failed to marshal proto message to JSON: %w", err)
+		}
+
+		return resource.Set(c.Name, jsonBytes)
 	}
 }
 
