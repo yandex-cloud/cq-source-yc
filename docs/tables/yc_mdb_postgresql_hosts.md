@@ -25,7 +25,7 @@ This table depends on [yc_mdb_postgresql_clusters](yc_mdb_postgresql_clusters.md
 |services|`json`|
 |subnet_id|`utf8`|
 |replication_source|`utf8`|
-|priority|`json`|
+|priority|`int64`|
 |config|`json`|
 |assign_public_ip|`bool`|
 |replica_type|`utf8`|

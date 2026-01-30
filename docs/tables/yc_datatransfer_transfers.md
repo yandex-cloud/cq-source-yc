@@ -27,3 +27,4 @@ The primary key for this table is **id**.
 |transformation|`json`|
 |data_objects|`json`|
 |prestable|`bool`|
+|replication_runtime|`json`|

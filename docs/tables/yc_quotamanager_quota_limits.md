@@ -6,10 +6,6 @@ https://yandex.cloud/ru/docs/quota-manager/api-ref/grpc/QuotaLimit/list#yandex.c
 
 The composite primary key for this table is (**resource_id**, **quota_id**).
 
-## Relations
-
-This table depends on [yc_quotamanager_quota_services](yc_quotamanager_quota_services.md).
-
 ## Columns
 
 | Name          | Type          |
@@ -19,5 +15,5 @@ This table depends on [yc_quotamanager_quota_services](yc_quotamanager_quota_ser
 |resource_id (PK)|`utf8`|
 |resource_type|`utf8`|
 |quota_id (PK)|`utf8`|
-|limit|`json`|
-|usage|`json`|
+|limit|`float64`|
+|usage|`float64`|

@@ -25,5 +25,5 @@ This table depends on [yc_mdb_redis_clusters](yc_mdb_redis_clusters.md).
 |health|`utf8`|
 |services|`json`|
 |shard_name|`utf8`|
-|replica_priority|`json`|
+|replica_priority|`int64`|
 |assign_public_ip|`bool`|

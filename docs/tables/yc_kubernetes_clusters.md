@@ -33,3 +33,4 @@ The primary key for this table is **id**.
 |log_group_id|`utf8`|
 |network_implementation|`json`|
 |scheduled_maintenance|`json`|
+|workload_identity_federation|`json`|

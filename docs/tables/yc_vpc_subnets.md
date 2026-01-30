@@ -6,6 +6,11 @@ https://cloud.yandex.ru/docs/vpc/api-ref/grpc/subnet_service#Subnet1
 
 The primary key for this table is **id**.
 
+## Relations
+
+The following tables depend on yc_vpc_subnets:
+  - [yc_vpc_used_addresses](yc_vpc_used_addresses.md)
+
 ## Columns
 
 | Name          | Type          |

@@ -39,4 +39,4 @@ The following tables depend on yc_mdb_redis_clusters:
 |persistence_mode|`utf8`|
 |announce_hostnames|`bool`|
 |auth_sentinel|`bool`|
-|disk_encryption_key_id|`json`|
+|disk_encryption_key_id|`utf8`|

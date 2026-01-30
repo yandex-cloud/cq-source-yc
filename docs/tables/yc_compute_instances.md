@@ -43,3 +43,4 @@ The primary key for this table is **id**.
 |maintenance_grace_period|`json`|
 |hardware_generation|`json`|
 |reserved_instance_pool_id|`utf8`|
+|application|`json`|

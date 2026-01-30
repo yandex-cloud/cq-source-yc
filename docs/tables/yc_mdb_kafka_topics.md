@@ -19,6 +19,6 @@ This table depends on [yc_mdb_kafka_clusters](yc_mdb_kafka_clusters.md).
 |cloud_id|`utf8`|
 |name (PK)|`utf8`|
 |cluster_id (PK)|`utf8`|
-|partitions|`json`|
-|replication_factor|`json`|
+|partitions|`int64`|
+|replication_factor|`int64`|
 |topic_config|`json`|

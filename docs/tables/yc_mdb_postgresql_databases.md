@@ -23,4 +23,4 @@ This table depends on [yc_mdb_postgresql_clusters](yc_mdb_postgresql_clusters.md
 |lc_ctype|`utf8`|
 |extensions|`json`|
 |template_db|`utf8`|
-|deletion_protection|`json`|
+|deletion_protection|`bool`|

@@ -18,6 +18,9 @@ func Subnets() *schema.Table {
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},
+		Relations: schema.Tables{
+			SubnetUsedAddresses(),
+		},
 	}
 }
 

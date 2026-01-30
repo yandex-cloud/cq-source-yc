@@ -37,4 +37,4 @@ The following tables depend on yc_mdb_mysql_clusters:
 |security_group_ids|`list<item: utf8, nullable>`|
 |deletion_protection|`bool`|
 |host_group_ids|`list<item: utf8, nullable>`|
-|disk_encryption_key_id|`json`|
+|disk_encryption_key_id|`utf8`|

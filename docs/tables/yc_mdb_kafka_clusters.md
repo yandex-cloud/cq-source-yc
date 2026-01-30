@@ -37,3 +37,4 @@ The following tables depend on yc_mdb_kafka_clusters:
 |maintenance_window|`json`|
 |planned_operation|`json`|
 |kafka_ui|`json`|
+|disk_encryption_key_id|`utf8`|
