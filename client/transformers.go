@@ -13,7 +13,12 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+const protobufOneofTag = "protobuf_oneof"
+
 func typeTransformer(field reflect.StructField) (arrow.DataType, error) {
+	if _, ok := field.Tag.Lookup(protobufOneofTag); ok {
+		return cqtypes.ExtensionTypes.JSON, nil
+	}
 	switch reflect.New(field.Type).Elem().Interface().(type) {
 	case *timestamppb.Timestamp,
 		timestamppb.Timestamp:
@@ -49,13 +54,16 @@ func typeTransformer(field reflect.StructField) (arrow.DataType, error) {
 		wrapperspb.BytesValue:
 		return arrow.BinaryTypes.Binary, nil
 	case nil:
-		return cqtypes.NewJSONType(), nil
+		return cqtypes.ExtensionTypes.JSON, nil
 	default:
 		return nil, nil
 	}
 }
 
 func resolverTransformer(field reflect.StructField, path string) schema.ColumnResolver {
+	if oneofName, ok := field.Tag.Lookup(protobufOneofTag); ok {
+		return ResolveOneofField(path, protoreflect.Name(oneofName))
+	}
 	switch reflect.New(field.Type).Elem().Interface().(type) {
 	case *timestamppb.Timestamp,
 		timestamppb.Timestamp:

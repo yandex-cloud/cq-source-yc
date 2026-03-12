@@ -15,6 +15,7 @@
   "client/client.go":"security/cloudquery/cq-source-yc/client/client.go",
   "client/multiplexer.go":"security/cloudquery/cq-source-yc/client/multiplexer.go",
   "client/resolvers.go":"security/cloudquery/cq-source-yc/client/resolvers.go",
+  "client/resolvers_test.go":"security/cloudquery/cq-source-yc/client/resolvers_test.go",
   "client/resourcehierarchy.go":"security/cloudquery/cq-source-yc/client/resourcehierarchy.go",
   "client/resourcehierarchy_test.go":"security/cloudquery/cq-source-yc/client/resourcehierarchy_test.go",
   "client/sdk.go":"security/cloudquery/cq-source-yc/client/sdk.go",
