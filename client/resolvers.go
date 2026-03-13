@@ -3,6 +3,9 @@ package client
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"strings"
+	"time"
 
 	"github.com/apache/arrow-go/v18/arrow"
 	"github.com/cloudquery/plugin-sdk/v4/schema"
@@ -78,24 +81,28 @@ var protomarshaler = protojson.MarshalOptions{
 
 // ResolveOneofField resolves a protobuf oneof field using protoreflect.
 //
-// path is the Go struct field name of the oneof container (e.g. "NetworkImplementation").
-// It is always a single, dot-free segment because the CQ SDK struct transformer only
-// recurses into anonymous/embedded structs — proto message sub-fields are serialised as
-// JSON blobs and never unwrapped, and oneof fields (interface types) are never structs,
-// so the transformer never descends into them. See TestOneofPathsAreFlat.
-//
-// Previous implementation used reflect to unwrap the concrete oneof wrapper struct and
-// parse the proto field name from struct tags. Using protoreflect + WhichOneof is cleaner:
-// it works directly on the parent proto.Message (resource.Item) and obtains the active
-// field descriptor — including its name — without any struct tag parsing.
+// For flat paths (e.g. "NetworkImplementation"), it operates on resource.Item directly.
+// For dotted paths (e.g. "Master.MasterType" from WithUnwrapStructFields),
+// it navigates to the parent message via funk.Get before resolving the oneof.
 //
 // oneofName is the proto oneof name from the protobuf_oneof struct tag (e.g. "master_type").
 // Produces {"active_field_name": <value>}.
 func ResolveOneofField(path string, oneofName protoreflect.Name) schema.ColumnResolver {
 	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
-		msg, ok := resource.Item.(proto.Message)
+		var target any
+		if i := strings.LastIndex(path, "."); i >= 0 {
+			// Dotted path: navigate to the parent message that owns the oneof.
+			target = funk.Get(resource.Item, path[:i])
+		} else {
+			target = resource.Item
+		}
+		if target == nil {
+			return nil
+		}
+
+		msg, ok := target.(proto.Message)
 		if !ok {
-			return fmt.Errorf("expected proto.Message, got %T", resource.Item)
+			return fmt.Errorf("expected proto.Message, got %T", target)
 		}
 
 		rv := msg.ProtoReflect()
@@ -143,6 +150,69 @@ func ResolveProtoMessage(path string) schema.ColumnResolver {
 		}
 
 		return resource.Set(c.Name, jsonBytes)
+	}
+}
+
+// ResolveProtoSlice resolves a slice of protobuf values by dispatching on the element type.
+// It handles proto messages (→ JSON array), timestamps (→ []time.Time), enums (→ []string),
+// and wrapper types (→ unwrapped slice) via runtime type inspection.
+// TODO: remove code repetition
+func ResolveProtoSlice(path string) schema.ColumnResolver {
+	return func(ctx context.Context, meta schema.ClientMeta, resource *schema.Resource, c schema.Column) error {
+		data := funk.Get(resource.Item, path)
+		if data == nil {
+			return nil
+		}
+		val := reflect.ValueOf(data)
+		if val.Kind() != reflect.Slice || val.Len() == 0 {
+			return nil
+		}
+
+		first := val.Index(0).Interface()
+		switch first.(type) {
+		case *timestamppb.Timestamp:
+			times := make([]time.Time, val.Len())
+			for i := range val.Len() {
+				times[i] = val.Index(i).Interface().(*timestamppb.Timestamp).AsTime()
+			}
+			return resource.Set(c.Name, times)
+
+		case protoreflect.Enum:
+			strs := make([]string, val.Len())
+			for i := range val.Len() {
+				e := val.Index(i).Interface().(protoreflect.Enum)
+				strs[i] = protoimpl.X.EnumStringOf(e.Descriptor(), e.Number())
+			}
+			return resource.Set(c.Name, strs)
+
+		case proto.Message:
+			// Wrappers implement proto.Message but also have GetValue — unwrap them.
+			if gv, ok := reflect.TypeOf(first).MethodByName("GetValue"); ok {
+				out := reflect.MakeSlice(reflect.SliceOf(gv.Type.Out(0)), val.Len(), val.Len())
+				for i := range val.Len() {
+					out.Index(i).Set(reflect.ValueOf(val.Index(i).Interface()).MethodByName("GetValue").Call(nil)[0])
+				}
+				return resource.Set(c.Name, out.Interface())
+			}
+			// Regular proto messages — serialize as JSON array via protojson.
+			var buf []byte
+			buf = append(buf, '[')
+			for i := range val.Len() {
+				if i > 0 {
+					buf = append(buf, ',')
+				}
+				jsonBytes, err := protomarshaler.Marshal(val.Index(i).Interface().(proto.Message))
+				if err != nil {
+					return fmt.Errorf("failed to marshal proto message at index %d: %w", i, err)
+				}
+				buf = append(buf, jsonBytes...)
+			}
+			buf = append(buf, ']')
+			return resource.Set(c.Name, buf)
+
+		default:
+			return nil
+		}
 	}
 }
 

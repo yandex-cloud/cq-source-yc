@@ -19,7 +19,7 @@ This table depends on [yc_mdb_mysql_clusters](yc_mdb_mysql_clusters.md).
 |name (PK)|`utf8`|
 |cluster_id (PK)|`utf8`|
 |permissions|`json`|
-|global_permissions|`list<item: int64, nullable>`|
+|global_permissions|`list<item: utf8, nullable>`|
 |connection_limits|`json`|
 |authentication_plugin|`utf8`|
 |connection_manager|`json`|

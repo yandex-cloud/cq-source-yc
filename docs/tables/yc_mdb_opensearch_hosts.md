@@ -26,4 +26,4 @@ This table depends on [yc_mdb_opensearch_clusters](yc_mdb_opensearch_clusters.md
 |assign_public_ip|`bool`|
 |system|`json`|
 |node_group|`utf8`|
-|roles|`list<item: int64, nullable>`|
+|roles|`list<item: utf8, nullable>`|

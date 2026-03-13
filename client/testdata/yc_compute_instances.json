@@ -1,0 +1,85 @@
+{
+  "application": null,
+  "boot_disk": {
+    "mode": "READ_WRITE",
+    "device_name": "boot",
+    "auto_delete": true,
+    "disk_id": "test-boot-disk-id"
+  },
+  "created_at": "2020-01-01T00:00:00Z",
+  "description": "test instance description",
+  "filesystems": null,
+  "folder_id": "test-folder-id",
+  "fqdn": "test-instance.ru-central1.internal",
+  "gpu_settings": null,
+  "hardware_generation": {
+    "legacy_features": {
+      "pci_topology": "PCI_TOPOLOGY_V1"
+    }
+  },
+  "host_group_id": "",
+  "host_id": "",
+  "id": "test-instance-id",
+  "labels": {
+    "env": "test",
+    "team": "platform"
+  },
+  "local_disks": null,
+  "maintenance_grace_period": null,
+  "maintenance_policy": "RESTART",
+  "metadata": {
+    "user-data": "#cloud-config"
+  },
+  "metadata_options": {
+    "gce_http_endpoint": "ENABLED",
+    "aws_v1_http_endpoint": "ENABLED"
+  },
+  "name": "test-instance",
+  "network_interfaces": [
+    {
+      "index": "0",
+      "mac_address": "00:00:5e:00:53:01",
+      "subnet_id": "test-subnet-id",
+      "primary_v4_address": {
+        "address": "10.0.0.10",
+        "one_to_one_nat": {
+          "address": "198.51.100.1",
+          "ip_version": "IPV4"
+        }
+      },
+      "security_group_ids": [
+        "test-sg-1",
+        "test-sg-2"
+      ]
+    }
+  ],
+  "network_settings": {
+    "type": "STANDARD"
+  },
+  "placement_policy": {},
+  "platform_id": "standard-v3",
+  "reserved_instance_pool_id": "",
+  "resources": {
+    "memory": "8589934592",
+    "cores": "4",
+    "core_fraction": "100"
+  },
+  "scheduling_policy": {},
+  "secondary_disks": [
+    {
+      "mode": "READ_WRITE",
+      "device_name": "data",
+      "disk_id": "test-data-disk-id"
+    },
+    {
+      "mode": "READ_ONLY",
+      "device_name": "logs",
+      "auto_delete": true,
+      "disk_id": "test-logs-disk-id"
+    }
+  ],
+  "serial_port_settings": null,
+  "service_account_id": "test-sa-id",
+  "status": "RUNNING",
+  "zone_id": "ru-central1-a"
+}

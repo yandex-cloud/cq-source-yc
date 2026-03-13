@@ -1,0 +1,88 @@
+{
+  "created_at": "2020-01-01T00:00:00Z",
+  "description": "test cluster description",
+  "folder_id": "test-folder-id",
+  "health": "HEALTHY",
+  "id": "test-cluster-id",
+  "internet_gateway": null,
+  "ip_allocation_policy": {
+    "cluster_ipv4_cidr_block": "10.64.0.0/16",
+    "node_ipv4_cidr_mask_size": "24",
+    "service_ipv4_cidr_block": "10.65.0.0/16",
+    "cluster_ipv6_cidr_block": "fc00::64:0/112",
+    "service_ipv6_cidr_block": "fc00::65:0/112"
+  },
+  "kms_provider": {
+    "key_id": "test-kms-key-id"
+  },
+  "labels": {
+    "env": "test",
+    "managed": "true"
+  },
+  "log_group_id": "",
+  "master": {
+    "regional_master": {
+      "region_id": "ru-central1",
+      "internal_v4_address": "10.0.0.1"
+    },
+    "locations": [
+      {
+        "zone_id": "ru-central1-b",
+        "subnet_id": "test-subnet-id"
+      }
+    ],
+    "etcd_cluster_size": "3",
+    "version": "1.33",
+    "endpoints": {
+      "internal_v4_endpoint": "https://10.0.0.1"
+    },
+    "master_auth": {
+      "cluster_ca_certificate": "dGVzdC1jYS1jZXJ0"
+    },
+    "version_info": {
+      "current_version": "1.33"
+    },
+    "maintenance_policy": {
+      "maintenance_window": {
+        "anytime": {}
+      }
+    },
+    "security_group_ids": [
+      "test-sg-1",
+      "test-sg-2",
+      "test-sg-3"
+    ],
+    "master_logging": {
+      "enabled": true,
+      "log_group_id": "test-log-group-id",
+      "audit_enabled": true,
+      "cluster_autoscaler_enabled": true,
+      "kube_apiserver_enabled": true,
+      "events_enabled": true
+    },
+    "resources": {
+      "cores": "2",
+      "core_fraction": "100",
+      "memory": "8589934592"
+    },
+    "scale_policy": {
+      "auto_scale": {
+        "min_resource_preset_id": "s-c2-m8"
+      }
+    }
+  },
+  "name": "test-cluster",
+  "network_id": "test-network-id",
+  "network_implementation": {
+    "cilium": {
+      "routing_mode": "TUNNEL"
+    }
+  },
+  "network_policy": null,
+  "node_service_account_id": "test-node-sa-id",
+  "release_channel": "STABLE",
+  "scheduled_maintenance": null,
+  "service_account_id": "test-sa-id",
+  "status": "RUNNING",
+  "workload_identity_federation": null
+}

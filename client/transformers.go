@@ -15,101 +15,134 @@ import (
 
 const protobufOneofTag = "protobuf_oneof"
 
-func typeTransformer(field reflect.StructField) (arrow.DataType, error) {
-	if _, ok := field.Tag.Lookup(protobufOneofTag); ok {
-		return cqtypes.ExtensionTypes.JSON, nil
+// protoTypeToArrow recursively resolves a reflect.Type to an Arrow DataType.
+// It peels pointers and slices, then matches known protobuf types.
+func protoTypeToArrow(t reflect.Type) (arrow.DataType, error) {
+	switch t.Kind() {
+	case reflect.Pointer:
+		return protoTypeToArrow(t.Elem())
+	case reflect.Slice:
+		if t.Elem().Kind() == reflect.Uint8 {
+			return nil, nil // []byte
+		}
+		elemType, err := protoTypeToArrow(t.Elem())
+		if err != nil {
+			return nil, err
+		}
+		// Not a protobuf type
+		if elemType == nil {
+			return nil, nil
+		}
+		if elemType == cqtypes.ExtensionTypes.JSON {
+			return cqtypes.ExtensionTypes.JSON, nil
+		}
+		return arrow.ListOf(elemType), nil
+	case reflect.Interface:
+		return nil, nil // oneof containers — handled by tag check
 	}
-	switch reflect.New(field.Type).Elem().Interface().(type) {
-	case *timestamppb.Timestamp,
-		timestamppb.Timestamp:
+
+	switch reflect.New(t).Interface().(type) {
+	case *timestamppb.Timestamp:
 		return arrow.FixedWidthTypes.Timestamp_us, nil
-	case *protoreflect.Enum,
-		protoreflect.Enum:
+	case protoreflect.Enum:
 		return arrow.BinaryTypes.String, nil
-	case *wrapperspb.DoubleValue,
-		wrapperspb.DoubleValue:
+	case *wrapperspb.DoubleValue:
 		return arrow.PrimitiveTypes.Float64, nil
-	case *wrapperspb.FloatValue,
-		wrapperspb.FloatValue:
+	case *wrapperspb.FloatValue:
 		return arrow.PrimitiveTypes.Float32, nil
-	case *wrapperspb.StringValue,
-		wrapperspb.StringValue:
+	case *wrapperspb.StringValue:
 		return arrow.BinaryTypes.String, nil
-	case *wrapperspb.Int64Value,
-		wrapperspb.Int64Value:
+	case *wrapperspb.Int64Value:
 		return arrow.PrimitiveTypes.Int64, nil
-	case *wrapperspb.Int32Value,
-		wrapperspb.Int32Value:
+	case *wrapperspb.Int32Value:
 		return arrow.PrimitiveTypes.Int32, nil
-	case *wrapperspb.UInt64Value,
-		wrapperspb.UInt64Value:
+	case *wrapperspb.UInt64Value:
 		return arrow.PrimitiveTypes.Uint64, nil
-	case *wrapperspb.UInt32Value,
-		wrapperspb.UInt32Value:
+	case *wrapperspb.UInt32Value:
 		return arrow.PrimitiveTypes.Uint32, nil
-	case *wrapperspb.BoolValue,
-		wrapperspb.BoolValue:
+	case *wrapperspb.BoolValue:
 		return arrow.FixedWidthTypes.Boolean, nil
-	case *wrapperspb.BytesValue,
-		wrapperspb.BytesValue:
+	case *wrapperspb.BytesValue:
 		return arrow.BinaryTypes.Binary, nil
-	case nil:
+	case proto.Message:
 		return cqtypes.ExtensionTypes.JSON, nil
 	default:
 		return nil, nil
 	}
 }
 
-func resolverTransformer(field reflect.StructField, path string) schema.ColumnResolver {
-	if oneofName, ok := field.Tag.Lookup(protobufOneofTag); ok {
-		return ResolveOneofField(path, protoreflect.Name(oneofName))
+func TypeTransformer(field reflect.StructField) (arrow.DataType, error) {
+	if _, ok := field.Tag.Lookup(protobufOneofTag); ok {
+		return cqtypes.ExtensionTypes.JSON, nil
 	}
-	switch reflect.New(field.Type).Elem().Interface().(type) {
-	case *timestamppb.Timestamp,
-		timestamppb.Timestamp:
+	return protoTypeToArrow(field.Type)
+}
+
+// protoResolver recursively resolves a reflect.Type to a ColumnResolver.
+// It peels pointers and slices, then matches known protobuf types.
+func protoResolver(t reflect.Type, path string) schema.ColumnResolver {
+	switch t.Kind() {
+	case reflect.Pointer:
+		return protoResolver(t.Elem(), path)
+	case reflect.Slice:
+		if t.Elem().Kind() == reflect.Uint8 {
+			return nil // []byte
+		}
+		// Only return a slice resolver when protoTypeToArrow recognises the element type.
+		if elemType, _ := protoTypeToArrow(t.Elem()); elemType != nil {
+			return ResolveProtoSlice(path)
+		}
+		return nil
+	case reflect.Interface:
+		return nil
+	}
+
+	switch reflect.New(t).Interface().(type) {
+	case *timestamppb.Timestamp:
 		return ResolveProtoTimestamp(path)
-	case *protoreflect.Enum,
-		protoreflect.Enum:
+	case protoreflect.Enum:
 		return ResolveProtoEnum(path)
-	case *wrapperspb.DoubleValue,
-		wrapperspb.DoubleValue:
+	case *wrapperspb.DoubleValue:
 		return ResolveWrapperValue[float64, *wrapperspb.DoubleValue](path)
-	case *wrapperspb.FloatValue,
-		wrapperspb.FloatValue:
+	case *wrapperspb.FloatValue:
 		return ResolveWrapperValue[float32, *wrapperspb.FloatValue](path)
-	case *wrapperspb.StringValue,
-		wrapperspb.StringValue:
+	case *wrapperspb.StringValue:
 		return ResolveWrapperValue[string, *wrapperspb.StringValue](path)
-	case *wrapperspb.Int64Value,
-		wrapperspb.Int64Value:
+	case *wrapperspb.Int64Value:
 		return ResolveWrapperValue[int64, *wrapperspb.Int64Value](path)
-	case *wrapperspb.Int32Value,
-		wrapperspb.Int32Value:
+	case *wrapperspb.Int32Value:
 		return ResolveWrapperValue[int32, *wrapperspb.Int32Value](path)
-	case *wrapperspb.UInt64Value,
-		wrapperspb.UInt64Value:
+	case *wrapperspb.UInt64Value:
 		return ResolveWrapperValue[uint64, *wrapperspb.UInt64Value](path)
-	case *wrapperspb.UInt32Value,
-		wrapperspb.UInt32Value:
+	case *wrapperspb.UInt32Value:
 		return ResolveWrapperValue[uint32, *wrapperspb.UInt32Value](path)
-	case *wrapperspb.BoolValue,
-		wrapperspb.BoolValue:
+	case *wrapperspb.BoolValue:
 		return ResolveWrapperValue[bool, *wrapperspb.BoolValue](path)
-	case *wrapperspb.BytesValue,
-		wrapperspb.BytesValue:
+	case *wrapperspb.BytesValue:
 		return ResolveWrapperValue[[]byte, *wrapperspb.BytesValue](path)
-	case *proto.Message,
-		proto.Message:
+	case proto.Message:
 		return ResolveProtoMessage(path)
 	default:
 		return nil
 	}
+}
 
+// ResolverTransformer returns a custom ColumnResolver for protobuf struct fields.
+//
+// Paths may contain dots when WithUnwrapStructFields is used (e.g. "CloudStatus.Id").
+// All resolvers use funk.Get which supports dotted paths natively.
+// ResolveOneofField navigates to the parent message for dotted paths before
+// applying protoreflect-based oneof resolution.
+func ResolverTransformer(field reflect.StructField, path string) schema.ColumnResolver {
+	if oneofName, ok := field.Tag.Lookup(protobufOneofTag); ok {
+		return ResolveOneofField(path, protoreflect.Name(oneofName))
+	}
+	return protoResolver(field.Type, path)
 }
 
 var options = []transformers.StructTransformerOption{
-	transformers.WithTypeTransformer(typeTransformer),
-	transformers.WithResolverTransformer(resolverTransformer),
+	transformers.WithTypeTransformer(TypeTransformer),
+	transformers.WithResolverTransformer(ResolverTransformer),
 }
 
 func SharedTransformers() []transformers.StructTransformerOption {
