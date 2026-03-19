@@ -7,10 +7,11 @@ require (
 	github.com/cloudquery/plugin-sdk/v4 v4.94.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/rs/zerolog v1.34.0
+	github.com/stretchr/testify v1.11.1
 	github.com/thoas/go-funk v0.9.3
 	github.com/yandex-cloud/go-genproto v0.49.0
 	github.com/yandex-cloud/go-sdk v0.31.0
-	google.golang.org/grpc v1.78.0
+	google.golang.org/grpc v1.79.3
 	google.golang.org/protobuf v1.36.11
 )
 
@@ -70,7 +71,6 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
-	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/zeebo/xxh3 v1.1.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
