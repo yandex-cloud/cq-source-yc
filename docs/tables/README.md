@@ -75,6 +75,8 @@
 - [yc_nlb_balancers](yc_nlb_balancers.md)
 - [yc_nlb_target_groups](yc_nlb_target_groups.md)
 - [yc_organizationmanager_federations](yc_organizationmanager_federations.md)
+- [yc_organizationmanager_groups](yc_organizationmanager_groups.md)
+  - [yc_organizationmanager_group_members](yc_organizationmanager_group_members.md)
 - [yc_organizationmanager_organizations](yc_organizationmanager_organizations.md)
 - [yc_organizationmanager_oslogin_settings](yc_organizationmanager_oslogin_settings.md)
 - [yc_organizationmanager_users](yc_organizationmanager_users.md)

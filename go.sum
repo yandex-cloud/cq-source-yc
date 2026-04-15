@@ -258,6 +258,8 @@ github.com/yandex-cloud/go-sdk v0.31.0 h1:iPixKMu7t64xziWRIEW3pKkq3kGuvgNmiwH/Vl
 github.com/yandex-cloud/go-sdk v0.31.0/go.mod h1:C27Pqw9umTq3vi3ZM8tfmc5Rb0rt6Fxnl7nimQT1aM0=
 github.com/yandex-cloud/go-sdk/services/cic v0.0.52 h1:grWAja+raBwW7FTlMwR6EXgeU6g9eT6t3UDRYJxnag8=
 github.com/yandex-cloud/go-sdk/services/cic v0.0.52/go.mod h1:zE647dfXaJ56YngOflk/z6PmXA/ZAe9X37UwXvFAbtQ=
+github.com/yandex-cloud/go-sdk/services/cloudrouter v0.0.52 h1:l2S4rHwd3IJbJiXW1a5gYlKLVUSydZXQJjGE6EqJHxI=
+github.com/yandex-cloud/go-sdk/services/cloudrouter v0.0.52/go.mod h1:rgbnWTSmwzprOZagruOD23E4k/zlBT/tpABjMAiRILg=
 github.com/yandex-cloud/go-sdk/services/serverless/mcpgateway v0.0.36 h1:8/cv4+fhKjZHEdvXn+/2F0hs22nYbESFeuJNkdkJ1w4=
 github.com/yandex-cloud/go-sdk/services/serverless/mcpgateway v0.0.36/go.mod h1:raPj9c/KGdIw3amIXGuiS8AwjQLuvdL1ET0bgRY2J3o=
 github.com/yandex-cloud/go-sdk/v2 v2.88.0 h1:uSu7/wq11dbb396AFLfvIP4GwUKQcsSJdnJomOO+PEI=
