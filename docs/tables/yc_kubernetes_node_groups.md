@@ -34,3 +34,5 @@ The following tables depend on yc_kubernetes_node_groups:
 |allowed_unsafe_sysctls|`list<item: utf8, nullable>`|
 |node_taints|`json`|
 |node_labels|`json`|
+|variables|`json`|
+|workload_identity_federation|`json`|

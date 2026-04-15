@@ -24,6 +24,7 @@ The primary key for this table is **id**.
 |status|`utf8`|
 |type|`utf8`|
 |warning|`utf8`|
+|regular_snapshot|`json`|
 |transformation|`json`|
 |data_objects|`json`|
 |prestable|`bool`|

@@ -18,7 +18,7 @@ func KafkaClusters() *schema.Table {
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},
-		Relations: schema.Tables{KafkaTopics(), KafkaUsers()},
+		Relations: schema.Tables{KafkaTopics(), KafkaUsers(), KafkaHosts()},
 	}
 }
 

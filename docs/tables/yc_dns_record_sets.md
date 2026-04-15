@@ -21,3 +21,4 @@ This table depends on [yc_dns_zones](yc_dns_zones.md).
 |type (PK)|`utf8`|
 |ttl|`int64`|
 |data|`list<item: utf8, nullable>`|
+|description|`utf8`|

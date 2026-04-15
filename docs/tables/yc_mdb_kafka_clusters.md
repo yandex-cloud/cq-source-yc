@@ -9,6 +9,7 @@ The primary key for this table is **id**.
 ## Relations
 
 The following tables depend on yc_mdb_kafka_clusters:
+  - [yc_mdb_kafka_hosts](yc_mdb_kafka_hosts.md)
   - [yc_mdb_kafka_topics](yc_mdb_kafka_topics.md)
   - [yc_mdb_kafka_users](yc_mdb_kafka_users.md)
 

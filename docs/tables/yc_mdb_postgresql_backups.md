@@ -23,3 +23,6 @@ The primary key for this table is **id**.
 |method|`utf8`|
 |journal_size|`int64`|
 |status|`utf8`|
+|retention_policy_id|`utf8`|
+|retention_policy_name|`utf8`|
+|retain_until|`timestamp[us, tz=UTC]`|

@@ -18,3 +18,4 @@ This table depends on [yc_mdb_mysql_clusters](yc_mdb_mysql_clusters.md).
 |_cq_parent_id|`uuid`|
 |name (PK)|`utf8`|
 |cluster_id (PK)|`utf8`|
+|deletion_protection_mode|`utf8`|

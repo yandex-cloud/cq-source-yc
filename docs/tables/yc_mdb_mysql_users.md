@@ -23,3 +23,4 @@ This table depends on [yc_mdb_mysql_clusters](yc_mdb_mysql_clusters.md).
 |connection_limits|`json`|
 |authentication_plugin|`utf8`|
 |connection_manager|`json`|
+|deletion_protection_mode|`utf8`|

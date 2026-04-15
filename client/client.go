@@ -10,9 +10,12 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/rs/zerolog"
 	ycsdk "github.com/yandex-cloud/go-sdk"
+	"github.com/yandex-cloud/go-sdk/dial"
 	"github.com/yandex-cloud/go-sdk/pkg/idempotency"
 	"github.com/yandex-cloud/go-sdk/pkg/requestid"
 	"github.com/yandex-cloud/go-sdk/pkg/retry/v1"
+	ycsdkv2 "github.com/yandex-cloud/go-sdk/v2"
+	optionsv2 "github.com/yandex-cloud/go-sdk/v2/pkg/options"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 )
@@ -34,6 +37,7 @@ type Client struct {
 	Backend state.Client
 	Logger  zerolog.Logger
 	SDK     *ycsdk.SDK
+	SDKv2   *ycsdkv2.SDK
 }
 
 func (c *Client) ID() string {
@@ -100,7 +104,7 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 	streamInterceptors := []grpc.StreamClientInterceptor{}
 
 	var dialOpts = []grpc.DialOption{
-		grpc.WithUserAgent(DefaultUserAgent),
+		grpc.WithUserAgent(dial.UserAgent() + "/" + DefaultUserAgent),
 	}
 
 	if spec.MaxRetries > 0 {
@@ -133,8 +137,24 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		return nil, fmt.Errorf("initialize Yandex Cloud SDK: %w", err)
 	}
 
+	credsv2, err := getCredentialsV2()
+	if err != nil {
+		return nil, err
+	}
+	sdkv2, err := ycsdkv2.Build(ctx,
+		optionsv2.WithCredentials(credsv2),
+		optionsv2.WithDiscoveryEndpoint(spec.Endpoint),
+		// TODO: use this instead of dialOpts
+		// optionsv2.WithDefaultRetryOptions(),
+		optionsv2.WithCustomDialOptions(dialOpts...),
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	client := Client{
 		SDK:    sdk,
+		SDKv2:  sdkv2,
 		Logger: logger,
 	}
 

@@ -28,3 +28,4 @@ The primary key for this table is **id**.
 |labels|`json`|
 |provider_type|`utf8`|
 |provider_cname|`utf8`|
+|tls|`json`|
