@@ -24,7 +24,9 @@ func Registries() *schema.Table {
 		},
 		Relations: schema.Tables{
 			xaccess.NewTable(base, fetchRegistryAccessBindings),
+			Artifacts(),
 			IpPermissions(),
+			LifecyclePolicies(),
 		},
 	}
 }

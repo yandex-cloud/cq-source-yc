@@ -4,19 +4,18 @@ This table shows data for YC Interconnect Public Connections.
 
 https://yandex.cloud/ru/docs/interconnect/api-ref/grpc/PublicConnection/list#yandex.cloud.cic.v1.PublicConnection
 
-The primary key for this table is **_cq_id**.
+The primary key for this table is **id**.
 
 ## Columns
 
 | Name          | Type          |
 | ------------- | ------------- |
-|_cq_id (PK)|`uuid`|
+|_cq_id|`uuid`|
 |_cq_parent_id|`uuid`|
-|id|`utf8`|
+|id (PK)|`utf8`|
 |name|`utf8`|
 |description|`utf8`|
 |folder_id|`utf8`|
-|region_id|`utf8`|
 |trunk_connection_id|`utf8`|
 |vlan_id|`int64`|
 |ipv4_peering|`json`|

@@ -1,4 +1,4 @@
-package client
+package yc
 
 import (
 	"cmp"
@@ -8,7 +8,6 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/internal/util"
-	"github.com/yandex-cloud/go-genproto/yandex/cloud/billing/v1"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/endpoint"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
@@ -92,29 +91,6 @@ const (
 	ServiceResourceManager     Service = "resource-manager"
 	ServiceOrganizationManager Service = "organization-manager"
 )
-
-type ResourceType string
-
-const (
-	ResourceTypeOrganization   ResourceType = "organization-manager.organization"
-	ResourceTypeCloud          ResourceType = "resource-manager.cloud"
-	ResourceTypeFolder         ResourceType = "resource-manager.folder"
-	ResourceTypeBillingAccount ResourceType = "billing.account"
-)
-
-// TODO: codegen
-func ResourceTypeFromProto(p any) (ResourceType, bool) {
-	switch p.(type) {
-	case organizationmanager.Organization:
-		return ResourceTypeOrganization, true
-	case resourcemanager.Cloud:
-		return ResourceTypeCloud, true
-	case billing.BillingAccount:
-		return ResourceTypeBillingAccount, true
-	default:
-		return ResourceType(""), false
-	}
-}
 
 // discover the hierarchy using Breadth-first search
 func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []ResourceHierarchyItem, organizations []string, clouds []string, folders []string, opts ...grpc.CallOption) ([]ResourceHierarchyItem, error) {

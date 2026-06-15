@@ -18,6 +18,7 @@ The following tables depend on yc_lockbox_secrets:
 |_cq_id|`uuid`|
 |_cq_parent_id|`uuid`|
 |cloud_id|`utf8`|
+|payload_specification|`json`|
 |id (PK)|`utf8`|
 |folder_id|`utf8`|
 |created_at|`timestamp[us, tz=UTC]`|
@@ -28,4 +29,3 @@ The following tables depend on yc_lockbox_secrets:
 |status|`utf8`|
 |current_version|`json`|
 |deletion_protection|`bool`|
-|payload_specification|`json`|

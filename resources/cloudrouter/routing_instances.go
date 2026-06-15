@@ -13,7 +13,7 @@ func RoutingInstances() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_cloudrouter_routing_instances",
 		Description: `https://yandex.cloud/ru/docs/cloud-router/api-ref/grpc/RoutingInstance/list#yandex.cloud.cloudrouter.v1.RoutingInstance`,
-		Resolver:    nil,
+		Resolver:    fetchRoutingInstances,
 		Transform:   client.TransformWithStruct(&cloudrouter.RoutingInstance{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,

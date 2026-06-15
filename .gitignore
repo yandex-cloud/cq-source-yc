@@ -21,10 +21,11 @@
 
 # Cloudquery specific
 .cq
-cq-source-yc
+/cq-source-yc
 integration
 *.log
 dist
 db.sql
 logs
-yc
+/yc
+migrate.yaml

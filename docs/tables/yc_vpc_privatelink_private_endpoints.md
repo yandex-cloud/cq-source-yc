@@ -24,3 +24,4 @@ The primary key for this table is **id**.
 |address|`json`|
 |dns_options|`json`|
 |service|`json`|
+|dns_records|`json`|

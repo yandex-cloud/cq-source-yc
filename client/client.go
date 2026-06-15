@@ -5,19 +5,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cloudquery/plugin-sdk/v4/helpers/grpczerolog"
 	"github.com/cloudquery/plugin-sdk/v4/state"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/rs/zerolog"
+	"github.com/yandex-cloud/cq-source-yc/client/yc"
 	ycsdk "github.com/yandex-cloud/go-sdk"
-	"github.com/yandex-cloud/go-sdk/dial"
-	"github.com/yandex-cloud/go-sdk/pkg/idempotency"
-	"github.com/yandex-cloud/go-sdk/pkg/requestid"
-	"github.com/yandex-cloud/go-sdk/pkg/retry/v1"
 	ycsdkv2 "github.com/yandex-cloud/go-sdk/v2"
-	optionsv2 "github.com/yandex-cloud/go-sdk/v2/pkg/options"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 )
 
 const (
@@ -26,7 +18,7 @@ const (
 )
 
 type Client struct {
-	hierarchy *ResourceHierarchy
+	hierarchy *yc.ResourceHierarchy
 
 	OrganizationId          string
 	CloudId                 string
@@ -92,62 +84,12 @@ func (c *Client) WithMultiplexedResourceId(id string) *Client {
 }
 
 func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error) {
-	credentials, err := getCredentials()
-	if err != nil {
-		return nil, err
-	}
-
-	unaryInterceptors := []grpc.UnaryClientInterceptor{
-		requestid.Interceptor(),
-		idempotency.Interceptor(),
-	}
-	streamInterceptors := []grpc.StreamClientInterceptor{}
-
-	var dialOpts = []grpc.DialOption{
-		grpc.WithUserAgent(dial.UserAgent() + "/" + DefaultUserAgent),
-	}
-
-	if spec.MaxRetries > 0 {
-		o, err := retry.RetryDialOption(
-			retry.WithRetries(retry.DefaultNameConfig(), spec.MaxRetries),
-			retry.WithRetryableStatusCodes(retry.DefaultNameConfig(), codes.ResourceExhausted, codes.Unavailable),
-		)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create retry option: %w", err)
-		}
-		dialOpts = append(dialOpts, o)
-	}
-
-	// debug interceptors are last
-	if spec.DebugGRPC {
-		unaryInterceptors = append(unaryInterceptors, logging.UnaryClientInterceptor(grpczerolog.InterceptorLogger(logger)))
-		streamInterceptors = append(streamInterceptors, logging.StreamClientInterceptor(grpczerolog.InterceptorLogger(logger)))
-	}
-
-	dialOpts = append(dialOpts, grpc.WithChainUnaryInterceptor(unaryInterceptors...), grpc.WithChainStreamInterceptor(streamInterceptors...))
-
-	sdk, err := ycsdk.Build(ctx,
-		ycsdk.Config{
-			Credentials: credentials,
-			Endpoint:    spec.Endpoint,
-		},
-		dialOpts...,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("initialize Yandex Cloud SDK: %w", err)
-	}
-
-	credsv2, err := getCredentialsV2()
-	if err != nil {
-		return nil, err
-	}
-	sdkv2, err := ycsdkv2.Build(ctx,
-		optionsv2.WithCredentials(credsv2),
-		optionsv2.WithDiscoveryEndpoint(spec.Endpoint),
-		// TODO: use this instead of dialOpts
-		// optionsv2.WithDefaultRetryOptions(),
-		optionsv2.WithCustomDialOptions(dialOpts...),
-	)
+	sdk, sdkv2, err := yc.Build(ctx, logger, yc.Config{
+		Endpoint:   spec.Endpoint,
+		UserAgent:  DefaultUserAgent,
+		MaxRetries: spec.MaxRetries,
+		DebugGRPC:  spec.DebugGRPC,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +100,7 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		Logger: logger,
 	}
 
-	hierarchy, err := NewResourceHierarchy(ctx, logger, sdk, spec.OrganizationIDs, spec.CloudIDs, spec.FolderIDs)
+	hierarchy, err := yc.NewResourceHierarchy(ctx, logger, sdk, spec.OrganizationIDs, spec.CloudIDs, spec.FolderIDs)
 	if err != nil {
 		return nil, fmt.Errorf("fetch resource hierarchy: %w", err)
 	}

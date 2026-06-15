@@ -24,3 +24,7 @@ lint:
 # All gen targets
 .PHONY: gen
 gen: gen-docs
+
+.PHONY: update-deps
+update-deps:
+	go get -u -t ./...

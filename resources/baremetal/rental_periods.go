@@ -1,0 +1,31 @@
+package baremetal
+
+import (
+	"context"
+
+	"github.com/cloudquery/plugin-sdk/v4/schema"
+	"github.com/yandex-cloud/cq-source-yc/client"
+	baremetal "github.com/yandex-cloud/go-genproto/yandex/cloud/baremetal/v1alpha"
+	baremetalsdk "github.com/yandex-cloud/go-sdk/services/baremetal/v1alpha"
+)
+
+// RentalPeriods is a global catalog (no folder/cloud scope), so the table runs once.
+func RentalPeriods() *schema.Table {
+	return &schema.Table{
+		Name:        "yc_baremetal_rental_periods",
+		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/RentalPeriod/list#yandex.cloud.baremetal.v1alpha.RentalPeriod`,
+		Resolver:    fetchRentalPeriods,
+		Transform:   client.TransformWithStruct(&baremetal.RentalPeriod{}, client.PrimaryKeyIdTransformer),
+	}
+}
+
+func fetchRentalPeriods(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- any) error {
+	c := meta.(*client.Client)
+
+	it := baremetalsdk.NewRentalPeriodClient(c.SDKv2).Iterator(ctx, &baremetal.ListRentalPeriodsRequest{})
+	for it.Next() {
+		res <- it.Value()
+	}
+
+	return it.Error()
+}

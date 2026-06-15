@@ -26,4 +26,5 @@ This table depends on [yc_mdb_postgresql_clusters](yc_mdb_postgresql_clusters.md
 |deletion_protection|`bool`|
 |user_password_encryption|`utf8`|
 |connection_manager|`json`|
+|user_connection_manager|`json`|
 |auth_method|`utf8`|

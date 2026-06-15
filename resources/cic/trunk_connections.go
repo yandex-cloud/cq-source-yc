@@ -15,7 +15,7 @@ func TrunkConnections() *schema.Table {
 		Description: `https://yandex.cloud/ru/docs/interconnect/api-ref/grpc/TrunkConnection/list#yandex.cloud.cic.v1.TrunkConnection`,
 		Multiplex:   client.FolderMultiplex,
 		Resolver:    fetchTrunkConnections,
-		Transform:   client.TransformWithStruct(&cic.TrunkConnection{}),
+		Transform:   client.TransformWithStruct(&cic.TrunkConnection{}, client.PrimaryKeyIdTransformer),
 	}
 }
 

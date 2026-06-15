@@ -30,6 +30,7 @@ The following tables depend on yc_ydb_databases:
 |scale_policy|`json`|
 |network_id|`utf8`|
 |subnet_ids|`list<item: utf8, nullable>`|
+|security_group_ids|`list<item: utf8, nullable>`|
 |database_type|`json`|
 |assign_public_ips|`bool`|
 |location_id|`utf8`|
@@ -40,4 +41,3 @@ The following tables depend on yc_ydb_databases:
 |kafka_api_endpoint|`utf8`|
 |monitoring_config|`json`|
 |deletion_protection|`bool`|
-|security_group_ids|`list<item: utf8, nullable>`|

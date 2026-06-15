@@ -15,7 +15,7 @@ func PrivateConnections() *schema.Table {
 		Description: `https://yandex.cloud/ru/docs/interconnect/api-ref/grpc/PrivateConnection/list#yandex.cloud.cic.v1.PrivateConnection`,
 		Multiplex:   client.FolderMultiplex,
 		Resolver:    fetchPrivateConnections,
-		Transform:   client.TransformWithStruct(&cic.PrivateConnection{}),
+		Transform:   client.TransformWithStruct(&cic.PrivateConnection{}, client.PrimaryKeyIdTransformer),
 	}
 }
 

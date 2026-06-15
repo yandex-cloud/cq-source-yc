@@ -25,3 +25,4 @@ This table depends on [yc_iam_service_accounts](yc_iam_service_accounts.md).
 |scope|`utf8`|
 |scopes|`list<item: utf8, nullable>`|
 |expires_at|`timestamp[us, tz=UTC]`|
+|masked_secret|`utf8`|

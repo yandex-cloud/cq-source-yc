@@ -1,4 +1,4 @@
-package client
+package yc
 
 import (
 	"context"
@@ -12,12 +12,12 @@ import (
 func TestResourceHierarchy(t *testing.T) {
 	t.Skip("test not mocked")
 	ctx := context.Background()
-	credentials, err := getCredentials()
+	creds, err := credentials()
 	if err != nil {
 		t.Error(err)
 	}
 	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
-		Credentials: credentials,
+		Credentials: creds,
 	})
 	if err != nil {
 		t.Error(err)

@@ -10,7 +10,9 @@ The primary key for this table is **id**.
 
 The following tables depend on yc_cloudregistry_registries:
   - [yc_access_bindings_cloudregistry_registries](yc_access_bindings_cloudregistry_registries.md)
+  - [yc_cloudregistry_artifacts](yc_cloudregistry_artifacts.md)
   - [yc_cloudregistry_ip_permissions](yc_cloudregistry_ip_permissions.md)
+  - [yc_cloudregistry_lifecycle_policies](yc_cloudregistry_lifecycle_policies.md)
 
 ## Columns
 
