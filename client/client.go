@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/cloudquery/plugin-sdk/v4/state"
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/client/yc"
+	"github.com/yandex-cloud/cq-source-yc/client/yc/datalens"
 	ycsdk "github.com/yandex-cloud/go-sdk"
 	ycsdkv2 "github.com/yandex-cloud/go-sdk/v2"
 )
@@ -26,10 +28,11 @@ type Client struct {
 	MultiplexedResourceId   string
 	MultiplexedResourceType ResourceType
 
-	Backend state.Client
-	Logger  zerolog.Logger
-	SDK     *ycsdk.SDK
-	SDKv2   *ycsdkv2.SDK
+	Backend  state.Client
+	Logger   zerolog.Logger
+	SDK      *ycsdk.SDK
+	SDKv2    *ycsdkv2.SDK
+	Datalens *datalens.Client
 }
 
 func (c *Client) ID() string {
@@ -88,16 +91,32 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		Endpoint:   spec.Endpoint,
 		UserAgent:  DefaultUserAgent,
 		MaxRetries: spec.MaxRetries,
-		DebugGRPC:  spec.DebugGRPC,
+		Debug:      spec.Debug,
 	})
 	if err != nil {
 		return nil, err
 	}
 
+	// The middleware caches IAM tokens and refreshes them before expiry.
+	iamTokens := ycsdk.NewIAMTokenMiddleware(sdk, time.Now)
+	dl, err := datalens.New(datalens.Config{
+		Endpoint:   spec.DatalensEndpoint,
+		UserAgent:  DefaultUserAgent,
+		MaxRetries: spec.MaxRetries,
+		Logger:     logger,
+		Token: func(ctx context.Context) (string, error) {
+			return iamTokens.GetIAMToken(ctx, false)
+		},
+	})
+	if err != nil {
+		return nil, fmt.Errorf("initialize DataLens client: %w", err)
+	}
+
 	client := Client{
-		SDK:    sdk,
-		SDKv2:  sdkv2,
-		Logger: logger,
+		SDK:      sdk,
+		SDKv2:    sdkv2,
+		Datalens: dl,
+		Logger:   logger,
 	}
 
 	hierarchy, err := yc.NewResourceHierarchy(ctx, logger, sdk, spec.OrganizationIDs, spec.CloudIDs, spec.FolderIDs)

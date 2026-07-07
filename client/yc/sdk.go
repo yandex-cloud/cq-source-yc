@@ -30,7 +30,7 @@ type Config struct {
 	Endpoint   string
 	UserAgent  string
 	MaxRetries int
-	DebugGRPC  bool
+	Debug      bool
 }
 
 // Build constructs both the v1 and v2 Yandex Cloud SDKs that back a Client.
@@ -62,7 +62,7 @@ func Build(ctx context.Context, logger zerolog.Logger, cfg Config) (*ycsdk.SDK, 
 	}
 
 	// debug interceptors are last
-	if cfg.DebugGRPC {
+	if cfg.Debug {
 		unaryInterceptors = append(unaryInterceptors, logging.UnaryClientInterceptor(grpczerolog.InterceptorLogger(logger)))
 		streamInterceptors = append(streamInterceptors, logging.StreamClientInterceptor(grpczerolog.InterceptorLogger(logger)))
 	}

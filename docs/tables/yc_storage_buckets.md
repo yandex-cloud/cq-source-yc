@@ -29,3 +29,4 @@ The composite primary key for this table is (**name**, **folder_id**).
 |allowed_private_endpoints|`json`|
 |resource_id|`utf8`|
 |disabled_statickey_auth|`bool`|
+|logging|`json`|

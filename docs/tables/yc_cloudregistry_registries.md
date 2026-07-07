@@ -32,3 +32,4 @@ The following tables depend on yc_cloudregistry_registries:
 |properties|`json`|
 |created_at|`timestamp[us, tz=UTC]`|
 |modified_at|`timestamp[us, tz=UTC]`|
+|pattern_filter|`json`|

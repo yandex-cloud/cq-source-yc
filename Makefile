@@ -21,9 +21,14 @@ gen-docs: build
 lint:
 	@golangci-lint run --timeout 10m
 
+.PHONY: gen-datalens
+gen-datalens:
+	curl -sSfL https://api.datalens.tech/json/ -o client/yc/datalens/openapi.json
+	cd client/yc/datalens && go run ./gen
+
 # All gen targets
 .PHONY: gen
-gen: gen-docs
+gen: gen-docs gen-datalens
 
 .PHONY: update-deps
 update-deps:

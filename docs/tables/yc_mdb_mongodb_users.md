@@ -19,3 +19,5 @@ This table depends on [yc_mdb_mongodb_clusters](yc_mdb_mongodb_clusters.md).
 |name (PK)|`utf8`|
 |cluster_id (PK)|`utf8`|
 |permissions|`json`|
+|auth_type|`utf8`|
+|deletion_protection|`bool`|

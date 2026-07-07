@@ -28,3 +28,5 @@ The following tables depend on yc_iam_service_accounts:
 |description|`utf8`|
 |labels|`json`|
 |last_authenticated_at|`timestamp[us, tz=UTC]`|
+|status|`utf8`|
+|expires_at|`timestamp[us, tz=UTC]`|

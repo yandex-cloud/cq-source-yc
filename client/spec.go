@@ -1,6 +1,9 @@
 package client
 
-import "github.com/cloudquery/plugin-sdk/v4/scheduler"
+import (
+	"github.com/cloudquery/plugin-sdk/v4/scheduler"
+	"github.com/yandex-cloud/cq-source-yc/client/yc/datalens"
+)
 
 const defaultEndpoint = "api.cloud.yandex.net:443"
 
@@ -14,14 +17,17 @@ type Spec struct {
 	// List of all folder ids to fetch information from
 	FolderIDs []string `json:"folder_ids"`
 
-	// If `true`, will log all GRPC calls (currently YC SDK only)
-	DebugGRPC bool `json:"debug_grpc"`
+	// If `true`, will log gRPC/HTTP calls
+	Debug bool `json:"debug"`
 
 	// Defines the maximum number of times an API request will be retried.
 	MaxRetries int `json:"max_retries,omitempty" jsonschema:"default=3"`
 
 	// The base URL endpoint the SDK will use
 	Endpoint string `json:"endpoint"`
+
+	// The base URL of the DataLens API
+	DatalensEndpoint string `json:"datalens_endpoint" jsonschema:"default=https://api.datalens.tech"`
 
 	// The best effort maximum number of Go routines to use. Lower this number to reduce memory usage.
 	Concurrency int `json:"concurrency" jsonschema:"minimum=1,default=50000"`
@@ -34,10 +40,11 @@ type Spec struct {
 
 func NewDefaultSpec() *Spec {
 	return &Spec{
-		MaxRetries:  3,
-		Endpoint:    defaultEndpoint,
-		Concurrency: scheduler.DefaultConcurrency,
-		Scheduler:   scheduler.StrategyShuffle,
+		MaxRetries:       3,
+		Endpoint:         defaultEndpoint,
+		DatalensEndpoint: datalens.DefaultEndpoint,
+		Concurrency:      scheduler.DefaultConcurrency,
+		Scheduler:        scheduler.StrategyShuffle,
 	}
 }
 

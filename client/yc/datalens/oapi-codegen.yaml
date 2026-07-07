@@ -1,0 +1,9 @@
+package: datalens
+generate:
+  models: true
+output: models.gen.go
+output-options:
+  # Limit generation to the operations we actually call; unused schemas are
+  # pruned by oapi-codegen.
+  include-tags:
+    - Navigation
