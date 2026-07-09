@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal Images.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/Image/list#yandex.cloud.baremetal.v1alpha.Image
+https://yandex.cloud/docs/baremetal/api-ref/grpc/BootImage/list#yandex.cloud.baremetal.v2.BootImage
 
 The primary key for this table is **id**.
 
@@ -17,7 +17,9 @@ The primary key for this table is **id**.
 |folder_id|`utf8`|
 |name|`utf8`|
 |description|`utf8`|
+|uri|`utf8`|
 |checksum|`utf8`|
-|status|`utf8`|
-|created_at|`timestamp[us, tz=UTC]`|
-|labels|`json`|
+|state|`utf8`|
+|create_time|`timestamp[us, tz=UTC]`|
+|update_time|`timestamp[us, tz=UTC]`|
+|annotations|`json`|

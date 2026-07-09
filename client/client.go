@@ -107,6 +107,7 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		Token: func(ctx context.Context) (string, error) {
 			return iamTokens.GetIAMToken(ctx, false)
 		},
+		Debug: spec.Debug,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("initialize DataLens client: %w", err)

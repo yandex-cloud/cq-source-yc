@@ -25,7 +25,8 @@ import (
 const (
 	DefaultEndpoint = "https://api.datalens.tech"
 
-	apiVersion = "2"
+	headerApiVersion = "1"
+	headerAuditMode  = "true"
 
 	// The DataLens API allows 60 requests per minute:
 	// https://yandex.cloud/ru/docs/datalens/concepts/limits#datalens-api-limits
@@ -144,7 +145,8 @@ func (c *Client) rpc(ctx context.Context, method, orgID string, args, result any
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("x-dl-org-id", orgID)
-	req.Header.Set("x-dl-api-version", apiVersion)
+	req.Header.Set("x-dl-api-version", headerApiVersion)
+	req.Header.Set("x-dl-audit-mode", headerAuditMode)
 	req.Header.Set("Content-Type", "application/json")
 	if c.userAgent != "" {
 		req.Header.Set("User-Agent", c.userAgent)

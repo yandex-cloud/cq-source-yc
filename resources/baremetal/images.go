@@ -5,17 +5,19 @@ import (
 
 	"github.com/cloudquery/plugin-sdk/v4/schema"
 	"github.com/yandex-cloud/cq-source-yc/client"
-	baremetal "github.com/yandex-cloud/go-genproto/yandex/cloud/baremetal/v1alpha"
-	baremetalsdk "github.com/yandex-cloud/go-sdk/services/baremetal/v1alpha"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/baremetal/v2"
+	baremetalsdk "github.com/yandex-cloud/go-sdk/services/baremetal/v2"
 )
 
+// Images is backed by the v2 BootImage service: the v1alpha Image resource
+// (user-uploaded images) was renamed to BootImage in v2.
 func Images() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_images",
-		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Image/list#yandex.cloud.baremetal.v1alpha.Image`,
+		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/BootImage/list#yandex.cloud.baremetal.v2.BootImage`,
 		Multiplex:   client.FolderMultiplex,
 		Resolver:    fetchImages,
-		Transform:   client.TransformWithStruct(&baremetal.Image{}, client.PrimaryKeyIdTransformer),
+		Transform:   client.TransformWithStruct(&baremetal.BootImage{}, client.PrimaryKeyIdTransformers("BootImageId")...),
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},
@@ -25,7 +27,7 @@ func Images() *schema.Table {
 func fetchImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- any) error {
 	c := meta.(*client.Client)
 
-	it := baremetalsdk.NewImageClient(c.SDKv2).Iterator(ctx, &baremetal.ListImagesRequest{FolderId: c.FolderId})
+	it := baremetalsdk.NewBootImageClient(c.SDKv2).BootImagesIterator(ctx, &baremetal.ListBootImagesRequest{FolderId: c.FolderId})
 	for it.Next() {
 		res <- it.Value()
 	}

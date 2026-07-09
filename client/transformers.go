@@ -155,6 +155,20 @@ func TransformWithStruct(t any, opts ...transformers.StructTransformerOption) sc
 
 var PrimaryKeyIdTransformer transformers.StructTransformerOption = transformers.WithPrimaryKeys(("Id"))
 
+// PrimaryKeyIdTransformers renames the given struct field (e.g. "ServerId") to
+// the unified "id" column and marks it as the primary key
+func PrimaryKeyIdTransformers(idField string) []transformers.StructTransformerOption {
+	return []transformers.StructTransformerOption{
+		transformers.WithNameTransformer(func(field reflect.StructField) (string, error) {
+			if field.Name == idField {
+				return "id", nil
+			}
+			return transformers.DefaultNameTransformer(field)
+		}),
+		transformers.WithPrimaryKeys(idField),
+	}
+}
+
 func TransformColumnPrimaryKey(column schema.Column) schema.Column {
 	col := column
 	col.PrimaryKey = true

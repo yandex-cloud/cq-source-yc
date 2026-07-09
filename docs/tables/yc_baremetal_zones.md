@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal Zones.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/Zone/list#yandex.cloud.baremetal.v1alpha.Zone
+https://yandex.cloud/docs/baremetal/api-ref/grpc/Zone/list#yandex.cloud.baremetal.v2.Zone
 
 The primary key for this table is **id**.
 

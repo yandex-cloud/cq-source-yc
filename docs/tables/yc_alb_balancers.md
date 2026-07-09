@@ -19,11 +19,11 @@ The primary key for this table is **id**.
 |folder_id|`utf8`|
 |labels|`json`|
 |status|`utf8`|
-|region_id|`utf8`|
-|network_id|`utf8`|
 |listeners|`json`|
 |allocation_policy|`json`|
+|network_id|`utf8`|
 |log_group_id|`utf8`|
+|region_id|`utf8`|
 |security_group_ids|`list<item: utf8, nullable>`|
 |created_at|`timestamp[us, tz=UTC]`|
 |auto_scale_policy|`json`|

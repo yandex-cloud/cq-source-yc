@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal VRFs.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/Vrf/list#yandex.cloud.baremetal.v1alpha.Vrf
+https://yandex.cloud/docs/baremetal/api-ref/grpc/Vrf/list#yandex.cloud.baremetal.v2.Vrf
 
 The primary key for this table is **id**.
 
@@ -17,7 +17,8 @@ The primary key for this table is **id**.
 |folder_id|`utf8`|
 |name|`utf8`|
 |description|`utf8`|
-|status|`utf8`|
+|state|`utf8`|
 |static_routes|`json`|
-|created_at|`timestamp[us, tz=UTC]`|
-|labels|`json`|
+|create_time|`timestamp[us, tz=UTC]`|
+|update_time|`timestamp[us, tz=UTC]`|
+|annotations|`json`|

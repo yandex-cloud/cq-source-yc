@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal Hardware Pools.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/HardwarePool/list#yandex.cloud.baremetal.v1alpha.HardwarePool
+https://yandex.cloud/docs/baremetal/api-ref/grpc/HardwarePool/list#yandex.cloud.baremetal.v2.HardwarePool
 
 The primary key for this table is **id**.
 

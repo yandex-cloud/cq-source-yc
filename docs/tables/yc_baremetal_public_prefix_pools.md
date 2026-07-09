@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal Public Prefix Pools.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/PublicPrefixPool/list#yandex.cloud.baremetal.v1alpha.PublicPrefixPool
+https://yandex.cloud/docs/baremetal/api-ref/grpc/PublicPrefixPool/list#yandex.cloud.baremetal.v2.PublicPrefixPool
 
 The primary key for this table is **id**.
 
@@ -19,5 +19,6 @@ The primary key for this table is **id**.
 |description|`utf8`|
 |cidr|`utf8`|
 |min_available_prefix|`int64`|
-|created_at|`timestamp[us, tz=UTC]`|
-|labels|`json`|
+|create_time|`timestamp[us, tz=UTC]`|
+|update_time|`timestamp[us, tz=UTC]`|
+|annotations|`json`|

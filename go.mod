@@ -12,9 +12,9 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.11.1
 	github.com/thoas/go-funk v0.9.3
-	github.com/yandex-cloud/go-genproto v0.93.0
+	github.com/yandex-cloud/go-genproto v0.94.0
 	github.com/yandex-cloud/go-sdk v0.32.0
-	github.com/yandex-cloud/go-sdk/services/baremetal v0.0.75
+	github.com/yandex-cloud/go-sdk/services/baremetal v0.0.76
 	github.com/yandex-cloud/go-sdk/services/cic v0.0.75
 	github.com/yandex-cloud/go-sdk/services/cloudrouter v0.0.75
 	github.com/yandex-cloud/go-sdk/services/serverless/mcpgateway v0.0.59

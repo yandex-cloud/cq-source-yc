@@ -43,7 +43,7 @@ func fetchEntries(scope string) schema.TableResolver {
 				var apiErr *datalens.APIError
 				if errors.As(err, &apiErr) && (apiErr.StatusCode == http.StatusForbidden || apiErr.StatusCode == http.StatusNotFound) {
 					// The organization has no DataLens instance or we have no access to it
-					c.Logger.Warn().Int("status", apiErr.StatusCode).Str("scope", scope).Msg("skipping DataLens entries")
+					c.Logger.Warn().Int("status", apiErr.StatusCode).Str("scope", scope).Str("body", apiErr.Body).Msg("skipping DataLens entries")
 					return nil
 				}
 				return err

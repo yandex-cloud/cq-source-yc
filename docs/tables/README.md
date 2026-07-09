@@ -15,7 +15,6 @@
 - [yc_ai_tuning_tasks](yc_ai_tuning_tasks.md)
 - [yc_alb_balancers](yc_alb_balancers.md)
 - [yc_audittrails_trails](yc_audittrails_trails.md)
-- [yc_baremetal_configurations](yc_baremetal_configurations.md)
 - [yc_baremetal_hardware_pools](yc_baremetal_hardware_pools.md)
 - [yc_baremetal_images](yc_baremetal_images.md)
 - [yc_baremetal_private_cloud_connections](yc_baremetal_private_cloud_connections.md)

@@ -25,6 +25,7 @@ This table depends on [yc_compute_disks](yc_compute_disks.md).
 |description|`utf8`|
 |labels|`json`|
 |family|`utf8`|
+|size|`int64`|
 |storage_size|`int64`|
 |min_disk_size|`int64`|
 |product_ids|`list<item: utf8, nullable>`|

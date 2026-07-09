@@ -2,7 +2,7 @@
 
 This table shows data for YC Baremetal Private Subnets.
 
-https://yandex.cloud/docs/baremetal/api-ref/grpc/PrivateSubnet/list#yandex.cloud.baremetal.v1alpha.PrivateSubnet
+https://yandex.cloud/docs/baremetal/api-ref/grpc/PrivateSubnet/list#yandex.cloud.baremetal.v2.PrivateSubnet
 
 The primary key for this table is **id**.
 
@@ -17,9 +17,10 @@ The primary key for this table is **id**.
 |folder_id|`utf8`|
 |name|`utf8`|
 |description|`utf8`|
-|status|`utf8`|
-|zone_id|`utf8`|
+|state|`utf8`|
 |hardware_pool_id|`utf8`|
 |vrf_options|`json`|
-|created_at|`timestamp[us, tz=UTC]`|
-|labels|`json`|
+|create_time|`timestamp[us, tz=UTC]`|
+|update_time|`timestamp[us, tz=UTC]`|
+|annotations|`json`|
+|zone_id|`utf8`|

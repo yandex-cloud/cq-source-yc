@@ -5,25 +5,29 @@ import (
 
 	"github.com/cloudquery/plugin-sdk/v4/schema"
 	"github.com/yandex-cloud/cq-source-yc/client"
-	baremetal "github.com/yandex-cloud/go-genproto/yandex/cloud/baremetal/v1alpha"
-	baremetalsdk "github.com/yandex-cloud/go-sdk/services/baremetal/v1alpha"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/baremetal/v2"
+	baremetalsdk "github.com/yandex-cloud/go-sdk/services/baremetal/v2"
 )
 
-// StandardImages is a global catalog of vendor-provided images (no folder/cloud
-// scope), so the table runs once.
+// StandardImages is backed by the v2 Image service: the v1alpha StandardImage
+// resource was renamed to Image in v2, and the list became folder-scoped.
 func StandardImages() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_standard_images",
-		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/StandardImage/list#yandex.cloud.baremetal.v1alpha.StandardImage`,
+		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Image/list#yandex.cloud.baremetal.v2.Image`,
+		Multiplex:   client.FolderMultiplex,
 		Resolver:    fetchStandardImages,
-		Transform:   client.TransformWithStruct(&baremetal.StandardImage{}, client.PrimaryKeyIdTransformer),
+		Transform:   client.TransformWithStruct(&baremetal.Image{}, client.PrimaryKeyIdTransformers("ImageId")...),
+		Columns: schema.ColumnList{
+			client.CloudIdColumn,
+		},
 	}
 }
 
 func fetchStandardImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- any) error {
 	c := meta.(*client.Client)
 
-	it := baremetalsdk.NewStandardImageClient(c.SDKv2).Iterator(ctx, &baremetal.ListStandardImagesRequest{})
+	it := baremetalsdk.NewImageClient(c.SDKv2).ImagesIterator(ctx, &baremetal.ListImagesRequest{FolderId: c.FolderId})
 	for it.Next() {
 		res <- it.Value()
 	}
