@@ -12,7 +12,7 @@ func Triggers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_triggers",
 		Description: `https://yandex.cloud/docs/functions/triggers/api-ref/grpc/Trigger/list#yandex.cloud.serverless.triggers.v1.Trigger`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessTriggers),
 		Resolver:    fetchTriggers,
 		Transform:   client.TransformWithStruct(&triggers.Trigger{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

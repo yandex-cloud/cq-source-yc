@@ -12,7 +12,7 @@ func MongoDBClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_mongodb_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-mongodb/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBMongoDB),
 		Resolver:    fetchMongoDBClusters,
 		Transform:   client.TransformWithStruct(&mongodb.Cluster{}, client.PrimaryKeyIdTransformer),
 		Relations: schema.Tables{

@@ -15,7 +15,7 @@ func entriesTable(name, scope string) *schema.Table {
 	return &schema.Table{
 		Name:        name,
 		Description: `DataLens entries with scope=` + scope + `. https://yandex.cloud/ru/docs/datalens/operations/api-start`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceDataLens),
 		Resolver:    fetchEntries(scope),
 		Transform:   client.TransformWithStruct(&datalens.Entry{}, transformers.WithPrimaryKeys("EntryId")),
 		Columns: schema.ColumnList{

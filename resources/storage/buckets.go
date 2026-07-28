@@ -22,7 +22,7 @@ func Buckets() *schema.Table {
 			transformers.WithPrimaryKeys("FolderId", "Name"),
 		),
 		Resolver:  fetchBuckets,
-		Multiplex: client.FolderMultiplex,
+		Multiplex: client.FolderMultiplex(client.ServiceStorage),
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},

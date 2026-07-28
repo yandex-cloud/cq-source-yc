@@ -13,7 +13,7 @@ func CloudsAccessPolicyBindings() *schema.Table {
 		Name:        "yc_access_policy_bindings_resourcemanager_clouds",
 		Title:       "YC Access Policy Bindings for Clouds",
 		Description: `https://yandex.cloud/docs/iam/concepts/access-control/#access-policies`,
-		Multiplex:   client.CloudMultiplex,
+		Multiplex:   client.CloudMultiplex(client.ServiceResourceManager),
 		Resolver:    fetchCloudsAccessPolicyBindings,
 		Transform:   AccessPolicyTransform,
 		Columns: schema.ColumnList{

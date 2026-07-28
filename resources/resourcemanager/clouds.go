@@ -12,7 +12,7 @@ func Clouds() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_resourcemanager_clouds",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/cloud_service#Cloud1`,
-		Multiplex:   client.CloudMultiplex,
+		Multiplex:   client.CloudMultiplex(client.ServiceResourceManager),
 		Resolver:    fetchClouds,
 		Transform:   client.TransformWithStruct(&resourcemanager.Cloud{}, client.PrimaryKeyIdTransformer),
 	}

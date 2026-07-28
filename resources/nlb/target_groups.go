@@ -12,7 +12,7 @@ func TargetGroups() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_nlb_target_groups",
 		Description: `https://yandex.cloud/ru/docs/network-load-balancer/api-ref/grpc/TargetGroup/list#yandex.cloud.loadbalancer.v1.TargetGroup`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceNLB),
 		Resolver:    fetchTargetGroups,
 		Transform:   client.TransformWithStruct(&loadbalancer.TargetGroup{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -12,7 +12,7 @@ func Disks() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_compute_disks",
 		Description: `https://cloud.yandex.ru/docs/compute/api-ref/grpc/disk_service#Disk1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCompute),
 		Resolver:    fetchDisks,
 		Transform:   client.TransformWithStruct(&compute.Disk{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

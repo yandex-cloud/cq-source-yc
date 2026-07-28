@@ -13,7 +13,7 @@ func ContainersContainers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_containers_containers",
 		Description: `https://cloud.yandex.ru/docs/serverless-containers/containers/api-ref/grpc/container_service#Container1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessContainers),
 		Resolver:    fetchContainersContainers,
 		Transform:   client.TransformWithStruct(&containers.Container{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{access.ServerlessContainersAccessBindings()},

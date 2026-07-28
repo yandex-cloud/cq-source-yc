@@ -12,7 +12,7 @@ func Groups() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_organizationmanager_groups",
 		Description: `https://yandex.cloud/ru/docs/organization/api-ref/grpc/Group/list#yandex.cloud.organizationmanager.v1.Group`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Resolver:    fetchGroups,
 		Transform:   client.TransformWithStruct(&organizationmanager.Group{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

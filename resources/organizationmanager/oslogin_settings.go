@@ -12,7 +12,7 @@ func OsloginSettings() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_organizationmanager_oslogin_settings",
 		Description: `https://yandex.cloud/ru/docs/organization/api-ref/grpc/OsLogin/getSettings#yandex.cloud.organizationmanager.v1.OsLoginSettings`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Resolver:    fetchOsloginSettings,
 		Transform:   client.TransformWithStruct(&organizationmanager.OsLoginSettings{}),
 		Columns: schema.ColumnList{

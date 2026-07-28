@@ -15,7 +15,7 @@ func Images() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_images",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/BootImage/list#yandex.cloud.baremetal.v2.BootImage`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchImages,
 		Transform:   client.TransformWithStruct(&baremetal.BootImage{}, client.PrimaryKeyIdTransformers("BootImageId")...),
 		Columns: schema.ColumnList{

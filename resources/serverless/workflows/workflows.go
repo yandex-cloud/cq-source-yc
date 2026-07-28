@@ -12,7 +12,7 @@ func Workflows() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_workflows",
 		Description: `https://yandex.cloud/docs/serverless-integrations/workflows/api-ref/grpc/Workflow/list#yandex.cloud.serverless.workflows.v1.Workflow`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessWorkflows),
 		Resolver:    fetchWorkflows,
 		Transform:   client.TransformWithStruct(&workflows.Workflow{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

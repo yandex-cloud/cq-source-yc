@@ -5,7 +5,7 @@ import (
 	"github.com/yandex-cloud/cq-source-yc/client/yc/datalens"
 )
 
-const defaultEndpoint = "api.cloud.yandex.net:443"
+var defaultEndpoint = RegionEndpoints[RegionRU]
 
 type Spec struct {
 	// List of all organiztions ids to fetch information from
@@ -24,7 +24,7 @@ type Spec struct {
 	MaxRetries int `json:"max_retries,omitempty" jsonschema:"default=3"`
 
 	// The base URL endpoint the SDK will use
-	Endpoint string `json:"endpoint"`
+	Endpoint string `json:"endpoint" jsonschema:"default=api.cloud.yandex.net:443"`
 
 	// The base URL of the DataLens API
 	DatalensEndpoint string `json:"datalens_endpoint" jsonschema:"default=https://api.datalens.tech"`

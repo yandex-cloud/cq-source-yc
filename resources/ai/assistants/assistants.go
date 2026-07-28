@@ -13,7 +13,7 @@ func Assistants() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ai_assistants",
 		Description: `https://yandex.cloud/docs/foundation-models/assistants/api-ref/grpc/Assistant/list#yandex.cloud.ai.assistants.v1.Assistant`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAIAssistants),
 		Resolver:    fetchAssistants,
 		Transform:   client.TransformWithStruct(&assistants.Assistant{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -16,7 +16,7 @@ func Registries() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_" + base,
 		Description: `https://yandex.cloud/ru/docs/cloud-registry/api-ref/grpc/Registry/list#yandex.cloud.cloudregistry.v1.Registry`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCloudRegistry),
 		Resolver:    fetchRegistries,
 		Transform:   client.TransformWithStruct(&cloudregistry.Registry{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

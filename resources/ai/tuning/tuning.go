@@ -14,7 +14,7 @@ func Tunings() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ai_tuning_tasks",
 		Description: `https://yandex.cloud/docs/foundation-models/tuning/api-ref/grpc/Tuning/list#yandex.cloud.ai.tuning.v1.TuningTask`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAITuning),
 		Resolver:    fetchTunings,
 		Transform:   client.TransformWithStruct(&tuningpb.TuningTask{}, transformers.WithPrimaryKeys("TaskId")),
 		Columns: schema.ColumnList{

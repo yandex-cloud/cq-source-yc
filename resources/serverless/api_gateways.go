@@ -14,7 +14,7 @@ func APIGatewayGateways() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_apigateway_gateways",
 		Description: `https://cloud.yandex.ru/docs/api-gateway/apigateway/api-ref/grpc/apigateway_service#ApiGateway1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessAPIGateway),
 		Resolver:    fetchAPIGateways,
 		Transform:   client.TransformWithStruct(&apigateway.ApiGateway{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{APIGatewayOpenapiSpecs()},

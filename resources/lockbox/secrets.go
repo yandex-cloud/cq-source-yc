@@ -13,7 +13,7 @@ func Secrets() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_lockbox_secrets",
 		Description: `https://cloud.yandex.ru/docs/lockbox/api-ref/grpc/secret_service#Secret1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceLockbox),
 		Resolver:    fetchSecrets,
 		Transform:   client.TransformWithStruct(&lockbox.Secret{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{access.SecretsAccessBindings()},

@@ -12,7 +12,7 @@ func OpenSearchClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_opensearch_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-opensearch/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBOpenSearch),
 		Resolver:    fetchOpenSearchClusters,
 		Transform:   client.TransformWithStruct(&opensearch.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

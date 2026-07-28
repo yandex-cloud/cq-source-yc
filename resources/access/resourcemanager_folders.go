@@ -12,7 +12,7 @@ func FoldersAccessBindings() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_access_bindings_resourcemanager_folders",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/folder_service#AccessBinding`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceResourceManager),
 		Resolver:    fetchFoldersAccessBindings,
 		Transform:   Transform,
 		Columns: schema.ColumnList{

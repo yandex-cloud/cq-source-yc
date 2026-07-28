@@ -12,7 +12,7 @@ func Buses() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_eventrouter_buses",
 		Description: `https://yandex.cloud/docs/serverless-integrations/eventrouter/api-ref/grpc/Bus/list#yandex.cloud.serverless.eventrouter.v1.Bus`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessEventRouter),
 		Resolver:    fetchBuses,
 		Transform:   client.TransformWithStruct(&eventrouter.Bus{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

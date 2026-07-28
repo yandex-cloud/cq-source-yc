@@ -13,7 +13,7 @@ func Files() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ai_files",
 		Description: `https://yandex.cloud/docs/foundation-models/assistants/api-ref/grpc/Files/list#yandex.cloud.ai.files.v1.File`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAIFiles),
 		Resolver:    fetchFiles,
 		Transform:   client.TransformWithStruct(&files.File{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

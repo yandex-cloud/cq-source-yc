@@ -13,7 +13,7 @@ func PrivateSubnets() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_private_subnets",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/PrivateSubnet/list#yandex.cloud.baremetal.v2.PrivateSubnet`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchPrivateSubnets,
 		Transform:   client.TransformWithStruct(&baremetal.PrivateSubnet{}, client.PrimaryKeyIdTransformers("PrivateSubnetId")...),
 		Columns: schema.ColumnList{

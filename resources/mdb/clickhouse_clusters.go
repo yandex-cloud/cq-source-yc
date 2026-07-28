@@ -12,7 +12,7 @@ func ClickhouseClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_clickhouse_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-clickhouse/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBClickhouse),
 		Resolver:    fetchClickhouseClusters,
 		Transform:   client.TransformWithStruct(&clickhouse.Cluster{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{ClickhouseDatabases(), ClickhouseUsers(), ClickhouseHosts()},

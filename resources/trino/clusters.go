@@ -12,7 +12,7 @@ func Clusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_trino_clusters",
 		Description: `https://yandex.cloud/docs/managed-trino/api-ref/grpc/Cluster/list#yandex.cloud.trino.v1.Cluster`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceTrino),
 		Resolver:    fetchClusters,
 		Transform:   client.TransformWithStruct(&trino.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

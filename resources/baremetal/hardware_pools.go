@@ -14,6 +14,7 @@ func HardwarePools() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_hardware_pools",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/HardwarePool/list#yandex.cloud.baremetal.v2.HardwarePool`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchHardwarePools,
 		Transform:   client.TransformWithStruct(&baremetal.HardwarePool{}, client.PrimaryKeyIdTransformers("HardwarePoolId")...),
 	}

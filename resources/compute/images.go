@@ -12,7 +12,7 @@ func Images() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_compute_images",
 		Description: `https://cloud.yandex.ru/docs/compute/api-ref/grpc/image_service#Image2`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCompute),
 		Resolver:    fetchImages,
 		Transform:   client.TransformWithStruct(&compute.Image{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

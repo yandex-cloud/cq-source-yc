@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/client/yc"
 	"github.com/yandex-cloud/cq-source-yc/client/yc/datalens"
+	"github.com/yandex-cloud/go-genproto/yandex/cloud/endpoint"
 	ycsdk "github.com/yandex-cloud/go-sdk"
 	ycsdkv2 "github.com/yandex-cloud/go-sdk/v2"
 )
@@ -21,12 +22,17 @@ const (
 
 type Client struct {
 	hierarchy *yc.ResourceHierarchy
+	// services the installation offers, discovered once at startup. Nil when it
+	// was never discovered, which disables skipping altogether.
+	services serviceSet
 
 	OrganizationId          string
 	CloudId                 string
 	FolderId                string
 	MultiplexedResourceId   string
 	MultiplexedResourceType ResourceType
+
+	Region Region
 
 	Backend  state.Client
 	Logger   zerolog.Logger
@@ -87,6 +93,8 @@ func (c *Client) WithMultiplexedResourceId(id string) *Client {
 }
 
 func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error) {
+	region, _ := RegionFromEndpoint(spec.Endpoint)
+
 	sdk, sdkv2, err := yc.Build(ctx, logger, yc.Config{
 		Endpoint:   spec.Endpoint,
 		UserAgent:  DefaultUserAgent,
@@ -95,6 +103,11 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 	})
 	if err != nil {
 		return nil, err
+	}
+	// Discover available services for `sdk.KnownServices`
+	_, err = sdk.ApiEndpoint().ApiEndpoint().List(ctx, &endpoint.ListApiEndpointsRequest{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to discover services: %w", err)
 	}
 
 	// The middleware caches IAM tokens and refreshes them before expiry.
@@ -118,14 +131,21 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		SDKv2:    sdkv2,
 		Datalens: dl,
 		Logger:   logger,
+		Region:   region,
 	}
 
 	hierarchy, err := yc.NewResourceHierarchy(ctx, logger, sdk, spec.OrganizationIDs, spec.CloudIDs, spec.FolderIDs)
 	if err != nil {
 		return nil, fmt.Errorf("fetch resource hierarchy: %w", err)
 	}
-
 	client.hierarchy = hierarchy
+
+	client.services = newServiceSet(sdk.KnownServices())
+
+	client.Logger.Debug().
+		Str("region", string(region)).
+		Interface("services", sdk.KnownServices()).
+		Msg("services offered by this installation")
 
 	if len(spec.OrganizationIDs) == 0 && len(spec.CloudIDs) == 0 && len(spec.FolderIDs) == 0 {
 		client.Logger.Warn().Msg("no organization_ids, cloud_ids, or folder_ids specified – assuming all resources nested in all orgs")

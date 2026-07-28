@@ -13,7 +13,7 @@ func PublicPrefixPools() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_public_prefix_pools",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/PublicPrefixPool/list#yandex.cloud.baremetal.v2.PublicPrefixPool`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchPublicPrefixPools,
 		Transform:   client.TransformWithStruct(&baremetal.PublicPrefixPool{}, client.PrimaryKeyIdTransformers("PublicPrefixPoolId")...),
 		Columns: schema.ColumnList{

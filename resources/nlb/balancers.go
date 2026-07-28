@@ -12,7 +12,7 @@ func Balancers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_nlb_balancers",
 		Description: `https://cloud.yandex.ru/docs/network-load-balancer/api-ref/grpc/network_load_balancer_service#NetworkLoadBalancer1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceNLB),
 		Resolver:    fetchBalancers,
 		Transform:   client.TransformWithStruct(&loadbalancer.NetworkLoadBalancer{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -13,7 +13,7 @@ func PrivateEndpoints() *schema.Table {
 		Name:        "yc_vpc_privatelink_private_endpoints",
 		Title:       "VPC Private Endpoints",
 		Description: `https://yandex.cloud/ru/docs/vpc/privatelink/api-ref/grpc/PrivateEndpoint/list#yandex.cloud.vpc.v1.privatelink.PrivateEndpoint`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchPrivateEndpoints,
 		Transform:   client.TransformWithStruct(&privatelink.PrivateEndpoint{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

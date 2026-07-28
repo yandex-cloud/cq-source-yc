@@ -12,7 +12,7 @@ func Networks() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_networks",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/network_service#Network1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchNetworks,
 		Transform:   client.TransformWithStruct(&vpc.Network{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

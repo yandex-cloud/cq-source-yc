@@ -12,7 +12,7 @@ func PostgreSQLBackups() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_postgresql_backups",
 		Description: `https://yandex.cloud/ru/docs/managed-postgresql/api-ref/grpc/backup_service#Backup`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBPostgreSQL),
 		Resolver:    fetchPostgreSQLBackups,
 		Transform:   client.TransformWithStruct(&postgresql.Backup{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

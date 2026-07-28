@@ -12,7 +12,7 @@ func MySQLClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_mysql_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-mysql/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBMySQL),
 		Resolver:    fetchMySQLClusters,
 		Transform:   client.TransformWithStruct(&mysql.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

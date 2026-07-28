@@ -13,7 +13,7 @@ func FunctionsFunctions() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_functions_functions",
 		Description: ``,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessFunctions),
 		Resolver:    fetchFunctionsFunctions,
 		Transform:   client.TransformWithStruct(&functions.Function{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{access.ServerlessFunctionsAccessBindings()},

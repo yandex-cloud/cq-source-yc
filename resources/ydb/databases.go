@@ -13,7 +13,7 @@ func Databases() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ydb_databases",
 		Description: `https://cloud.yandex.ru/docs/ydb/api-ref/grpc/database_service#Database1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceYDB),
 		Resolver:    fetchDatabases,
 		Transform:   client.TransformWithStruct(&ydb.Database{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

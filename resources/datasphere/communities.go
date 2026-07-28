@@ -13,7 +13,7 @@ func Communities() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_datasphere_communities",
 		Description: `https://cloud.yandex.ru/docs/datasphere/api-ref/grpc/community_service#Community3`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceDataSphere),
 		Resolver:    fetchCommunities,
 		Transform:   client.TransformWithStruct(&datasphere.Community{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{Projects(), access.DatasphereCommunitiesBindings()},

@@ -13,7 +13,7 @@ func FoldersAccessPolicyBindings() *schema.Table {
 		Name:        "yc_access_policy_bindings_resourcemanager_folders",
 		Title:       "YC Access Policy Bindings for Folders",
 		Description: `https://yandex.cloud/docs/iam/concepts/access-control/#access-policies`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceResourceManager),
 		Resolver:    fetchFoldersAccessPolicyBindings,
 		Transform:   AccessPolicyTransform,
 		Columns: schema.ColumnList{

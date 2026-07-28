@@ -12,7 +12,7 @@ func Rules() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_eventrouter_rules",
 		Description: `https://yandex.cloud/docs/serverless-integrations/eventrouter/api-ref/grpc/Rule/list#yandex.cloud.serverless.eventrouter.v1.Rule`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessEventRouter),
 		Resolver:    fetchRules,
 		Transform:   client.TransformWithStruct(&eventrouter.Rule{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -12,7 +12,7 @@ func CloudsAccessBindings() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_access_bindings_resourcemanager_clouds",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/cloud_service#AccessBinding`,
-		Multiplex:   client.CloudMultiplex,
+		Multiplex:   client.CloudMultiplex(client.ServiceResourceManager),
 		Resolver:    fetchCloudsAccessBindings,
 		Transform:   Transform,
 		Columns: schema.ColumnList{

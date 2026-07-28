@@ -12,7 +12,7 @@ func Zones() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_dns_zones",
 		Description: `https://cloud.yandex.ru/docs/dns/api-ref/grpc/dns_zone_service#DnsZone1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceDNS),
 		Resolver:    fetchZones,
 		Transform:   client.TransformWithStruct(&dns.DnsZone{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

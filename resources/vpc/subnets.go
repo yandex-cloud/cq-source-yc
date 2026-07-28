@@ -12,7 +12,7 @@ func Subnets() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_subnets",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/subnet_service#Subnet1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchSubnets,
 		Transform:   client.TransformWithStruct(&vpc.Subnet{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -48,7 +48,16 @@ spec:
   Maxiumum number of retries for YC Client
 
 - `endpoint` (`string`, default `api.cloud.yandex.net:443`):
-  Yandex Cloud endpoint
+  Yandex Cloud endpoint.
+
+  | Region        | Endpoint                   |
+  | ------------- | -------------------------- |
+  | `ru-central1` | `api.cloud.yandex.net:443` |
+  | `kz1`         | `api.yandexcloud.kz:443`   |
+
+  Installations do not offer the same services. Tables belonging to a service
+  the installation does not have are skipped with a log message, so there is no
+  need to list them under `skip_tables`.
 
 - `concurrency` (`int`, optional, default: `10000`):
   A best effort maximum number of Go routines to use. Lower this number to reduce memory usage.

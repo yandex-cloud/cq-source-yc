@@ -12,7 +12,7 @@ func OrganizationsAccessBindings() *schema.Table {
 	return &schema.Table{
 		Name:      "yc_access_bindings_organizationmanager_organizations",
 		Resolver:  fetchOrganizationsAccessBindings,
-		Multiplex: client.OrganizationMultiplex,
+		Multiplex: client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Transform: Transform,
 		Columns: schema.ColumnList{
 			client.MultiplexedResourceIdColumn,

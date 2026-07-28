@@ -13,7 +13,7 @@ func SymmetricKeys() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_kms_symmetric_keys",
 		Description: ``,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceKMS),
 		Resolver:    fetchSymmetricKeys,
 		Transform:   client.TransformWithStruct(&kms.SymmetricKey{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{caccess.SymmetricKeysAccessBindings()},

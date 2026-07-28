@@ -13,6 +13,7 @@ func PointOfPresences() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_cic_point_of_presences",
 		Description: `https://yandex.cloud/docs/interconnect/api-ref/grpc/PointOfPresence/list#yandex.cloud.cic.v1.PointOfPresence`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceCIC),
 		Resolver:    fetchPointOfPresences,
 		Transform:   client.TransformWithStruct(&cic.PointOfPresence{}, client.PrimaryKeyIdTransformer),
 	}

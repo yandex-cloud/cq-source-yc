@@ -14,7 +14,7 @@ func McpGateways() *schema.Table {
 	return &schema.Table{
 		Name:                "yc_serverless_mcpgateway_gateways",
 		Description:         `https://aistudio.yandex.ru/docs/ru/ai-studio/mcp-gateway/api-ref/grpc/McpGateway/get.html#yandex.cloud.serverless.mcpgateway.v1.McpGateway`,
-		Multiplex:           client.FolderMultiplex,
+		Multiplex:           client.FolderMultiplex(client.ServiceServerlessMCPGateway),
 		Resolver:            fetchMcpGateways,
 		PreResourceResolver: getMcpGateway,
 		Transform:           client.TransformWithStruct(&mcpgateway.McpGateway{}, client.PrimaryKeyIdTransformer),

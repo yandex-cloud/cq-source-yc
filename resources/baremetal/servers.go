@@ -13,7 +13,7 @@ func Servers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_servers",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Server/list#yandex.cloud.baremetal.v2.Server`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchServers,
 		Transform:   client.TransformWithStruct(&baremetal.Server{}, client.PrimaryKeyIdTransformers("ServerId")...),
 		Columns: schema.ColumnList{

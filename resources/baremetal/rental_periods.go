@@ -14,6 +14,7 @@ func RentalPeriods() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_rental_periods",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/RentalPeriod/list#yandex.cloud.baremetal.v2.RentalPeriod`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchRentalPeriods,
 		Transform:   client.TransformWithStruct(&baremetal.RentalPeriod{}, client.PrimaryKeyIdTransformers("RentalPeriodId")...),
 	}

@@ -12,7 +12,7 @@ func Clusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_kubernetes_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-kubernetes/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceKubernetes),
 		Resolver:    fetchClusters,
 		Transform:   client.TransformWithStruct(&k8s.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

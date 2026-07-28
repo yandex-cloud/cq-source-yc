@@ -12,7 +12,7 @@ func SecurityGroups() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_security_groups",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/security_group_service#SecurityGroup1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchSecurityGroups,
 		Transform:   client.TransformWithStruct(&vpc.SecurityGroup{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

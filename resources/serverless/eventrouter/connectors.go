@@ -12,7 +12,7 @@ func Connectors() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_serverless_eventrouter_connectors",
 		Description: `https://yandex.cloud/docs/serverless-integrations/eventrouter/api-ref/grpc/Connector/list#yandex.cloud.serverless.eventrouter.v1.Connector`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceServerlessEventRouter),
 		Resolver:    fetchConnectors,
 		Transform:   client.TransformWithStruct(&eventrouter.Connector{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

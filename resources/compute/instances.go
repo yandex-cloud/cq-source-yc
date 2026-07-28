@@ -14,7 +14,7 @@ func Instances() *schema.Table {
 		Description: `https://cloud.yandex.ru/docs/compute/api-ref/grpc/instance_service#Instance`,
 		Resolver:    fetchInstances,
 		Transform:   client.TransformWithStruct(&compute.Instance{}, client.PrimaryKeyIdTransformer),
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCompute),
 		Columns: schema.ColumnList{
 			client.CloudIdColumn,
 		},

@@ -12,7 +12,7 @@ func GreenplumClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_greenplum_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-greenplum/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBGreenplum),
 		Resolver:    fetchGreenplumClusters,
 		Transform:   client.TransformWithStruct(&greenplum.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

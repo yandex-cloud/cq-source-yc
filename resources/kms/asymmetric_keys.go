@@ -13,7 +13,7 @@ func AsymmetricKeys() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_kms_asymmetric_keys",
 		Description: `https://yandex.cloud/ru/docs/kms/api-ref/grpc/asymmetric_encryption_key_service#AsymmetricEncryptionKey2`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceKMS),
 		Resolver:    fetchAsymmetricKeys,
 		Transform:   client.TransformWithStruct(&kms.AsymmetricEncryptionKey{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{caccess.AsymmetricKeysAccessBindings()},

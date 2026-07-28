@@ -13,7 +13,7 @@ func Organizations() *schema.Table {
 		Name:        "yc_organizationmanager_organizations",
 		Description: `https://cloud.yandex.ru/docs/organization/api-ref/grpc/organization_service#Organization1`,
 		Resolver:    fetchOrganizations,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Transform:   client.TransformWithStruct(&organizationmanager.Organization{}, client.PrimaryKeyIdTransformer),
 	}
 }

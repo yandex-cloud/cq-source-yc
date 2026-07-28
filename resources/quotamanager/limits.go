@@ -50,7 +50,7 @@ func QuotaLimits() *schema.Table {
 			transformers.WithUnwrapStructFields("Resource", "QuotaLimit"),
 			transformers.WithPrimaryKeys("Resource.Id", "QuotaId"),
 		),
-		Multiplex: client.CombineMultiplex(client.OrganizationMultiplex, client.CloudMultiplex),
+		Multiplex: client.CombineMultiplex(client.OrganizationMultiplex(client.ServiceQuotaManager), client.CloudMultiplex(client.ServiceQuotaManager)),
 	}
 }
 

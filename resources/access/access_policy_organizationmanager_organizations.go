@@ -13,7 +13,7 @@ func OrganizationsAccessPolicyBindings() *schema.Table {
 		Name:        "yc_access_policy_bindings_organizationmanager_organizations",
 		Title:       "YC Access Policy Bindings for Organizations",
 		Description: `https://yandex.cloud/docs/iam/concepts/access-control/#access-policies`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Resolver:    fetchOrganizationsAccessPolicyBindings,
 		Transform:   AccessPolicyTransform,
 		Columns: schema.ColumnList{

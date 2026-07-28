@@ -19,6 +19,7 @@ func QuotaServices() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_quotamanager_quota_services",
 		Description: `https://yandex.cloud/ru/docs/quota-manager/api-ref/grpc/QuotaLimit/listServices#yandex.cloud.quotamanager.v1.Service`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceQuotaManager),
 		Resolver:    fetchQuotaServices,
 		Transform:   client.TransformWithStruct(&Service{}, transformers.WithUnwrapAllEmbeddedStructs(), transformers.WithPrimaryKeys("Id", "ResourceType")),
 	}

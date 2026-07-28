@@ -13,7 +13,7 @@ func Users() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_organizationmanager_users",
 		Description: `https://cloud.yandex.ru/docs/organization/api-ref/grpc/user_service#OrganizationUser`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Resolver:    fetchUsers,
 		Transform:   client.TransformWithStruct(&organizationmanager.ListMembersResponse_OrganizationUser{}, transformers.WithUnwrapStructFields("SubjectClaims"), transformers.WithPrimaryKeys("SubjectClaims.Sub")),
 		Columns: schema.ColumnList{

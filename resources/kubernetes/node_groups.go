@@ -12,7 +12,7 @@ func NodeGroups() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_kubernetes_node_groups",
 		Description: ``,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceKubernetes),
 		Resolver:    fetchNodeGroups,
 		Transform:   client.TransformWithStruct(&k8s.NodeGroup{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

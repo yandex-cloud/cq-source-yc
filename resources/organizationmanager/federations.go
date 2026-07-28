@@ -12,7 +12,7 @@ func Federations() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_organizationmanager_federations",
 		Description: `https://yandex.cloud/ru/docs/organization/saml/api-ref/grpc/Federation/list#yandex.cloud.organizationmanager.v1.saml.Federation`,
-		Multiplex:   client.OrganizationMultiplex,
+		Multiplex:   client.OrganizationMultiplex(client.ServiceOrganizationManager),
 		Resolver:    fetchFederations,
 		Transform:   client.TransformWithStruct(&saml.Federation{}, client.PrimaryKeyIdTransformer),
 	}

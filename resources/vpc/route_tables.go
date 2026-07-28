@@ -12,7 +12,7 @@ func RouteTables() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_route_tables",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/route_table_service#RouteTable1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchRouteTables,
 		Transform:   client.TransformWithStruct(&vpc.RouteTable{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

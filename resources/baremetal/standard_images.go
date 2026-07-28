@@ -15,7 +15,7 @@ func StandardImages() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_standard_images",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Image/list#yandex.cloud.baremetal.v2.Image`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchStandardImages,
 		Transform:   client.TransformWithStruct(&baremetal.Image{}, client.PrimaryKeyIdTransformers("ImageId")...),
 		Columns: schema.ColumnList{
@@ -27,7 +27,7 @@ func StandardImages() *schema.Table {
 func fetchStandardImages(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- any) error {
 	c := meta.(*client.Client)
 
-	it := baremetalsdk.NewImageClient(c.SDKv2).ImagesIterator(ctx, &baremetal.ListImagesRequest{FolderId: c.FolderId})
+	it := baremetalsdk.NewImageClient(c.SDKv2).ImagesIterator(ctx, &baremetal.ListImagesRequest{FolderId: "baremetal-standard-images"})
 	for it.Next() {
 		res <- it.Value()
 	}

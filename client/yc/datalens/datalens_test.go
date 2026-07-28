@@ -36,7 +36,7 @@ func TestGetEntries(t *testing.T) {
 		assert.Equal(t, "/rpc/getEntries", r.URL.Path)
 		assert.Equal(t, "Bearer test-iam-token", r.Header.Get("Authorization"))
 		assert.Equal(t, "org-id", r.Header.Get("x-dl-org-id"))
-		assert.Equal(t, "2", r.Header.Get("x-dl-api-version"))
+		assert.Equal(t, "1", r.Header.Get("x-dl-api-version"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 
 		var args GetEntriesV2Args

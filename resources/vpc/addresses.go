@@ -12,7 +12,7 @@ func Addresses() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_addresses",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/address_service#Address2`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchAddresses,
 		Transform:   client.TransformWithStruct(&vpc.Address{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

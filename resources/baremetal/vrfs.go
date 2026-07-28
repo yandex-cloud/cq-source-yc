@@ -13,7 +13,7 @@ func Vrfs() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_vrfs",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Vrf/list#yandex.cloud.baremetal.v2.Vrf`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchVrfs,
 		Transform:   client.TransformWithStruct(&baremetal.Vrf{}, client.PrimaryKeyIdTransformers("VrfId")...),
 		Columns: schema.ColumnList{

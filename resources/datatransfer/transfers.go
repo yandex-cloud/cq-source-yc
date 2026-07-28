@@ -12,7 +12,7 @@ func Transfers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_datatransfer_transfers",
 		Description: `https://yandex.cloud/ru/docs/data-transfer/api-ref/grpc/transfer_service#Transfer`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceDataTransfer),
 		Resolver:    fetchTransfers,
 		Transform:   client.TransformWithStruct(&datatransfer.Transfer{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

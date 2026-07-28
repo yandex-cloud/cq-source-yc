@@ -10,12 +10,13 @@ import (
 )
 
 // AccessPolicyTemplates lists the IAM access policy templates catalog. The List
-// RPC is global (no folder/cloud/org scope), so the table has no Multiplex and
-// runs once. Each template is returned as an access.AccessPolicy.
+// RPC is global (no folder/cloud/org scope), so the table runs once. Each
+// template is returned as an access.AccessPolicy.
 func AccessPolicyTemplates() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_iam_access_policy_templates",
 		Description: `https://yandex.cloud/docs/iam/concepts/access-control/#access-policies`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceIAM),
 		Resolver:    fetchAccessPolicyTemplates,
 		Transform:   client.TransformWithStruct(&access.AccessPolicy{}, client.PrimaryKeyIdTransformer),
 	}

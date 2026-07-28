@@ -13,7 +13,7 @@ func PublicConnections() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_cic_public_connections",
 		Description: `https://yandex.cloud/ru/docs/interconnect/api-ref/grpc/PublicConnection/list#yandex.cloud.cic.v1.PublicConnection`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCIC),
 		Resolver:    fetchPublicConnections,
 		Transform:   client.TransformWithStruct(&cic.PublicConnection{}, client.PrimaryKeyIdTransformer),
 	}

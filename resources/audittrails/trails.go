@@ -12,7 +12,7 @@ func Trails() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_audittrails_trails",
 		Description: `https://yandex.cloud/ru/docs/audit-trails/api-ref/grpc/trail_service#Trail1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAuditTrails),
 		Resolver:    fetchTrails,
 		Transform:   client.TransformWithStruct(&audittrails.Trail{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

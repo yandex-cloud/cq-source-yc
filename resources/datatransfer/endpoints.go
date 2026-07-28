@@ -12,7 +12,7 @@ func Endpoints() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_datatransfer_endpoints",
 		Description: `https://yandex.cloud/ru/docs/data-transfer/api-ref/grpc/endpoint_service#Endpoint1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceDataTransfer),
 		Resolver:    fetchEndpoints,
 		Transform:   client.TransformWithStruct(&datatransfer.Endpoint{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

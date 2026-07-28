@@ -13,7 +13,7 @@ func Keys() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_iam_keys",
 		Description: `https://cloud.yandex.ru/docs/iam/api-ref/grpc/key_service#Key1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceIAM),
 		Resolver:    fetchKeys,
 		Transform:   client.TransformWithStruct(&iam.Key{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -12,7 +12,7 @@ func Gateways() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_vpc_gateways",
 		Description: `https://cloud.yandex.ru/docs/vpc/api-ref/grpc/gateway_service#Gateway1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceVPC),
 		Resolver:    fetchGateways,
 		Transform:   client.TransformWithStruct(&vpc.Gateway{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

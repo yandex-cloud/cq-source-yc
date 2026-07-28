@@ -13,6 +13,7 @@ func Partners() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_cic_partners",
 		Description: `https://yandex.cloud/docs/interconnect/api-ref/grpc/Partner/list#yandex.cloud.cic.v1.Partner`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceCIC),
 		Resolver:    fetchPartners,
 		Transform:   client.TransformWithStruct(&cic.Partner{}, client.PrimaryKeyIdTransformer),
 	}

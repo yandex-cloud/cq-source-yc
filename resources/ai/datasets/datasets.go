@@ -14,7 +14,7 @@ func Datasets() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ai_datasets",
 		Description: `https://yandex.cloud/docs/foundation-models/dataset/api-ref/grpc/Dataset/list#yandex.cloud.ai.dataset.v1.DatasetInfo`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAIDatasets),
 		Resolver:    fetchDatasets,
 		Transform:   client.TransformWithStruct(&dataset.DatasetInfo{}, transformers.WithPrimaryKeys("DatasetId")),
 		Columns: schema.ColumnList{

@@ -15,6 +15,7 @@ func Zones() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_zones",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/Zone/list#yandex.cloud.baremetal.v2.Zone`,
+		Multiplex:   client.GlobalMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchZones,
 		Transform:   client.TransformWithStruct(&baremetal.Zone{}, client.PrimaryKeyIdTransformers("ZoneId")...),
 	}

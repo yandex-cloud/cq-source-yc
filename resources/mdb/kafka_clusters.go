@@ -12,7 +12,7 @@ func KafkaClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_kafka_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-kafka/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBKafka),
 		Resolver:    fetchKafkaClusters,
 		Transform:   client.TransformWithStruct(&kafka.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

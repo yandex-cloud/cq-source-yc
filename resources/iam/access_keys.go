@@ -14,7 +14,7 @@ func AccessKeys() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_iam_access_keys",
 		Description: `https://cloud.yandex.ru/docs/iam/api-ref/grpc/access_key_service#AccessKey`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceIAM),
 		Resolver:    fetchAccessKeys,
 		Transform:   client.TransformWithStruct(&awscompatibility.AccessKey{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

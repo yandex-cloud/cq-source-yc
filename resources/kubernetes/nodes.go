@@ -15,7 +15,7 @@ func Nodes() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_kubernetes_nodes",
 		Description: ``,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceKubernetes),
 		Resolver:    fetchNodes,
 		Transform:   client.TransformWithStruct(&k8s.Node{}, transformers.WithUnwrapStructFields("CloudStatus"), transformers.WithPrimaryKeys("CloudStatus.Id")),
 		Columns: schema.ColumnList{

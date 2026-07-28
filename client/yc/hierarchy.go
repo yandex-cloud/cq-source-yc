@@ -3,12 +3,10 @@ package yc
 import (
 	"cmp"
 	"context"
-	"fmt"
 	"slices"
 
 	"github.com/rs/zerolog"
 	"github.com/yandex-cloud/cq-source-yc/internal/util"
-	"github.com/yandex-cloud/go-genproto/yandex/cloud/endpoint"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/organizationmanager/v1"
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/resourcemanager/v1"
 	ycsdk "github.com/yandex-cloud/go-sdk"
@@ -94,11 +92,6 @@ const (
 
 // discover the hierarchy using Breadth-first search
 func bfs(ctx context.Context, sdk *ycsdk.SDK, logger zerolog.Logger, init []ResourceHierarchyItem, organizations []string, clouds []string, folders []string, opts ...grpc.CallOption) ([]ResourceHierarchyItem, error) {
-	// call ApiEndpoint.List to fill internal endpoint list in ycsdk.SDK
-	_, err := sdk.ApiEndpoint().ApiEndpoint().List(ctx, &endpoint.ListApiEndpointsRequest{})
-	if err != nil {
-		return nil, fmt.Errorf("discover endpoints: %w", err)
-	}
 	services := util.SliceToSet(sdk.KnownServices())
 	logger.Debug().Interface("services", services).Msg("available services")
 

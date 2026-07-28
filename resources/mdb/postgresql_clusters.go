@@ -12,7 +12,7 @@ func PostgreSQLClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_postgresql_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-postgresql/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBPostgreSQL),
 		Resolver:    fetchPostgreSQLClusters,
 		Transform:   client.TransformWithStruct(&postgresql.Cluster{}, client.PrimaryKeyIdTransformer),
 		Relations:   schema.Tables{PostgreSQLDatabases(), PostgreSQLUsers(), PostgreSQLHosts()},

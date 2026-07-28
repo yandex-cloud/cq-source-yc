@@ -13,7 +13,7 @@ func Folders() *schema.Table {
 		Name:        "yc_resourcemanager_folders",
 		Description: `https://cloud.yandex.ru/docs/resource-manager/api-ref/grpc/folder_service#Folder1`,
 		Resolver:    fetchFolders,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceResourceManager),
 		Transform:   client.TransformWithStruct(&resourcemanager.Folder{}, client.PrimaryKeyIdTransformer),
 	}
 }

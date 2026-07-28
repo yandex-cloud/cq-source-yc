@@ -14,7 +14,7 @@ func BatchInferences() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_ai_batch_inference_tasks",
 		Description: `https://yandex.cloud/docs/foundation-models/batch/api-ref/grpc/BatchInference/list#yandex.cloud.ai.batch_inference.v1.BatchInferenceTask`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceAIBatchInference),
 		Resolver:    fetchBatchInferences,
 		Transform:   client.TransformWithStruct(&batchinferencepb.BatchInferenceTask{}, transformers.WithPrimaryKeys("TaskId")),
 		Columns: schema.ColumnList{

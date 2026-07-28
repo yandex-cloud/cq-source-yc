@@ -13,7 +13,7 @@ func ServiceAccounts() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_iam_service_accounts",
 		Description: `https://cloud.yandex.ru/docs/iam/api-ref/grpc/service_account_service#ServiceAccount1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceIAM),
 		Resolver:    fetchServiceAccounts,
 		Transform:   client.TransformWithStruct(&iam.ServiceAccount{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

@@ -13,7 +13,7 @@ func PrivateCloudConnections() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_baremetal_private_cloud_connections",
 		Description: `https://yandex.cloud/docs/baremetal/api-ref/grpc/PrivateCloudConnection/list#yandex.cloud.baremetal.v2.PrivateCloudConnection`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceBaremetal),
 		Resolver:    fetchPrivateCloudConnections,
 		Transform:   client.TransformWithStruct(&baremetal.PrivateCloudConnection{}, client.PrimaryKeyIdTransformers("PrivateCloudConnectionId")...),
 		Columns: schema.ColumnList{

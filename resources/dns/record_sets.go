@@ -15,7 +15,7 @@ func RecordSets() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_dns_record_sets",
 		Description: `https://cloud.yandex.ru/docs/dns/api-ref/grpc/dns_zone_service#RecordSet1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceDNS),
 		Resolver:    fetchRecordSets,
 		Transform:   client.TransformWithStruct(&dns.RecordSet{}, transformers.WithPrimaryKeys("Name", "Type")),
 		Columns: schema.ColumnList{

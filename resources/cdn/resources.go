@@ -12,7 +12,7 @@ func Resources() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_cdn_resources",
 		Description: `https://cloud.yandex.ru/docs/cdn/api-ref/grpc/resource_service#Resource1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceCDN),
 		Resolver:    fetchResources,
 		Transform:   client.TransformWithStruct(&cdn.Resource{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{

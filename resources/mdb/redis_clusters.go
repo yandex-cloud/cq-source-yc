@@ -12,7 +12,7 @@ func RedisClusters() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_mdb_redis_clusters",
 		Description: `https://cloud.yandex.ru/docs/managed-mongodb/api-ref/grpc/cluster_service#Cluster1`,
-		Multiplex:   client.FolderMultiplex,
+		Multiplex:   client.FolderMultiplex(client.ServiceMDBRedis),
 		Resolver:    fetchRedisClusters,
 		Transform:   client.TransformWithStruct(&redis.Cluster{}, client.PrimaryKeyIdTransformer),
 		Columns: schema.ColumnList{
