@@ -36,13 +36,13 @@ func TestGetEntries(t *testing.T) {
 		assert.Equal(t, "/rpc/getEntries", r.URL.Path)
 		assert.Equal(t, "Bearer test-iam-token", r.Header.Get("Authorization"))
 		assert.Equal(t, "org-id", r.Header.Get("x-dl-org-id"))
-		assert.Equal(t, "1", r.Header.Get("x-dl-api-version"))
+		assert.Equal(t, "2", r.Header.Get("x-dl-api-version"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 
 		var args GetEntriesV2Args
 		require.NoError(t, json.NewDecoder(r.Body).Decode(&args))
 		require.NotNil(t, args.Scope)
-		assert.Equal(t, "connection", *args.Scope)
+		assert.Equal(t, EntryScopeConnection, *args.Scope)
 		token := ""
 		if args.PageToken != nil {
 			token = *args.PageToken
@@ -63,7 +63,7 @@ func TestGetEntries(t *testing.T) {
 		_, _ = w.Write([]byte(`{"entries": []}`))
 	}))
 
-	scope := "connection"
+	scope := EntryScopeConnection
 	entries, next, err := c.GetEntries(context.Background(), "org-id", GetEntriesV2Args{Scope: &scope})
 	require.NoError(t, err)
 	assert.Equal(t, "page2", next)
@@ -71,7 +71,7 @@ func TestGetEntries(t *testing.T) {
 	assert.Equal(t, "e1", entries[0].EntryId)
 	assert.Equal(t, "folder-1", entries[0].Name)
 	assert.Equal(t, "e2", entries[1].EntryId)
-	assert.Equal(t, "connection", entries[1].Scope)
+	assert.Equal(t, EntryScopeConnection, entries[1].Scope)
 
 	entries, next, err = c.GetEntries(context.Background(), "org-id", GetEntriesV2Args{Scope: &scope, PageToken: &next})
 	require.NoError(t, err)

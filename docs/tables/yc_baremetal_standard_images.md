@@ -16,3 +16,6 @@ The primary key for this table is **id**.
 |id (PK)|`utf8`|
 |folder_id|`utf8`|
 |name|`utf8`|
+|family|`utf8`|
+|state|`utf8`|
+|publish_time|`timestamp[us, tz=UTC]`|

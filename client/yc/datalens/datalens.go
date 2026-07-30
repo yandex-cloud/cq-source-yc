@@ -25,7 +25,7 @@ import (
 const (
 	DefaultEndpoint = "https://api.datalens.tech"
 
-	headerApiVersion = "1"
+	headerApiVersion = "2"
 	headerAuditMode  = "true"
 
 	// The DataLens API allows 60 requests per minute:
@@ -173,11 +173,6 @@ func (c *Client) rpc(ctx context.Context, method, orgID string, args, result any
 // getEntries. Entries the caller has no access to (isLocked=true) carry only
 // EntryId, Name, Scope and Type.
 type Entry = GetEntriesV2ResultEntries1
-
-// Scopes lists all entry scopes (the EntryScope schema in the spec).
-// GetEntries requires either scope or ids to be set, so listing all entries
-// means one pass per scope.
-var Scopes = []string{"folder", "connection", "dataset", "dash", "widget", "report"}
 
 // Connection is a getConnection response. In the spec ConnectionRead is a
 // discriminated union of ~30 connection types (postgres, clickhouse, gsheets,

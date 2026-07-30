@@ -12,7 +12,7 @@ import (
 )
 
 func Connections() *schema.Table {
-	t := entriesTable("yc_datalens_connections", "connection")
+	t := entriesTable("yc_datalens_connections", datalens.EntryScopeConnection)
 	t.Description = `DataLens connections, enriched with getConnection details (host, port, ... in the data column). https://yandex.cloud/ru/docs/datalens/operations/api-start`
 	t.PostResourceResolver = resolveConnectionDetails
 	return t

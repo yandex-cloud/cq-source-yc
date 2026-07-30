@@ -14,30 +14,36 @@ const (
 	Organization_IDScopes organizationIDContextKey = "Organization_ID.Scopes"
 )
 
-// Defines values for GetEntriesEntryIsLocked.
+// Defines values for EntryScope.
 const (
-	GetEntriesEntryIsLockedFalse GetEntriesEntryIsLocked = false
+	EntryScopeArtifact   EntryScope = "artifact"
+	EntryScopeCompute    EntryScope = "compute"
+	EntryScopeConnection EntryScope = "connection"
+	EntryScopeDash       EntryScope = "dash"
+	EntryScopeDataset    EntryScope = "dataset"
+	EntryScopeFolder     EntryScope = "folder"
+	EntryScopeReport     EntryScope = "report"
+	EntryScopeWidget     EntryScope = "widget"
 )
 
-// Valid indicates whether the value is a known member of the GetEntriesEntryIsLocked enum.
-func (e GetEntriesEntryIsLocked) Valid() bool {
+// Valid indicates whether the value is a known member of the EntryScope enum.
+func (e EntryScope) Valid() bool {
 	switch e {
-	case GetEntriesEntryIsLockedFalse:
+	case EntryScopeArtifact:
 		return true
-	default:
-		return false
-	}
-}
-
-// Defines values for GetEntriesLockedEntryIsLocked.
-const (
-	GetEntriesLockedEntryIsLockedTrue GetEntriesLockedEntryIsLocked = true
-)
-
-// Valid indicates whether the value is a known member of the GetEntriesLockedEntryIsLocked enum.
-func (e GetEntriesLockedEntryIsLocked) Valid() bool {
-	switch e {
-	case GetEntriesLockedEntryIsLockedTrue:
+	case EntryScopeCompute:
+		return true
+	case EntryScopeConnection:
+		return true
+	case EntryScopeDash:
+		return true
+	case EntryScopeDataset:
+		return true
+	case EntryScopeFolder:
+		return true
+	case EntryScopeReport:
+		return true
+	case EntryScopeWidget:
 		return true
 	default:
 		return false
@@ -178,13 +184,13 @@ func (e PostRpcGetEntriesParamsXDlApiVersion) Valid() bool {
 
 // Defines values for PostRpcGetEntriesParamsXDlAuditMode.
 const (
-	True PostRpcGetEntriesParamsXDlAuditMode = "true"
+	PostRpcGetEntriesParamsXDlAuditModeTrue PostRpcGetEntriesParamsXDlAuditMode = "true"
 )
 
 // Valid indicates whether the value is a known member of the PostRpcGetEntriesParamsXDlAuditMode enum.
 func (e PostRpcGetEntriesParamsXDlAuditMode) Valid() bool {
 	switch e {
-	case True:
+	case PostRpcGetEntriesParamsXDlAuditModeTrue:
 		return true
 	default:
 		return false
@@ -193,13 +199,13 @@ func (e PostRpcGetEntriesParamsXDlAuditMode) Valid() bool {
 
 // Defines values for PostRpcListDirectoryParamsXDlApiVersion.
 const (
-	N2 PostRpcListDirectoryParamsXDlApiVersion = "2"
+	PostRpcListDirectoryParamsXDlApiVersionN2 PostRpcListDirectoryParamsXDlApiVersion = "2"
 )
 
 // Valid indicates whether the value is a known member of the PostRpcListDirectoryParamsXDlApiVersion enum.
 func (e PostRpcListDirectoryParamsXDlApiVersion) Valid() bool {
 	switch e {
-	case N2:
+	case PostRpcListDirectoryParamsXDlApiVersionN2:
 		return true
 	default:
 		return false
@@ -221,44 +227,8 @@ type EntryPermissions struct {
 	Read bool `json:"read"`
 }
 
-// GetEntriesEntry defines model for GetEntriesEntry.
-type GetEntriesEntry struct {
-	CollectionId    *string                  `json:"collectionId"`
-	CollectionTitle *string                  `json:"collectionTitle,omitempty"`
-	CreatedAt       string                   `json:"createdAt"`
-	CreatedBy       string                   `json:"createdBy"`
-	Data            *map[string]interface{}  `json:"data,omitempty"`
-	EntryId         string                   `json:"entryId"`
-	Hidden          bool                     `json:"hidden"`
-	IsFavorite      bool                     `json:"isFavorite"`
-	IsLocked        *GetEntriesEntryIsLocked `json:"isLocked,omitempty"`
-	Key             string                   `json:"key"`
-	Links           *map[string]string       `json:"links"`
-	Meta            *map[string]interface{}  `json:"meta"`
-	Permissions     *EntryPermissions        `json:"permissions,omitempty"`
-	PublishedId     *string                  `json:"publishedId"`
-	SavedId         string                   `json:"savedId"`
-	Scope           string                   `json:"scope"`
-	Type            string                   `json:"type"`
-	UpdatedAt       string                   `json:"updatedAt"`
-	UpdatedBy       string                   `json:"updatedBy"`
-	WorkbookId      *string                  `json:"workbookId"`
-	WorkbookTitle   *string                  `json:"workbookTitle,omitempty"`
-}
-
-// GetEntriesEntryIsLocked defines model for GetEntriesEntry.IsLocked.
-type GetEntriesEntryIsLocked bool
-
-// GetEntriesLockedEntry defines model for GetEntriesLockedEntry.
-type GetEntriesLockedEntry struct {
-	EntryId  string                        `json:"entryId"`
-	IsLocked GetEntriesLockedEntryIsLocked `json:"isLocked"`
-	Scope    string                        `json:"scope"`
-	Type     string                        `json:"type"`
-}
-
-// GetEntriesLockedEntryIsLocked defines model for GetEntriesLockedEntry.IsLocked.
-type GetEntriesLockedEntryIsLocked bool
+// EntryScope Type of the entry, e.g. `dash` — dashboard, `widget` — chart, etc.
+type EntryScope string
 
 // GetEntriesV2Args defines model for GetEntriesV2Args.
 type GetEntriesV2Args struct {
@@ -279,8 +249,10 @@ type GetEntriesV2Args struct {
 	} `json:"orderBy,omitempty"`
 	PageSize  *int    `json:"pageSize,omitempty"`
 	PageToken *string `json:"pageToken,omitempty"`
-	Scope     *string `json:"scope,omitempty"`
-	Type      *string `json:"type,omitempty"`
+
+	// Scope Type of the entry, e.g. `dash` — dashboard, `widget` — chart, etc.
+	Scope *EntryScope `json:"scope,omitempty"`
+	Type  *string     `json:"type,omitempty"`
 }
 
 // GetEntriesV2ArgsOrderByDirection defines model for GetEntriesV2Args.OrderBy.Direction.
@@ -300,8 +272,10 @@ type GetEntriesV2ResultEntries0 struct {
 	EntryId  string                             `json:"entryId"`
 	IsLocked GetEntriesV2ResultEntries0IsLocked `json:"isLocked"`
 	Name     string                             `json:"name"`
-	Scope    string                             `json:"scope"`
-	Type     string                             `json:"type"`
+
+	// Scope Type of the entry, e.g. `dash` — dashboard, `widget` — chart, etc.
+	Scope EntryScope `json:"scope"`
+	Type  string     `json:"type"`
 }
 
 // GetEntriesV2ResultEntries0IsLocked defines model for GetEntriesV2Result.Entries.0.IsLocked.
@@ -325,12 +299,14 @@ type GetEntriesV2ResultEntries1 struct {
 	Permissions     *EntryPermissions                   `json:"permissions,omitempty"`
 	PublishedId     *string                             `json:"publishedId"`
 	SavedId         string                              `json:"savedId"`
-	Scope           string                              `json:"scope"`
-	Type            string                              `json:"type"`
-	UpdatedAt       string                              `json:"updatedAt"`
-	UpdatedBy       string                              `json:"updatedBy"`
-	WorkbookId      *string                             `json:"workbookId"`
-	WorkbookTitle   *string                             `json:"workbookTitle,omitempty"`
+
+	// Scope Type of the entry, e.g. `dash` — dashboard, `widget` — chart, etc.
+	Scope         EntryScope `json:"scope"`
+	Type          string     `json:"type"`
+	UpdatedAt     string     `json:"updatedAt"`
+	UpdatedBy     string     `json:"updatedBy"`
+	WorkbookId    *string    `json:"workbookId"`
+	WorkbookTitle *string    `json:"workbookTitle,omitempty"`
 }
 
 // GetEntriesV2ResultEntries1IsLocked defines model for GetEntriesV2Result.Entries.1.IsLocked.
@@ -408,7 +384,9 @@ type ListDirectoryBreadCrumb struct {
 	IsLocked bool `json:"isLocked"`
 
 	// Path Path of the breadcrumb item.
-	Path        string `json:"path"`
+	Path string `json:"path"`
+
+	// Permissions Permissions for the breadcrumb item.
 	Permissions struct {
 		// Admin Indicates if there are permissions for admin.
 		Admin bool `json:"admin"`
@@ -460,7 +438,9 @@ type ListDirectoryEntry struct {
 	Meta *map[string]interface{} `json:"meta"`
 
 	// Name Name of the entry.
-	Name        string `json:"name"`
+	Name string `json:"name"`
+
+	// Permissions Permissions for the entry.
 	Permissions *struct {
 		// Admin Indicates if there are permissions for admin.
 		Admin bool `json:"admin"`
@@ -481,8 +461,8 @@ type ListDirectoryEntry struct {
 	// SavedId Saved version ID.
 	SavedId string `json:"savedId"`
 
-	// Scope Specified type of the entry from scope (e.g. type of the connection or visualization type for charts).
-	Scope string `json:"scope"`
+	// Scope Type of the entry, e.g. `dash` — dashboard, `widget` — chart, etc.
+	Scope EntryScope `json:"scope"`
 
 	// Type Type of the entry (e.g., dash, dataset, connection).
 	Type string `json:"type"`

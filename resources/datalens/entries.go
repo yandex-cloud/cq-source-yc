@@ -11,10 +11,10 @@ import (
 	"github.com/yandex-cloud/cq-source-yc/client/yc/datalens"
 )
 
-func entriesTable(name, scope string) *schema.Table {
+func entriesTable(name string, scope datalens.EntryScope) *schema.Table {
 	return &schema.Table{
 		Name:        name,
-		Description: `DataLens entries with scope=` + scope + `. https://yandex.cloud/ru/docs/datalens/operations/api-start`,
+		Description: `DataLens entries with scope=` + string(scope) + `. https://yandex.cloud/ru/docs/datalens/operations/api-start`,
 		Multiplex:   client.OrganizationMultiplex(client.ServiceDataLens),
 		Resolver:    fetchEntries(scope),
 		Transform:   client.TransformWithStruct(&datalens.Entry{}, transformers.WithPrimaryKeys("EntryId")),
@@ -24,7 +24,7 @@ func entriesTable(name, scope string) *schema.Table {
 	}
 }
 
-func fetchEntries(scope string) schema.TableResolver {
+func fetchEntries(scope datalens.EntryScope) schema.TableResolver {
 	return func(ctx context.Context, meta schema.ClientMeta, _ *schema.Resource, res chan<- any) error {
 		c := meta.(*client.Client)
 
@@ -43,7 +43,7 @@ func fetchEntries(scope string) schema.TableResolver {
 				var apiErr *datalens.APIError
 				if errors.As(err, &apiErr) && (apiErr.StatusCode == http.StatusForbidden || apiErr.StatusCode == http.StatusNotFound) {
 					// The organization has no DataLens instance or we have no access to it
-					c.Logger.Warn().Int("status", apiErr.StatusCode).Str("scope", scope).Str("body", apiErr.Body).Msg("skipping DataLens entries")
+					c.Logger.Warn().Int("status", apiErr.StatusCode).Str("scope", string(scope)).Str("body", apiErr.Body).Msg("skipping DataLens entries")
 					return nil
 				}
 				return err
@@ -62,21 +62,21 @@ func fetchEntries(scope string) schema.TableResolver {
 }
 
 func Folders() *schema.Table {
-	return entriesTable("yc_datalens_folders", "folder")
+	return entriesTable("yc_datalens_folders", datalens.EntryScopeFolder)
 }
 
 func Datasets() *schema.Table {
-	return entriesTable("yc_datalens_datasets", "dataset")
+	return entriesTable("yc_datalens_datasets", datalens.EntryScopeDataset)
 }
 
 func Dashboards() *schema.Table {
-	return entriesTable("yc_datalens_dashboards", "dash")
+	return entriesTable("yc_datalens_dashboards", datalens.EntryScopeDash)
 }
 
 func Widgets() *schema.Table {
-	return entriesTable("yc_datalens_widgets", "widget")
+	return entriesTable("yc_datalens_widgets", datalens.EntryScopeWidget)
 }
 
 func Reports() *schema.Table {
-	return entriesTable("yc_datalens_reports", "report")
+	return entriesTable("yc_datalens_reports", datalens.EntryScopeReport)
 }
