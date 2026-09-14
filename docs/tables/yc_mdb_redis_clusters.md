@@ -40,3 +40,4 @@ The following tables depend on yc_mdb_redis_clusters:
 |announce_hostnames|`bool`|
 |auth_sentinel|`bool`|
 |disk_encryption_key_id|`utf8`|
+|is_ha|`bool`|

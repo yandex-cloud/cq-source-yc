@@ -16,10 +16,11 @@ func Buckets() *schema.Table {
 		Name: "yc_storage_buckets",
 		Transform: client.TransformWithStruct(
 			&storage.Bucket{},
-			transformers.WithUnwrapStructFields("Bucket"),
 			// Id is always empty ¯\_(ツ)_/¯
 			transformers.WithSkipFields("Id"),
-			transformers.WithPrimaryKeys("FolderId", "Name"),
+			// Not valid since ~2026H2
+			// transformers.WithPrimaryKeys("FolderId", "Name"),
+			transformers.WithPrimaryKeys("ResourceId"),
 		),
 		Resolver:  fetchBuckets,
 		Multiplex: client.FolderMultiplex(client.ServiceStorage),

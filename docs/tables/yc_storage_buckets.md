@@ -2,7 +2,7 @@
 
 This table shows data for YC Object Storage Buckets.
 
-The composite primary key for this table is (**name**, **folder_id**).
+The primary key for this table is **resource_id**.
 
 ## Columns
 
@@ -11,8 +11,8 @@ The composite primary key for this table is (**name**, **folder_id**).
 |_cq_id|`uuid`|
 |_cq_parent_id|`uuid`|
 |cloud_id|`utf8`|
-|name (PK)|`utf8`|
-|folder_id (PK)|`utf8`|
+|name|`utf8`|
+|folder_id|`utf8`|
 |anonymous_access_flags|`json`|
 |default_storage_class|`utf8`|
 |versioning|`utf8`|
@@ -27,6 +27,6 @@ The composite primary key for this table is (**name**, **folder_id**).
 |object_lock|`json`|
 |encryption|`json`|
 |allowed_private_endpoints|`json`|
-|resource_id|`utf8`|
+|resource_id (PK)|`utf8`|
 |disabled_statickey_auth|`bool`|
 |logging|`json`|

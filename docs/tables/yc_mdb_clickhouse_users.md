@@ -23,3 +23,4 @@ This table depends on [yc_mdb_clickhouse_clusters](yc_mdb_clickhouse_clusters.md
 |quotas|`json`|
 |connection_manager|`json`|
 |auth_method|`utf8`|
+|user_connection_manager|`json`|
