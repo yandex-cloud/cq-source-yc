@@ -50,7 +50,7 @@ func fetchBuckets(ctx context.Context, meta schema.ClientMeta, _ *schema.Resourc
 
 			if st.Code() == codes.PermissionDenied {
 				// Can't fail here because then we wouldn't get all other buckets
-				c.Logger.Warn().Str("bucket", b.Name).Msg("PermissionDenied while fetching bucket")
+				c.Logger.Warn().Str("bucket", value.Name).Msg("PermissionDenied while fetching bucket")
 				continue
 			}
 
