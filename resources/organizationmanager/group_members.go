@@ -14,7 +14,7 @@ func GroupMembers() *schema.Table {
 	return &schema.Table{
 		Name:        "yc_organizationmanager_group_members",
 		Description: `https://yandex.cloud/ru/docs/organization/api-ref/grpc/Group/listMembers#yandex.cloud.organizationmanager.v1.GroupMember`,
-		Resolver:    nil,
+		Resolver:    fetchGroupMembers,
 		Transform:   client.TransformWithStruct(&organizationmanager.GroupMember{}, transformers.WithPrimaryKeys("SubjectId")),
 		Columns: schema.ColumnList{
 			client.ParentIdColumn,
@@ -22,7 +22,7 @@ func GroupMembers() *schema.Table {
 	}
 }
 
-func fetchGroupMemebrs(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
+func fetchGroupMembers(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 	group, ok := parent.Item.(*organizationmanager.Group)
 	if !ok {

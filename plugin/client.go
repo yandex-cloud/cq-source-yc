@@ -54,6 +54,7 @@ func NewClient(ctx context.Context, logger zerolog.Logger, specBytes []byte, opt
 		scheduler.WithLogger(logger),
 		scheduler.WithConcurrency(spec.Concurrency),
 		scheduler.WithStrategy(spec.Scheduler),
+		scheduler.WithErrorClassifier(client.ClassifyError),
 	)
 	return c, nil
 }

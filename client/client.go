@@ -105,10 +105,11 @@ func New(ctx context.Context, logger zerolog.Logger, spec *Spec) (*Client, error
 		return nil, err
 	}
 	// Discover available services for `sdk.KnownServices`
-	_, err = sdk.ApiEndpoint().ApiEndpoint().List(ctx, &endpoint.ListApiEndpointsRequest{})
+	discovered, err := sdk.ApiEndpoint().ApiEndpoint().List(ctx, &endpoint.ListApiEndpointsRequest{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to discover services: %w", err)
 	}
+	sdkv2 = withV2Routes(sdkv2, discovered.GetEndpoints())
 
 	// The middleware caches IAM tokens and refreshes them before expiry.
 	iamTokens := ycsdk.NewIAMTokenMiddleware(sdk, time.Now)
